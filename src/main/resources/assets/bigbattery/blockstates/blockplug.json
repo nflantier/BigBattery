@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "normal": { "model": "bigbattery:blockplug" },
+        "inventory": { "model": "bigbattery:blockplug" },
+        "facing=down":  { "model": "bigbattery:blockplug", "x": 180 },
+        "facing=up":    { "model": "bigbattery:blockplug" },
+        "facing=north": { "model": "bigbattery:blockplug", "x" : 90},
+        "facing=south": { "model": "bigbattery:blockplug", "x": 270 },
+        "facing=west":  { "model": "bigbattery:blockplug", "x": 90, "y":270 },
+        "facing=east":  { "model": "bigbattery:blockplug", "x": 90, "y":90 }
+    }
+}

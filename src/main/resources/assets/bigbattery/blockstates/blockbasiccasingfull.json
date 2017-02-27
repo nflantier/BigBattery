@@ -1,0 +1,7 @@
+{
+
+    "variants": {
+        "normal": { "model": "bigbattery:blockbasiccasingfull" },
+        "inventory": { "model": "bigbattery:blockbasiccasingfull" }
+    }
+}

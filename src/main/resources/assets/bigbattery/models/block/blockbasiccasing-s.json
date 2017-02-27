@@ -1,0 +1,17 @@
+{
+    "parent": "block/block",
+    "textures": {
+        "border": "bigbattery:blocks/blockbasiccasing-b"
+    },
+     "elements": [
+        {   "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "west": { "uv": [ 0, 0, 16, 16 ], "texture": "border", "rotation":90, "cullface": "west" },
+                "east": { "uv": [ 0, 0, 16, 16 ], "texture": "border", "rotation":270, "cullface": "east" },
+                "down": { "uv": [ 0, 0, 16, 16 ], "texture": "border", "cullface": "down" },
+                "up": { "uv": [ 0, 0, 16, 16 ], "texture": "border", "rotation":180, "cullface": "up" }
+            }
+        }
+    ]
+}
