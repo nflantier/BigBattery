@@ -158,6 +158,7 @@ public class BlockCasing extends ABlockBBStructure {
     {
 		if(!worldIn.isRemote && state.getValue(ISSTRUCT) == true){
 			TileEntity te = worldIn.getTileEntity(pos);
+			IBlockState st = worldIn.getBlockState(fromPos);
 			if( te != null && te instanceof ITileHaveMaster){
 				if(! ((ITileHaveMaster)te).toMaster(fromPos, MultiBlockMessage.CHECK) )
 					worldIn.setBlockState(pos, state.withProperty(ISSTRUCT, false));

@@ -117,8 +117,7 @@ public class MultiBlockBattery {
 					for (int z = dwn.getZ() ; z <= ues.getZ() ; z++ ){
 						BlockPos p = new BlockPos(x,y,z);
 						IBlockState s = world.getBlockState(p);
-						ItemStack st = new ItemStack(s.getBlock());
-						if(allowedMaterialsBlock.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(st))){
+						if(s.getBlock()!= Blocks.AIR){
 							return p;
 						}
 					}
@@ -197,6 +196,7 @@ public class MultiBlockBattery {
 		public MaterialPart electrolyteMP = new MaterialPart();
 		
 		public float potentialDifference = 0;
+		public int baseAmount = 0;
 		public Random rdm  = new Random();
 		
 		public MaterialsBattery(){
@@ -207,8 +207,7 @@ public class MultiBlockBattery {
 			if(pos == null)
 				return false;
 			IBlockState state = world.getBlockState(pos);
-			ItemStack stack = new ItemStack(state.getBlock());
-			if(allowedMaterialsBlock.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(stack))){
+			if(state.getBlock() != Blocks.AIR){
 				world.setBlockToAir(pos);
 				return true;
 			}
@@ -216,7 +215,8 @@ public class MultiBlockBattery {
 		}
 		
 		public void handleMaterials(World world, float rationRF){
-						
+			if(anode == null || cathode == null || electrolyte == null)
+				return ;
 			
 			if(anodeMP.currentUnit<=0){
 				anodeMP.currentUnit	= anodeMP.totalUnit;
@@ -225,8 +225,8 @@ public class MultiBlockBattery {
 					anodeMP.reset();
 				}
 				anodeMP.totalAmount-=1;
-				if( !useMaterial(world, anodeMP.materialLimit.getRandomBlock()) )
-					useMaterial(world,anodeMP.materialLimit.getNextMaterialBlock(world));
+				//if( !useMaterial(world, anodeMP.materialLimit.getRandomBlock()) )
+					//useMaterial(world,anodeMP.materialLimit.getNextMaterialBlock(world));
 			}
 			if(cathodeMP.currentUnit<=0){
 				cathodeMP.currentUnit = cathodeMP.totalUnit;
@@ -235,8 +235,8 @@ public class MultiBlockBattery {
 					cathodeMP.reset();
 				}
 				cathodeMP.totalAmount-=1;
-				if( !useMaterial(world, cathodeMP.materialLimit.getRandomBlock()) )
-					useMaterial(world,cathodeMP.materialLimit.getNextMaterialBlock(world));
+				//if( !useMaterial(world, cathodeMP.materialLimit.getRandomBlock()) )
+					//useMaterial(world,cathodeMP.materialLimit.getNextMaterialBlock(world));
 				
 			}
 			if(electrolyteMP.currentUnit<=0){
@@ -246,13 +246,17 @@ public class MultiBlockBattery {
 					electrolyteMP.reset();
 				}
 				electrolyteMP.totalAmount-=1;
-				if( !useMaterial(world, electrolyteMP.materialLimit.getRandomBlock()) )
-					useMaterial(world,electrolyteMP.materialLimit.getNextMaterialBlock(world));
+				//if( !useMaterial(world, electrolyteMP.materialLimit.getRandomBlock()) )
+					//useMaterial(world,electrolyteMP.materialLimit.getNextMaterialBlock(world));
 			}
 			
 			anodeMP.currentUnit -= ( rdm.nextDouble() + 1 ) * rationRF +1;
 			cathodeMP.currentUnit -= ( rdm.nextDouble() + 1 ) * rationRF +1;
 			electrolyteMP.currentUnit -= ( rdm.nextDouble() + 1 ) * rationRF +1;
+			
+			System.out.println("ano "+anodeMP.currentUnit);
+			System.out.println("cath "+cathodeMP.currentUnit);
+			System.out.println("ele "+electrolyteMP.currentUnit);
 		}
 		
 		public double generateEnergy(){
@@ -264,7 +268,7 @@ public class MultiBlockBattery {
 			//multiply by number of blocks
 			//less electrolyte = less rf per tick
 			//conductive lose rf per tick : ratioEfficiency
-			return potentialDifference * Math.pow(Math.abs(electrolyte.potential) , 1.08) * Math.pow(electrolyte.electrolyteType.ratioVoltage,1.08) * Math.pow(anodeMP.totalAmount + cathodeMP.totalAmount, 1.18);
+			return potentialDifference * Math.pow(Math.abs(electrolyte.potential) , 1.08) * Math.pow(electrolyte.electrolyteType.ratioVoltage,1.08) * Math.pow(anodeMP.totalAmount + cathodeMP.totalAmount+1, 1.18);
 		}
 		
 		public void setEnergecticValues(){
@@ -275,7 +279,7 @@ public class MultiBlockBattery {
 			int anodeOxydationNo = anode.oxydationNumber.length;
 			int cathodeOxydationNo = cathode.oxydationNumber.length;
 			int electrolyteOxydationNo = electrolyte.oxydationNumber.length;
-			
+			baseAmount = anodeMP.totalAmount + cathodeMP.totalAmount;
 			anodeMP.totalUnit = Math.floor( anodeMP.weight * ( Math.pow(anodeOxydationNo * 1.5,1.5) * 100) );
 			cathodeMP.totalUnit = Math.floor( cathodeMP.weight * ( Math.pow(cathodeOxydationNo * 1.5,1.5) * 100) );
 			electrolyteMP.totalUnit= Math.floor( electrolyteMP.weight * ( Math.pow(electrolyteOxydationNo * 1.5,electrolyte.electrolyteType.ratioDecay) * 100) );
@@ -316,7 +320,7 @@ public class MultiBlockBattery {
 	        t.setTag("electrolyteMP", electrolyteMP.writeToNBT(new NBTTagCompound()));
 
 	        t.setFloat("potentialDifference", potentialDifference);
-	        
+	        t.setInteger("baseAmount", baseAmount);
 	        nbt.setTag("materialbattery", t);
 	        
 	        return nbt;
@@ -342,6 +346,7 @@ public class MultiBlockBattery {
 		    	electrolyteMP.readFromNBT((NBTTagCompound) b.getTag("electrolyteMP"));
 		    	
 		    	potentialDifference = b.getFloat("potentialDifference");
+		    	baseAmount = b.getInteger("baseAmount");
 	    	}
 	    }
 		
@@ -424,9 +429,9 @@ public class MultiBlockBattery {
 		}
 
 		boolean chst = checkStructure(world);
-		boolean chco = checkConductive(world);
-		boolean chel = isManual ? checkElectrolyte(world) : interfaceElectrolyte != null ? true : checkElectrolyte(world);
-		boolean chma = isManual ? checkMaterials(world) : interfaceAnode != null && interfaceCathode != null ? true : checkMaterials(world);
+		boolean chco = isStructured ? true : checkConductive(world);
+		boolean chel = isStructured ? true : isManual ? checkElectrolyte(world) : interfaceElectrolyte != null ? true : checkElectrolyte(world);
+		boolean chma = isStructured ? true : isManual ? checkMaterials(world) : interfaceAnode != null && interfaceCathode != null ? true : checkMaterials(world);
 
 		System.out.println(chst);
 		System.out.println(chco);
@@ -468,6 +473,8 @@ public class MultiBlockBattery {
 	}
 	
 	private void setupMaterials(World world){
+		if( mapFacingConductiveItemStack.isEmpty() || mapFacingMaterialAmount.isEmpty() || mapFacingMaterialB3D.isEmpty())
+			return;
 		ItemStack stco = null;
 		EnumFacing fco = null;
 		ItemStack stm1 = null;

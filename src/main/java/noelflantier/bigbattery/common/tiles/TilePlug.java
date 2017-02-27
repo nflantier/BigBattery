@@ -33,6 +33,7 @@ public class TilePlug extends ATileBBTicking implements ITileMaster, IEnergyStor
 		if(!getStructure().isStructured)
 			return;
 
+		energyStorage.extractEnergy(1000000, false);
 		if(energyStorage.getEnergyStored()>=energyStorage.getMaxEnergyStored())
 			return;
 		int rf = (int) mbb.materialsB.generateEnergy();
@@ -101,7 +102,7 @@ public class TilePlug extends ATileBBTicking implements ITileMaster, IEnergyStor
 		switch(message){
 			case CHECK :
 				if(getStructure().isStructured && getStructure().isBlockPartOfStructure(fromPos)){
-						getStructure().batteryCheckAndSetupStructure(world, getPos(), null);
+					getStructure().batteryCheckAndSetupStructure(world, getPos(), null);
 				}
 				break;
 			default:

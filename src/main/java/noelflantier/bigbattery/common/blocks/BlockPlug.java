@@ -63,18 +63,20 @@ public class BlockPlug extends ABlockBBStructure {
 	@Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
+		if(hand == EnumHand.OFF_HAND)
+			return false;
 		if(!worldIn.isRemote){
+			if(state.getValue(ISSTRUCT) == true){
+				
+				return true;
+			}
+			
 			TileEntity te = worldIn.getTileEntity(pos);
-			/*System.out.println(playerIn.getHeldItem(hand).getItem());
-			if(playerIn.getHeldItem(hand).getItem() == Items.AIR){
-				if( te != null && te instanceof TilePlug){
-					System.out.println(((TilePlug)te).energyStorage.getEnergyStored());
-					((TilePlug)te).extractEnergy(1000000, false);
+			if(playerIn.getHeldItem(EnumHand.MAIN_HAND).getItem() != Items.AIR){
+				if( te != null && te instanceof ITileMaster){
+					((ITileMaster)te).getStructure().batteryCheckAndSetupStructure(worldIn, pos, playerIn);
 				}
-				return false;
-			}*/
-			if( te != null && te instanceof ITileMaster){
-				((ITileMaster)te).getStructure().batteryCheckAndSetupStructure(worldIn, pos, playerIn);
+				return true;
 			}
 		}
         return false;
