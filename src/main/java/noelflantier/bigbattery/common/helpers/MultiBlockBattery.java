@@ -87,6 +87,7 @@ public class MultiBlockBattery {
 	public class B3D{
 		public BlockPos dwn;
 		public BlockPos ues;
+		public Random brdm = new Random();
 		
 		public B3D(BlockPos d, BlockPos u){
 			dwn = d;
@@ -99,6 +100,33 @@ public class MultiBlockBattery {
 	    public B3D() {
 		}
 
+	    public BlockPos getRandomBlock(){
+	    	int sx = Math.abs(ues.getX() - dwn.getX());
+	    	int sy = Math.abs(ues.getY() - dwn.getY());
+	    	int sz = Math.abs(ues.getZ() - dwn.getZ());
+	    	
+	    	int rx = sx > 0 ? brdm.nextInt(sx) + dwn.getX() : dwn.getX();
+	    	int ry = sy > 0 ? brdm.nextInt(sy) + dwn.getY() : dwn.getY();
+	    	int rz = sz > 0 ? brdm.nextInt(sz) + dwn.getZ() : dwn.getZ();
+	    	return new BlockPos(rx, ry, rz);
+	    }
+
+	    public BlockPos getNextMaterialBlock(World world){
+			for (int x = dwn.getX() ; x <= ues.getX() ; x++ ){
+				for (int y = dwn.getY() ; y <= ues.getY() ; y++ ){
+					for (int z = dwn.getZ() ; z <= ues.getZ() ; z++ ){
+						BlockPos p = new BlockPos(x,y,z);
+						IBlockState s = world.getBlockState(p);
+						ItemStack st = new ItemStack(s.getBlock());
+						if(allowedMaterialsBlock.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(st))){
+							return p;
+						}
+					}
+				}
+			}
+	    	return null;
+	    }
+	    
 		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 	    	if(dwn!=null){
 		        nbt.setInteger("dwnx", dwn.getX());
@@ -123,9 +151,9 @@ public class MultiBlockBattery {
 	public class MaterialPart{
 
 		public float weight = 1;
-		public double totalUnit = 1;//~tick time per block
-		public double currentUnit = 1;
-		public int totalAmount = 1;//nombre block
+		public double totalUnit = 0;//~tick time per block
+		public double currentUnit = 0;
+		public int totalAmount = 0;//nombre block
 		public B3D materialLimit = new B3D();
 		
 		public MaterialPart(){}
@@ -149,9 +177,9 @@ public class MultiBlockBattery {
 
 		public void reset() {
 			weight = 1;
-			totalUnit = 1;
-			currentUnit = 1;
-			totalAmount = 1;
+			totalUnit = 0;
+			currentUnit = 0;
+			totalAmount = 0;
 		}
 	}
 	
@@ -175,38 +203,56 @@ public class MultiBlockBattery {
 			
 		}
 
+		public boolean useMaterial(World world, BlockPos pos){
+			if(pos == null)
+				return false;
+			IBlockState state = world.getBlockState(pos);
+			ItemStack stack = new ItemStack(state.getBlock());
+			if(allowedMaterialsBlock.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(stack))){
+				world.setBlockToAir(pos);
+				return true;
+			}
+			return false;
+		}
+		
 		public void handleMaterials(World world, float rationRF){
-			if( anodeMP.totalAmount <=0){
-				anode = null;
-				anodeMP.reset();
+						
+			
+			if(anodeMP.currentUnit<=0){
+				anodeMP.currentUnit	= anodeMP.totalUnit;
+				if( anodeMP.totalAmount <= 0){
+					anode = null;
+					anodeMP.reset();
+				}
+				anodeMP.totalAmount-=1;
+				if( !useMaterial(world, anodeMP.materialLimit.getRandomBlock()) )
+					useMaterial(world,anodeMP.materialLimit.getNextMaterialBlock(world));
 			}
-			if( cathodeMP.totalAmount <= 0){
-				cathode = null;
-				cathodeMP.reset();
+			if(cathodeMP.currentUnit<=0){
+				cathodeMP.currentUnit = cathodeMP.totalUnit;
+				if( cathodeMP.totalAmount <= 0){
+					cathode = null;
+					cathodeMP.reset();
+				}
+				cathodeMP.totalAmount-=1;
+				if( !useMaterial(world, cathodeMP.materialLimit.getRandomBlock()) )
+					useMaterial(world,cathodeMP.materialLimit.getNextMaterialBlock(world));
+				
 			}
-			if( electrolyteMP.totalAmount <= 0){
-				electrolyte = null;
-				electrolyteMP.reset();
+			if(electrolyteMP.currentUnit<=0){
+				electrolyteMP.currentUnit = electrolyteMP.totalUnit;
+				if( electrolyteMP.totalAmount <= 0){
+					electrolyte = null;
+					electrolyteMP.reset();
+				}
+				electrolyteMP.totalAmount-=1;
+				if( !useMaterial(world, electrolyteMP.materialLimit.getRandomBlock()) )
+					useMaterial(world,electrolyteMP.materialLimit.getNextMaterialBlock(world));
 			}
 			
 			anodeMP.currentUnit -= ( rdm.nextDouble() + 1 ) * rationRF +1;
 			cathodeMP.currentUnit -= ( rdm.nextDouble() + 1 ) * rationRF +1;
 			electrolyteMP.currentUnit -= ( rdm.nextDouble() + 1 ) * rationRF +1;
-						
-			if(anodeMP.currentUnit<=0){
-				anodeMP.totalAmount-=1;
-			}
-			if(cathodeMP.currentUnit<=0){
-				cathodeMP.totalAmount-=1;
-			}
-			if(electrolyteMP.currentUnit<=0){
-				electrolyteMP.totalAmount-=1;
-			}
-			System.out.println("acur "+anodeMP.currentUnit);
-			System.out.println("ccur "+cathodeMP.currentUnit);
-			System.out.println("aamo "+anodeMP.totalAmount);
-			System.out.println("camo "+cathodeMP.totalAmount);
-			
 		}
 		
 		public double generateEnergy(){
@@ -233,10 +279,6 @@ public class MultiBlockBattery {
 			anodeMP.totalUnit = Math.floor( anodeMP.weight * ( Math.pow(anodeOxydationNo * 1.5,1.5) * 100) );
 			cathodeMP.totalUnit = Math.floor( cathodeMP.weight * ( Math.pow(cathodeOxydationNo * 1.5,1.5) * 100) );
 			electrolyteMP.totalUnit= Math.floor( electrolyteMP.weight * ( Math.pow(electrolyteOxydationNo * 1.5,electrolyte.electrolyteType.ratioDecay) * 100) );
-
-			anodeMP.currentUnit	= anodeMP.totalUnit;
-			cathodeMP.currentUnit = cathodeMP.totalUnit;
-			electrolyteMP.currentUnit = electrolyteMP.totalUnit;
 		}
 		
 		public MaterialsBattery setCathodeAndConductive(ItemStack cathodeStack, ItemStack conductive, int amount){

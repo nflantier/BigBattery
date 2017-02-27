@@ -5,39 +5,39 @@
         {   "when": {"OR" :[{ "down": "false" }, {"isstruct" : "false"}]},
             "apply": { "model": "bigbattery:blockbasiccasing-d"}
         },
-        {   "when": {"AND" :[{ "down": "true" }, {"isstruct" : "true"}]},
+        {   "when": { "down": "true","isstruct" : "true"},
             "apply": { "model": "bigbattery:blockbasiccasing-dt"}
         },
         {   "when": {"OR" :[{ "up": "false" }, {"isstruct" : "false"}]},
             "apply": { "model": "bigbattery:blockbasiccasing-u", "x": 180  }
         },
-        {   "when": {"AND" :[{ "up": "true" }, {"isstruct" : "true"}]},
+        {   "when": { "up": "true" ,"isstruct" : "true"},
             "apply": { "model": "bigbattery:blockbasiccasing-ut", "x": 180  }
         },
         
         {   "when": {"OR" :[{ "north": "false" }, {"isstruct" : "false"}]},
             "apply": { "model": "bigbattery:blockbasiccasing-n"}
         },
-        {   "when": {"AND" :[{ "north": "true" }, {"isstruct" : "true"}]},
+        {   "when": { "north": "true" , "isstruct" : "true"},
             "apply": { "model": "bigbattery:blockbasiccasing-nt"}
         },
         {   "when": {"OR" :[{ "south": "false" }, {"isstruct" : "false"}]},
             "apply": { "model": "bigbattery:blockbasiccasing-s", "y": 180}
         },
-        {   "when": {"AND" :[{ "south": "true" }, {"isstruct" : "true"}]},
+        {   "when": { "south": "true" , "isstruct" : "true"},
             "apply": { "model": "bigbattery:blockbasiccasing-st", "y": 180}
         },
         
         {   "when": {"OR" :[{ "west": "false" }, {"isstruct" : "false"}]},
             "apply": { "model": "bigbattery:blockbasiccasing-w"}
         },
-        {   "when": {"AND" :[{ "west": "true" }, {"isstruct" : "true"}]},
+        {   "when": { "west": "true" , "isstruct" : "true"},
             "apply": { "model": "bigbattery:blockbasiccasing-wt"}
         },
         {   "when": {"OR" :[{ "east": "false" }, {"isstruct" : "false"}]},
             "apply": { "model": "bigbattery:blockbasiccasing-e", "y": 180}
         },
-        {   "when": {"AND" :[{ "east": "true" }, {"isstruct" : "true"}]},
+        {   "when": { "east": "true" , "isstruct" : "true"},
             "apply": { "model": "bigbattery:blockbasiccasing-et", "y": 180}
         }
     ]

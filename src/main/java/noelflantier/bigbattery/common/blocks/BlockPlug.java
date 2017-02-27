@@ -65,13 +65,14 @@ public class BlockPlug extends ABlockBBStructure {
     {
 		if(!worldIn.isRemote){
 			TileEntity te = worldIn.getTileEntity(pos);
+			/*System.out.println(playerIn.getHeldItem(hand).getItem());
 			if(playerIn.getHeldItem(hand).getItem() == Items.AIR){
 				if( te != null && te instanceof TilePlug){
 					System.out.println(((TilePlug)te).energyStorage.getEnergyStored());
-					//((TilePlug)te).extractEnergy(1000000, false);
+					((TilePlug)te).extractEnergy(1000000, false);
 				}
 				return false;
-			}
+			}*/
 			if( te != null && te instanceof ITileMaster){
 				((ITileMaster)te).getStructure().batteryCheckAndSetupStructure(worldIn, pos, playerIn);
 			}

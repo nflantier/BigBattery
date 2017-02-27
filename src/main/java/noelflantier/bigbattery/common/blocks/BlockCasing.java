@@ -1,9 +1,18 @@
 package noelflantier.bigbattery.common.blocks;
 
+import java.util.Collection;
+
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -32,6 +42,42 @@ public class BlockCasing extends ABlockBBStructure {
     public static final PropertyBool SOUTH = PropertyBool.create("south");
     public static final PropertyBool WEST = PropertyBool.create("west");
     
+    public static final PropertyCasingType TYPE = PropertyCasingType.create("type");
+    
+    public enum CasingType implements IStringSerializable{
+    	BASIC("basic"),
+    	ADVANCED("advanced");
+
+    	public String name;
+    	
+    	private CasingType(String name) {
+    		this.name = name;
+		}
+    	
+		@Override
+		public String getName() {
+			return name;
+		}
+    }
+    
+	public static class PropertyCasingType extends PropertyEnum<CasingType>{
+
+		protected PropertyCasingType(String name, Collection<CasingType> allowedValues) {
+			super(name, CasingType.class, allowedValues);
+		}
+		public static PropertyCasingType create(String name)
+	    {
+	        return create(name, Predicates.<CasingType>alwaysTrue());
+	    }
+	    public static PropertyCasingType create(String name, Predicate<CasingType> filter)
+	    {
+	        return create(name, Collections2.<CasingType>filter(Lists.newArrayList(CasingType.values()), filter));
+	    }
+	    public static PropertyCasingType create(String name, Collection<CasingType> values)
+	    {
+	        return new PropertyCasingType(name, values);
+	    }
+	}
 	public BlockCasing(Material materialIn) {
 		super(materialIn);
 		setRegistryName(Ressources.UL_NAME_BLOCK_CASING);
@@ -67,6 +113,8 @@ public class BlockCasing extends ABlockBBStructure {
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
     {
+		if(state.getValue(ISSTRUCT) == false)
+			return state;
         state = state.withProperty(WEST, this.getConnectedBlock(worldIn, pos, EnumFacing.WEST));
         state = state.withProperty(EAST, this.getConnectedBlock(worldIn, pos, EnumFacing.EAST));
         state = state.withProperty(NORTH, this.getConnectedBlock(worldIn, pos, EnumFacing.NORTH));
@@ -79,10 +127,10 @@ public class BlockCasing extends ABlockBBStructure {
     
     private Boolean getConnectedBlock(IBlockAccess worldIn, BlockPos pos, EnumFacing direction)
     {
-
+    	
         BlockPos blockpos = pos.offset(direction);
         IBlockState iblockstate = worldIn.getBlockState(pos.offset(direction));
-		return iblockstate.getBlock() == this;
+		return iblockstate.getBlock() == this && iblockstate.getValue(ISSTRUCT) == true;
     }
     
 
