@@ -46,6 +46,17 @@ public class ModBlocks {
 	public static Block blockTin;
 	public static Block blockAluminium;
 	
+	/*
+	 * 
+	 * ALLOY
+	 * 
+	 * STEEL
+	 * 
+	 * 
+	 * */
+	
+	
+	
 	//ELECTROLYTES
 	public static Block blockIonicChlore;
 	public static Block blockIonicLithium;

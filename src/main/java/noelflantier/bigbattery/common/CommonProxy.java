@@ -1,10 +1,13 @@
 package noelflantier.bigbattery.common;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import noelflantier.bigbattery.common.handlers.ModBlocks;
+import noelflantier.bigbattery.common.handlers.ModConfig;
+import noelflantier.bigbattery.common.handlers.ModEvents;
 import noelflantier.bigbattery.common.handlers.ModFluids;
 import noelflantier.bigbattery.common.handlers.ModItems;
 import noelflantier.bigbattery.common.handlers.ModTiles;
@@ -17,7 +20,11 @@ public class CommonProxy {
 	}
 	
 	public void preInit(FMLPreInitializationEvent event) {
-		
+
+		ModConfig.preInitCommon(event);
+		ModEvents.preInitCommon();
+        MinecraftForge.EVENT_BUS.register(ModEvents.INSTANCE);
+        
     	ModBlocks.preInitCommon();
     	ModFluids.preInitCommon();
     	ModItems.preInitCommon();
