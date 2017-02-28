@@ -1,0 +1,15 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "all": "bigbattery:blocks/ionic_chlore"
+        },
+        "model": "bigbattery:blockionic" 
+    },
+    "variants": {
+        "normal": [{
+        }],
+        "inventory": [{
+        }]
+    }
+}

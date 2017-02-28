@@ -1,0 +1,15 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "all": "bigbattery:blocks/calcium"
+        },
+        "model": "bigbattery:blockmetal" 
+    },
+    "variants": {
+        "normal": [{
+        }],
+        "inventory": [{
+        }]
+    }
+}

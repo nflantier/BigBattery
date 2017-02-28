@@ -1,0 +1,17 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "flow": "bigbattery:blocks/liquefied_asgardite",
+            "still": "bigbattery:blocks/liquefied_asgardite_flow"
+        },
+        "model": "forge:fluid"
+    },
+    "variants": {
+        "ignore":[{
+            "custom": {
+                "fluid": "fluidChlore"
+            }
+        }]
+    }
+}

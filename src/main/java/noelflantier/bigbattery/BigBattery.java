@@ -18,7 +18,7 @@ import noelflantier.bigbattery.common.CommonProxy;
 @Mod(modid = Ressources.MODID, name = Ressources.NAME, version = Ressources.VERSION)
 public class BigBattery {
 	
-	public static CreativeTabs sfTabs;
+	public static CreativeTabs bbTabs;
 	@SidedProxy(clientSide = Ressources.CLIENT_PROXY, serverSide = Ressources.SERVER_PROXY)
 	public static CommonProxy myProxy;
 	
@@ -30,7 +30,7 @@ public class BigBattery {
     @EventHandler
     public void preinit(FMLPreInitializationEvent event)
     {
-    	sfTabs = new CreativeTabs("SFArtifacts"){
+    	bbTabs = new CreativeTabs("SFArtifacts"){
     		@SideOnly(Side.CLIENT)
     		public ItemStack getTabIconItem(){
     			return new ItemStack(Items.APPLE);

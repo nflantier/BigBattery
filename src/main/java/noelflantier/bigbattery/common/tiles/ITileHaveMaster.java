@@ -9,7 +9,24 @@ import noelflantier.bigbattery.common.helpers.MultiBlockMessage;
 public interface ITileHaveMaster {
 	void setMaster(BlockPos pos);
     BlockPos getMasterPos();
-    World getWorldForMaster();
+    World getWorldForMaster();    
+    default boolean isMasterStillHere(){
+    	if(getWorldForMaster()==null || getMasterPos()==null)
+			return false;
+    	TileEntity t = getWorldForMaster().getTileEntity(getMasterPos());
+		return t!=null && t instanceof ITileMaster;
+    }
+    default boolean isMasterStructured(){
+    	if(getWorldForMaster()==null || getMasterPos()==null)
+			return false;
+    	TileEntity t = getWorldForMaster().getTileEntity(getMasterPos());
+		if(t!=null && t instanceof ITileMaster){
+			if(((ITileMaster)t).getStructure() == null)
+				return false;
+			return ((ITileMaster)t).getStructure().isStructured;
+		}
+		return false;
+    }
     default boolean toMaster(BlockPos from, MultiBlockMessage message){
 	    if(getWorldForMaster()==null || getMasterPos()==null)
 			return false;

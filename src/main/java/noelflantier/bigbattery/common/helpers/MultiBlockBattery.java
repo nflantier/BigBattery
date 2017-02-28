@@ -23,6 +23,7 @@ import net.minecraft.world.World;
 import noelflantier.bigbattery.common.blocks.ABlockBBStructure;
 import noelflantier.bigbattery.common.blocks.BlockPlug;
 import noelflantier.bigbattery.common.handlers.ModBlocks;
+import noelflantier.bigbattery.common.handlers.ModProperties.CasingType;
 import noelflantier.bigbattery.common.tiles.ITileHaveMaster;
 import noelflantier.bigbattery.common.tiles.ITileMaster;
 
@@ -45,6 +46,8 @@ public class MultiBlockBattery {
 	public BlockPos interfaceElectrolyte;
 	public BlockPos interfaceAnode;
 	public BlockPos interfaceCathode;
+	public CasingType casingType;
+	
 	
 	public int maxRange = 200;
 	public Map<EnumFacing, ItemStack> mapFacingConductiveItemStack= new HashMap<EnumFacing, ItemStack>();
@@ -150,9 +153,9 @@ public class MultiBlockBattery {
 	public class MaterialPart{
 
 		public float weight = 1;
-		public double totalUnit = 0;//~tick time per block
-		public double currentUnit = 0;
-		public int totalAmount = 0;//nombre block
+		public double totalUnit = -1;//~tick time per block
+		public double currentUnit = -1;
+		public int totalAmount = -1;//nombre block
 		public B3D materialLimit = new B3D();
 		
 		public MaterialPart(){}
@@ -176,9 +179,9 @@ public class MultiBlockBattery {
 
 		public void reset() {
 			weight = 1;
-			totalUnit = 0;
-			currentUnit = 0;
-			totalAmount = 0;
+			totalUnit = -1;
+			currentUnit = -1;
+			totalAmount = -1;
 		}
 	}
 	
@@ -197,6 +200,8 @@ public class MultiBlockBattery {
 		
 		public float potentialDifference = 0;
 		public int baseAmount = 0;
+		public boolean deleteMaterials = true;
+		
 		public Random rdm  = new Random();
 		
 		public MaterialsBattery(){
@@ -207,7 +212,8 @@ public class MultiBlockBattery {
 			if(pos == null)
 				return false;
 			IBlockState state = world.getBlockState(pos);
-			if(state.getBlock() != Blocks.AIR){
+			ItemStack st = new ItemStack(state.getBlock());
+			if(state.getBlock() != Blocks.AIR ){
 				world.setBlockToAir(pos);
 				return true;
 			}
@@ -225,8 +231,8 @@ public class MultiBlockBattery {
 					anodeMP.reset();
 				}
 				anodeMP.totalAmount-=1;
-				//if( !useMaterial(world, anodeMP.materialLimit.getRandomBlock()) )
-					//useMaterial(world,anodeMP.materialLimit.getNextMaterialBlock(world));
+				if(deleteMaterials && !useMaterial(world, anodeMP.materialLimit.getRandomBlock()) )
+					useMaterial(world,anodeMP.materialLimit.getNextMaterialBlock(world));
 			}
 			if(cathodeMP.currentUnit<=0){
 				cathodeMP.currentUnit = cathodeMP.totalUnit;
@@ -235,10 +241,11 @@ public class MultiBlockBattery {
 					cathodeMP.reset();
 				}
 				cathodeMP.totalAmount-=1;
-				//if( !useMaterial(world, cathodeMP.materialLimit.getRandomBlock()) )
-					//useMaterial(world,cathodeMP.materialLimit.getNextMaterialBlock(world));
+				if(deleteMaterials && !useMaterial(world, cathodeMP.materialLimit.getRandomBlock()) )
+					useMaterial(world,cathodeMP.materialLimit.getNextMaterialBlock(world));
 				
 			}
+			
 			if(electrolyteMP.currentUnit<=0){
 				electrolyteMP.currentUnit = electrolyteMP.totalUnit;
 				if( electrolyteMP.totalAmount <= 0){
@@ -246,17 +253,17 @@ public class MultiBlockBattery {
 					electrolyteMP.reset();
 				}
 				electrolyteMP.totalAmount-=1;
-				//if( !useMaterial(world, electrolyteMP.materialLimit.getRandomBlock()) )
-					//useMaterial(world,electrolyteMP.materialLimit.getNextMaterialBlock(world));
+				if(deleteMaterials && !useMaterial(world, electrolyteMP.materialLimit.getRandomBlock()) )
+					useMaterial(world,electrolyteMP.materialLimit.getNextMaterialBlock(world));
 			}
 			
 			anodeMP.currentUnit -= ( rdm.nextDouble() + 1 ) * rationRF +1;
 			cathodeMP.currentUnit -= ( rdm.nextDouble() + 1 ) * rationRF +1;
 			electrolyteMP.currentUnit -= ( rdm.nextDouble() + 1 ) * rationRF +1;
 			
-			System.out.println("ano "+anodeMP.currentUnit);
+			/*System.out.println("ano "+anodeMP.currentUnit);
 			System.out.println("cath "+cathodeMP.currentUnit);
-			System.out.println("ele "+electrolyteMP.currentUnit);
+			System.out.println("ele "+electrolyteMP.currentUnit);*/
 		}
 		
 		public double generateEnergy(){
@@ -268,7 +275,8 @@ public class MultiBlockBattery {
 			//multiply by number of blocks
 			//less electrolyte = less rf per tick
 			//conductive lose rf per tick : ratioEfficiency
-			return potentialDifference * Math.pow(Math.abs(electrolyte.potential) , 1.08) * Math.pow(electrolyte.electrolyteType.ratioVoltage,1.08) * Math.pow(anodeMP.totalAmount + cathodeMP.totalAmount+1, 1.18);
+			return potentialDifference * ( Math.pow(Math.abs(electrolyte.potential) , 1.5) + Math.pow(electrolyte.electrolyteType.ratioVoltage,1.5) + Math.pow(anodeMP.totalAmount + cathodeMP.totalAmount+1, 1.5));
+			//return potentialDifference * Math.pow(Math.abs(electrolyte.potential) , 1.08) * Math.pow(electrolyte.electrolyteType.ratioVoltage,1.08) * Math.pow(anodeMP.totalAmount + cathodeMP.totalAmount+1, 1.18);
 		}
 		
 		public void setEnergecticValues(){
@@ -280,9 +288,13 @@ public class MultiBlockBattery {
 			int cathodeOxydationNo = cathode.oxydationNumber.length;
 			int electrolyteOxydationNo = electrolyte.oxydationNumber.length;
 			baseAmount = anodeMP.totalAmount + cathodeMP.totalAmount;
-			anodeMP.totalUnit = Math.floor( anodeMP.weight * ( Math.pow(anodeOxydationNo * 1.5,1.5) * 100) );
-			cathodeMP.totalUnit = Math.floor( cathodeMP.weight * ( Math.pow(cathodeOxydationNo * 1.5,1.5) * 100) );
-			electrolyteMP.totalUnit= Math.floor( electrolyteMP.weight * ( Math.pow(electrolyteOxydationNo * 1.5,electrolyte.electrolyteType.ratioDecay) * 100) );
+			anodeMP.totalUnit = Math.floor( anodeMP.weight * ( Math.pow(anodeOxydationNo,1.1) * (1000/anodeOxydationNo)) );
+			cathodeMP.totalUnit = Math.floor( cathodeMP.weight * ( Math.pow(cathodeOxydationNo ,1.3) * (1000/cathodeOxydationNo)) );
+			electrolyteMP.totalUnit= Math.floor( electrolyteMP.weight * ( Math.pow(electrolyteOxydationNo ,electrolyte.electrolyteType.ratioDecay) * (1000/electrolyteOxydationNo)) );
+
+			System.out.println("ano "+anodeMP.totalUnit+"   "+anodeMP.weight+"   "+anodeOxydationNo);
+			System.out.println("cat "+cathodeMP.totalUnit+"   "+cathodeMP.weight+"   "+cathodeOxydationNo);
+			System.out.println("ele "+electrolyteMP.totalUnit+"   "+electrolyteMP.weight+"   "+electrolyteOxydationNo+"  "+electrolyte.electrolyteType.ratioDecay);
 		}
 		
 		public MaterialsBattery setCathodeAndConductive(ItemStack cathodeStack, ItemStack conductive, int amount){
@@ -448,7 +460,6 @@ public class MultiBlockBattery {
 			return false;
 		}
 		
-		//SETUP
 		setupStructure(world);
 		if(!isStructured){
 			reset();

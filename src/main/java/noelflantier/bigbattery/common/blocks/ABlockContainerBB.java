@@ -14,7 +14,7 @@ public abstract class ABlockContainerBB extends BlockContainer {
 	
 	protected ABlockContainerBB(Material materialIn) {
 		super(materialIn);
-		this.setCreativeTab(BigBattery.sfTabs);
+		this.setCreativeTab(BigBattery.bbTabs);
 	}
 
     @Override

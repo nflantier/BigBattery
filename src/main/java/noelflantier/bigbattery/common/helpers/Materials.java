@@ -21,7 +21,7 @@ public class Materials {
     	i++;
     	electrodeListByPotential.put(i,new Electrode("Gold", -0.1F,new float[]{-4F,-3F,-2F,-1F,0F,1F,2F,3F,4F}).addMaterial(Blocks.GOLD_BLOCK).addMaterial(new ItemStack(Items.GOLD_INGOT), 1).addMaterial(new ItemStack(Items.GOLD_NUGGET), -9).setID(i));
     	i++;
-    	electrolyteListByPotential.put(i,new Electrolyte("Book", -3.04F,new float[]{1F}, Electrolyte.Type.IONIC).addMaterial(Blocks.BOOKSHELF,1).setID(i));
+    	electrolyteListByPotential.put(i,new Electrolyte("Book", -3.04F,new float[]{1F}, Electrolyte.Type.IONIC).addMaterial(Blocks.BOOKSHELF,9).setID(i));
     	i++;
     	conductiveListByRatio.put(i,new Conductive("RedStone", 1.1F).setID(i).addMaterial(Blocks.REDSTONE_BLOCK,1));
     	i++;

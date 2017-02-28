@@ -1,7 +1,7 @@
 {
     "parent": "block/block",
     "textures": {
-        "border": "bigbattery:blocks/blockbasiccasing-b"
+        "border": "bigbattery:blocks/basic_casing_b"
     },
      "elements": [
         {   "from": [ 0, 0, 0 ],

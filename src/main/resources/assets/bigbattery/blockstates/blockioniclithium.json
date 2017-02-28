@@ -1,0 +1,15 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "all": "bigbattery:blocks/ionic_lithium"
+        },
+        "model": "bigbattery:blockionic" 
+    },
+    "variants": {
+        "normal": [{
+        }],
+        "inventory": [{
+        }]
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "all": "bigbattery:blocks/ore_graphite"
+        },
+        "model": "bigbattery:blockore" 
+    },
+    "variants": {
+        "normal": [{
+        }],
+        "inventory": [{
+        }]
+    }
+}

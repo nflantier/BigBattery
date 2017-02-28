@@ -1,7 +1,0 @@
-{
-
-    "variants": {
-        "normal": { "model": "bigbattery:blockadvancedcasingfull" },
-        "inventory": { "model": "bigbattery:blockadvancedcasingfull" }
-    }
-}

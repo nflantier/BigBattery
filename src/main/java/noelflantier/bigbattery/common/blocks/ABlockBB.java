@@ -8,7 +8,7 @@ public abstract class ABlockBB extends Block{
 
 	public ABlockBB(Material materialIn) {
 		super(materialIn);
-		this.setCreativeTab(BigBattery.sfTabs);
+		this.setCreativeTab(BigBattery.bbTabs);
 	}
 
 }

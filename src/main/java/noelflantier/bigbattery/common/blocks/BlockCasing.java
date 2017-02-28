@@ -1,18 +1,9 @@
 package noelflantier.bigbattery.common.blocks;
 
-import java.util.Collection;
-
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +12,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -29,6 +19,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import noelflantier.bigbattery.Ressources;
+import noelflantier.bigbattery.common.handlers.ModProperties.PropertyCasingType;
 import noelflantier.bigbattery.common.helpers.MultiBlockMessage;
 import noelflantier.bigbattery.common.tiles.ITileHaveMaster;
 import noelflantier.bigbattery.common.tiles.TileCasing;
@@ -43,41 +34,7 @@ public class BlockCasing extends ABlockBBStructure {
     public static final PropertyBool WEST = PropertyBool.create("west");
     
     public static final PropertyCasingType TYPE = PropertyCasingType.create("type");
-    
-    public enum CasingType implements IStringSerializable{
-    	BASIC("basic"),
-    	ADVANCED("advanced");
 
-    	public String name;
-    	
-    	private CasingType(String name) {
-    		this.name = name;
-		}
-    	
-		@Override
-		public String getName() {
-			return name;
-		}
-    }
-    
-	public static class PropertyCasingType extends PropertyEnum<CasingType>{
-
-		protected PropertyCasingType(String name, Collection<CasingType> allowedValues) {
-			super(name, CasingType.class, allowedValues);
-		}
-		public static PropertyCasingType create(String name)
-	    {
-	        return create(name, Predicates.<CasingType>alwaysTrue());
-	    }
-	    public static PropertyCasingType create(String name, Predicate<CasingType> filter)
-	    {
-	        return create(name, Collections2.<CasingType>filter(Lists.newArrayList(CasingType.values()), filter));
-	    }
-	    public static PropertyCasingType create(String name, Collection<CasingType> values)
-	    {
-	        return new PropertyCasingType(name, values);
-	    }
-	}
 	public BlockCasing(Material materialIn) {
 		super(materialIn);
 		setRegistryName(Ressources.UL_NAME_BLOCK_CASING);
@@ -100,7 +57,7 @@ public class BlockCasing extends ABlockBBStructure {
     {
         return 0;
     }
-
+    
 	@Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
@@ -145,12 +102,17 @@ public class BlockCasing extends ABlockBBStructure {
 
 	@Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-    {
+    {        
+		if (!worldIn.isRemote)
+	    {
+	    	//worldIn.notifyNeighborsOfStateChange(pos, state.getBlock(), true);
+			TileEntity te = worldIn.getTileEntity(pos);
+			if( te != null && te instanceof ITileHaveMaster){
+				((ITileHaveMaster)te).toMaster(pos, MultiBlockMessage.CHECK);
+			}
+	    }
         super.breakBlock(worldIn, pos, state);
-        if (!worldIn.isRemote)
-        {
-        	worldIn.notifyNeighborsOfStateChange(pos, state.getBlock(), true); 
-        }
+
     }
 
 	@Override
@@ -160,7 +122,12 @@ public class BlockCasing extends ABlockBBStructure {
 			TileEntity te = worldIn.getTileEntity(pos);
 			IBlockState st = worldIn.getBlockState(fromPos);
 			if( te != null && te instanceof ITileHaveMaster){
-				if(! ((ITileHaveMaster)te).toMaster(fromPos, MultiBlockMessage.CHECK) )
+				if(st.getBlock() instanceof ABlockBBStructure == false){
+					if( !((ITileHaveMaster)te).isMasterStructured() )
+						worldIn.setBlockState(pos, state.withProperty(ISSTRUCT, false));
+					return;
+				}
+				if( !((ITileHaveMaster)te).isMasterStillHere())
 					worldIn.setBlockState(pos, state.withProperty(ISSTRUCT, false));
 			}
 		}

@@ -1,7 +1,7 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "bigbattery:blocks/blockbasiccasing",
-        "particle": "bigbattery:blocks/blockbasiccasing"
+        "all": "bigbattery:blocks/basic_casing",
+        "particle": "bigbattery:blocks/basic_casing"
     }
 }
