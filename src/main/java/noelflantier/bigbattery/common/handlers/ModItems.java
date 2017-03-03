@@ -8,6 +8,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import noelflantier.bigbattery.Ressources;
 import noelflantier.bigbattery.common.items.ItemBB;
+import noelflantier.bigbattery.common.items.ItemChloreFilter;
 
 public class ModItems {
 
@@ -20,11 +21,13 @@ public class ModItems {
 	public static Item itemIngotZinc;
 	public static Item itemIngotTin;
 	public static Item itemIngotAluminium;
+	public static Item itemIngotSteel;
 
 	public static Item itemDustChlore;
 	public static Item itemDustLithium;
 	public static Item itemDustCalcium;
-	public static Item ionicAgent;
+	public static Item itemChloreFilter;
+	public static Item itemIonicAgent;
 	
 	public static void preInitCommon() {
 		itemIngotSilver = new ItemBB().setRegistryName(Ressources.UL_NAME_ITEM_INGOT_SILVER).setUnlocalizedName(Ressources.UL_NAME_ITEM_INGOT_SILVER);
@@ -45,6 +48,8 @@ public class ModItems {
 		GameRegistry.register(itemIngotTin);
 		itemIngotAluminium = new ItemBB().setRegistryName(Ressources.UL_NAME_ITEM_INGOT_ALUMINIUM).setUnlocalizedName(Ressources.UL_NAME_ITEM_INGOT_ALUMINIUM);
 		GameRegistry.register(itemIngotAluminium);
+		itemIngotSteel = new ItemBB().setRegistryName(Ressources.UL_NAME_ITEM_INGOT_STEEL).setUnlocalizedName(Ressources.UL_NAME_ITEM_INGOT_STEEL);
+		GameRegistry.register(itemIngotSteel);
 		
 
 		itemDustChlore = new ItemBB().setRegistryName(Ressources.UL_NAME_ITEM_DUST_CHLORE).setUnlocalizedName(Ressources.UL_NAME_ITEM_DUST_CHLORE);
@@ -53,8 +58,12 @@ public class ModItems {
 		GameRegistry.register(itemDustLithium);
 		itemDustCalcium = new ItemBB().setRegistryName(Ressources.UL_NAME_ITEM_DUST_CALCIUM).setUnlocalizedName(Ressources.UL_NAME_ITEM_DUST_CALCIUM);
 		GameRegistry.register(itemDustCalcium);
-		ionicAgent = new ItemBB().setRegistryName(Ressources.UL_NAME_ITEM_IONIC_AGENT).setUnlocalizedName(Ressources.UL_NAME_ITEM_IONIC_AGENT);
-		GameRegistry.register(ionicAgent);
+		
+		itemIonicAgent = new ItemBB().setRegistryName(Ressources.UL_NAME_ITEM_IONIC_AGENT).setUnlocalizedName(Ressources.UL_NAME_ITEM_IONIC_AGENT);
+		GameRegistry.register(itemIonicAgent);
+		itemChloreFilter = new ItemChloreFilter().setRegistryName(Ressources.UL_NAME_ITEM_CHLORE_FILTER).setUnlocalizedName(Ressources.UL_NAME_ITEM_CHLORE_FILTER);
+		GameRegistry.register(itemChloreFilter);
+		
 	}
 	
     @SideOnly(Side.CLIENT)
@@ -69,11 +78,14 @@ public class ModItems {
     	ModelLoader.setCustomModelResourceLocation(itemIngotZinc, 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_ITEM_INGOT_ZINC, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(itemIngotTin, 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_ITEM_INGOT_TIN, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(itemIngotAluminium, 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_ITEM_INGOT_ALUMINIUM, "inventory"));
+    	ModelLoader.setCustomModelResourceLocation(itemIngotSteel, 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_ITEM_INGOT_STEEL, "inventory"));
 
     	ModelLoader.setCustomModelResourceLocation(itemDustChlore, 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_ITEM_DUST_CHLORE, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(itemDustLithium, 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_ITEM_DUST_LITHIUM, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(itemDustCalcium, 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_ITEM_DUST_CALCIUM, "inventory"));
-    	ModelLoader.setCustomModelResourceLocation(ionicAgent, 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_ITEM_IONIC_AGENT, "inventory"));
+    	
+    	ModelLoader.setCustomModelResourceLocation(itemIonicAgent, 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_ITEM_IONIC_AGENT, "inventory"));
+    	ModelLoader.setCustomModelResourceLocation(itemChloreFilter, 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_ITEM_CHLORE_FILTER, "inventory"));
 	
     }
 

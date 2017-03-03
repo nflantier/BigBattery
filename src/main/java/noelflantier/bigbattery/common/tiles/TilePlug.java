@@ -9,10 +9,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.items.CapabilityItemHandler;
-import noelflantier.bigbattery.common.helpers.Materials;
 import noelflantier.bigbattery.common.helpers.MultiBlockBattery;
 import noelflantier.bigbattery.common.helpers.MultiBlockMessage;
+import noelflantier.bigbattery.common.network.PacketHandler;
+import noelflantier.bigbattery.common.network.messages.PacketPlug;
 
 public class TilePlug extends ATileBBTicking implements ITileMaster, IEnergyStorage{
 
@@ -42,6 +42,9 @@ public class TilePlug extends ATileBBTicking implements ITileMaster, IEnergyStor
 			energyStorage.receiveEnergy(rf,false);
 			mbb.materialsB.handleMaterials(getWorld(), (float)truerf/(float)rf);
 		}		
+    	if(energyStorage.getEnergyStored()!=this.lastEnergyStoredAmount)
+    		PacketHandler.sendToAllAround(new PacketPlug(this.getPos(), energyStorage.getEnergyStored(), this.lastEnergyStoredAmount),this);
+    	
 		lastEnergyStoredAmount= energyStorage.getEnergyStored();
 	}
 
@@ -109,6 +112,10 @@ public class TilePlug extends ATileBBTicking implements ITileMaster, IEnergyStor
 				break;
 		}
 		
+	}
+	
+	public void setEnergy(int energy){
+		energyStorage.receiveEnergy(Math.abs(energyStorage.getEnergyStored()-energy), false);
 	}
 
 	@Override

@@ -1,0 +1,14 @@
+<!--
+
+-->
+<materials>
+	<electrode name="" potential="" oxydationNo="">
+		<itemStack modID="" itemnNme="" oredictName="" weight=""/>
+	</electrode>
+	<electrolyte name="" potential="" oxydationno="" type="">
+		<itemStack modid="" itemname="" oredictname="" weight=""/>
+	</electrolyte>
+	<conductive name="" ratioRf="">
+		<itemStack modid="" itemname="" oredictname=""/>
+	</conductive>
+</materials>

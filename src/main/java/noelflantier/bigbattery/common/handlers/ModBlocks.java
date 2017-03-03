@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import noelflantier.bigbattery.Ressources;
 import noelflantier.bigbattery.common.blocks.BlockCasing;
+import noelflantier.bigbattery.common.blocks.BlockEnrichedClay;
 import noelflantier.bigbattery.common.blocks.BlockIonic;
 import noelflantier.bigbattery.common.blocks.BlockMetals;
 import noelflantier.bigbattery.common.blocks.BlockOres;
@@ -30,11 +31,12 @@ public class ModBlocks {
 	public static Block blockOreLead;
 	public static Block blockOrePlatinium;
 	public static Block blockOreCopper;
-	public static Block blockOreGraphite;
 	public static Block blockOreNickel;
 	public static Block blockOreZinc;
 	public static Block blockOreTin;
 	public static Block blockOreAluminium;
+	
+	public static Block blockEnrichedClay;
 	
 	public static Block blockSilver;
 	public static Block blockLead;
@@ -48,10 +50,13 @@ public class ModBlocks {
 	
 	/*
 	 * 
-	 * ALLOY
-	 * 
-	 * STEEL
-	 * 
+	 * ENRICHEDCLAY lithiumdust
+	 * BONEMEAL calciumdust
+	 * Chl:ore filter you right click water you store coord for 100 tick you cant click in thos coord
+	 * filtre (paper paper paper
+	 * 			flint flint flint
+	 *			paper paper paper)
+	 * STEEL iron coal
 	 * 
 	 * */
 	
@@ -72,7 +77,6 @@ public class ModBlocks {
 		
     	blockPlug = new BlockPlug(Material.ROCK);
 		GameRegistry.register(blockPlug);
-		
 		blockOreSilver = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_SILVER).setHardness(1).setHardness(1).setResistance(1);
 		GameRegistry.register(blockOreSilver);
 		blockOreLead = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_LEAD).setHardness(1).setHardness(1).setResistance(1);
@@ -81,8 +85,6 @@ public class ModBlocks {
 		GameRegistry.register(blockOrePlatinium);
 		blockOreCopper = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_COPPER).setHardness(1).setHardness(1).setResistance(1);
 		GameRegistry.register(blockOreCopper);
-		blockOreGraphite = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_GRAPHITE).setHardness(1).setHardness(1).setResistance(1);
-		GameRegistry.register(blockOreGraphite);
 		blockOreNickel = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_NICKEL).setHardness(1).setHardness(1).setResistance(1);
 		GameRegistry.register(blockOreNickel);
 		blockOreZinc = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_ZINC).setHardness(1).setHardness(1).setResistance(1);
@@ -91,6 +93,9 @@ public class ModBlocks {
 		GameRegistry.register(blockOreTin);
 		blockOreAluminium = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_ALUMINIUM).setHardness(1).setHardness(1).setResistance(1);
 		GameRegistry.register(blockOreAluminium);
+
+		blockEnrichedClay = new BlockEnrichedClay(Material.CLAY).setHardness(0.6F).setHardness(1).setResistance(1);
+		GameRegistry.register(blockEnrichedClay);
 		
 		blockSilver = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_SILVER).setHardness(1).setHardness(1).setResistance(1);
 		GameRegistry.register(blockSilver);
@@ -137,11 +142,12 @@ public class ModBlocks {
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockOreLead), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ORE_LEAD, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockOrePlatinium), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ORE_PLATINIUM, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockOreCopper), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ORE_COPPER, "inventory"));
-    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockOreGraphite), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ORE_GRAPHITE, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockOreNickel), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ORE_NICKEL, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockOreZinc), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ORE_ZINC, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockOreTin), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ORE_TIN, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockOreAluminium), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ORE_ALUMINIUM, "inventory"));
+    	
+    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockEnrichedClay), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ENRICHED_CLAY, "inventory"));
     	
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockSilver), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_SILVER, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockLead), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_LEAD, "inventory"));

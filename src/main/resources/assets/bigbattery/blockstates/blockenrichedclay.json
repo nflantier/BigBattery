@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "normal": { "model": "bigbattery:blockenrichedclay" },
+        "inventory": { "model": "bigbattery:blockenrichedclay" }
+    }
+}

@@ -25,7 +25,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import noelflantier.bigbattery.BigBattery;
 import noelflantier.bigbattery.Ressources;
+import noelflantier.bigbattery.common.handlers.ModGuis;
 import noelflantier.bigbattery.common.tiles.ITileMaster;
 import noelflantier.bigbattery.common.tiles.TilePlug;
 
@@ -63,19 +65,15 @@ public class BlockPlug extends ABlockBBStructure {
 	@Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-		if(!worldIn.isRemote){
-			if(state.getValue(ISSTRUCT) == true || hand == EnumHand.OFF_HAND){
-				
-				return true;
-			}
-			
-			TileEntity te = worldIn.getTileEntity(pos);
+		if(!worldIn.isRemote){	
 			if(playerIn.getHeldItem(EnumHand.MAIN_HAND).getItem() == Items.STICK){
+				TileEntity te = worldIn.getTileEntity(pos);
 				if( te != null && te instanceof ITileMaster){
 					((ITileMaster)te).getStructure().batteryCheckAndSetupStructure(worldIn, pos, playerIn);
 				}
 				return true;
-			}
+			}else
+				playerIn.openGui(BigBattery.instance, ModGuis.guiIDPlug, worldIn, pos.getX(), pos.getY(), pos.getZ());	
 		}
         return false;
     }

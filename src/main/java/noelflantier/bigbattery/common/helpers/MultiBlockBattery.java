@@ -24,6 +24,7 @@ import noelflantier.bigbattery.common.blocks.ABlockBBStructure;
 import noelflantier.bigbattery.common.blocks.BlockPlug;
 import noelflantier.bigbattery.common.handlers.ModBlocks;
 import noelflantier.bigbattery.common.handlers.ModProperties.CasingType;
+import noelflantier.bigbattery.common.materials.MaterialsHandler;
 import noelflantier.bigbattery.common.tiles.ITileHaveMaster;
 import noelflantier.bigbattery.common.tiles.ITileMaster;
 
@@ -152,7 +153,7 @@ public class MultiBlockBattery {
 	
 	public class MaterialPart{
 
-		public float weight = 1;
+		public double weight = 1;
 		public double totalUnit = -1;//~tick time per block
 		public double currentUnit = -1;
 		public int totalAmount = -1;//nombre block
@@ -161,7 +162,7 @@ public class MultiBlockBattery {
 		public MaterialPart(){}
 		
 	    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-	        nbt.setFloat("weight", weight);
+	        nbt.setDouble("weight", weight);
 	        nbt.setDouble("totalUnit", totalUnit);
 	        nbt.setDouble("currentUnit", currentUnit);
 	        nbt.setInteger("totalAmount", totalAmount);
@@ -187,18 +188,18 @@ public class MultiBlockBattery {
 	
 	public class MaterialsBattery{
 	
-		public Materials.Electrode anode;
-		public Materials.Conductive anodeCond;
+		public MaterialsHandler.Electrode anode;
+		public MaterialsHandler.Conductive anodeCond;
 		public MaterialPart anodeMP = new MaterialPart();
 		
-		public Materials.Electrode cathode;
-		public Materials.Conductive cathodeCond;
+		public MaterialsHandler.Electrode cathode;
+		public MaterialsHandler.Conductive cathodeCond;
 		public MaterialPart cathodeMP = new MaterialPart();
 		
-		public Materials.Electrolyte electrolyte;
+		public MaterialsHandler.Electrolyte electrolyte;
 		public MaterialPart electrolyteMP = new MaterialPart();
 		
-		public float potentialDifference = 0;
+		public double potentialDifference = 0;
 		public int baseAmount = 0;
 		public boolean deleteMaterials = true;
 		
@@ -298,22 +299,22 @@ public class MultiBlockBattery {
 		}
 		
 		public MaterialsBattery setCathodeAndConductive(ItemStack cathodeStack, ItemStack conductive, int amount){
-			cathode = Materials.getElectrodeFromStack(cathodeStack);
-			cathodeCond = Materials.getConductiveFromStack(conductive);
-			cathodeMP.weight = Materials.getWeightFromStack(cathode, cathodeStack);
+			cathode = MaterialsHandler.getElectrodeFromStack(cathodeStack);
+			cathodeCond = MaterialsHandler.getConductiveFromStack(conductive);
+			cathodeMP.weight = MaterialsHandler.getWeightFromStack(cathode, cathodeStack);
 			cathodeMP.totalAmount = amount;
 			return this;
 		}
 		public MaterialsBattery setAnodeAndConductive(ItemStack anodeStack, ItemStack conductive, int amount){
-			anode = Materials.getElectrodeFromStack(anodeStack);
-			anodeCond = Materials.getConductiveFromStack(conductive);
-			anodeMP.weight = Materials.getWeightFromStack(anode, anodeStack);
+			anode = MaterialsHandler.getElectrodeFromStack(anodeStack);
+			anodeCond = MaterialsHandler.getConductiveFromStack(conductive);
+			anodeMP.weight = MaterialsHandler.getWeightFromStack(anode, anodeStack);
 			anodeMP.totalAmount = amount;
 			return this;
 		}
 
 		public MaterialsBattery setElectrolyte(ItemStack electrolyteStack, int amount){
-			electrolyte = Materials.getElectrolyteFromStack(electrolyteStack);
+			electrolyte = MaterialsHandler.getElectrolyteFromStack(electrolyteStack);
 			electrolyteMP.totalAmount = amount;
 			return this;
 		}
@@ -331,7 +332,7 @@ public class MultiBlockBattery {
 	        t.setInteger("electrolyte", electrolyte != null ? electrolyte.materialID : 0);
 	        t.setTag("electrolyteMP", electrolyteMP.writeToNBT(new NBTTagCompound()));
 
-	        t.setFloat("potentialDifference", potentialDifference);
+	        t.setDouble("potentialDifference", potentialDifference);
 	        t.setInteger("baseAmount", baseAmount);
 	        nbt.setTag("materialbattery", t);
 	        
@@ -342,19 +343,19 @@ public class MultiBlockBattery {
 	    	NBTTagCompound b = (NBTTagCompound) nbt.getTag("materialbattery");
 	    	if(b!=null){
 		    	int anodeid = b.getInteger("anode");
-		    	anode = anodeid >= 0 ? Materials.electrodeListByPotential.get(anodeid) : null;
+		    	anode = anodeid >= 0 ? MaterialsHandler.electrodeListByPotential.get(anodeid) : null;
 		    	int anodeCondid = b.getInteger("anodeCond");
-		    	anodeCond = anodeCondid >= 0 ? Materials.conductiveListByRatio.get(anodeCondid) : null;
+		    	anodeCond = anodeCondid >= 0 ? MaterialsHandler.conductiveListByRatio.get(anodeCondid) : null;
 		    	anodeMP.readFromNBT((NBTTagCompound) b.getTag("anodeMP"));
 
 		    	int cathodeid = b.getInteger("cathode");
-		    	cathode = cathodeid >= 0 ? Materials.electrodeListByPotential.get(cathodeid) : null;
+		    	cathode = cathodeid >= 0 ? MaterialsHandler.electrodeListByPotential.get(cathodeid) : null;
 		    	int cathodeCondid = b.getInteger("cathodeCond");
-		    	cathodeCond = cathodeCondid >= 0 ? Materials.conductiveListByRatio.get(cathodeCondid) : null;
+		    	cathodeCond = cathodeCondid >= 0 ? MaterialsHandler.conductiveListByRatio.get(cathodeCondid) : null;
 		    	cathodeMP.readFromNBT((NBTTagCompound) b.getTag("cathodeMP"));
 	    		
 		    	int electrolyteid = b.getInteger("electrolyte");
-		    	electrolyte = electrolyteid >= 0 ? Materials.electrolyteListByPotential.get(electrolyteid) : null;
+		    	electrolyte = electrolyteid >= 0 ? MaterialsHandler.electrolyteListByPotential.get(electrolyteid) : null;
 		    	electrolyteMP.readFromNBT((NBTTagCompound) b.getTag("electrolyteMP"));
 		    	
 		    	potentialDifference = b.getFloat("potentialDifference");
@@ -496,7 +497,7 @@ public class MultiBlockBattery {
 			else if(stm2 == null) stm2 = mapFacingMaterialItemStack.get(entry.getKey()).copy();
 			
 			if(stm1 != null && stm2 != null){
-				if(Materials.getElectrodeFromStack(stm2).potential < Materials.getElectrodeFromStack(stm1).potential ){
+				if(MaterialsHandler.getElectrodeFromStack(stm2).potential < MaterialsHandler.getElectrodeFromStack(stm1).potential ){
 					materialsB.setAnodeAndConductive(stm2.copy(), entry.getValue(), mapFacingMaterialAmount.get(entry.getKey()));
 					materialsB.setCathodeAndConductive(stm1.copy(), stco, mapFacingMaterialAmount.get(fco));
 					materialsB.anodeMP.materialLimit = mapFacingMaterialB3D.get(entry.getKey());

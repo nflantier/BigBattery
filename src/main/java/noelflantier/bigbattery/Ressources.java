@@ -36,6 +36,8 @@ public class Ressources {
 	public static final String UL_NAME_BLOCK_ZINC = "blockZinc";
 	public static final String UL_NAME_BLOCK_TIN = "blockTin";
 	public static final String UL_NAME_BLOCK_ALUMINIUM = "blockAluminium";
+	
+	public static final String UL_NAME_BLOCK_ENRICHED_CLAY = "blockEnrichedClay";
 
 	public static final String UL_NAME_FLUID_CHLORE = "fluidChlore";
 	public static final String UL_NAME_FLUID_LITHIUM = "fluidLithium";
@@ -59,11 +61,13 @@ public class Ressources {
 	public static final String UL_NAME_ITEM_INGOT_ZINC = "itemIngotZinc";
 	public static final String UL_NAME_ITEM_INGOT_TIN = "itemIngotTin";
 	public static final String UL_NAME_ITEM_INGOT_ALUMINIUM = "itemIngotAluminium";
+	public static final String UL_NAME_ITEM_INGOT_STEEL = "itemIngotSteel";
 	
 	public static final String UL_NAME_ITEM_DUST_CHLORE = "itemDustChlore";
 	public static final String UL_NAME_ITEM_DUST_LITHIUM = "itemDustLithium";
 	public static final String UL_NAME_ITEM_DUST_CALCIUM = "itemDustCalcium";
-	public static final String UL_NAME_ITEM_IONIC_AGENT = "ionicAgent";
+	public static final String UL_NAME_ITEM_IONIC_AGENT = "itemIonicAgent";
+	public static final String UL_NAME_ITEM_CHLORE_FILTER = "itemChloreFilter";
 }
 
 
