@@ -47,11 +47,12 @@ public class MaterialsHandler{
 	conductiveListByRatio.add(i,new Conductive("Alluminium", 2.1F).setID(i));
 	i++;
 	conductiveListByRatio.add(i,new Conductive("Copper", 1.2F).setID(i));*/
-	public static Map<Double,Electrode> electrodeListByPotential= new HashMap<Double,Electrode>();//desc
-	public static Map<Double,Electrolyte> electrolyteListByPotential= new HashMap<Double,Electrolyte>();//desc
-	public static Map<Double,Conductive> conductiveListByRatio= new HashMap<Double,Conductive>();//desc
+	public static Map<Integer,Electrode> electrodeListByPotential= new HashMap<Integer,Electrode>();//desc
+	public static Map<Integer,Electrolyte> electrolyteListByPotential= new HashMap<Integer,Electrolyte>();//desc
+	public static Map<Integer,Conductive> conductiveListByRatio= new HashMap<Integer,Conductive>();//desc
 	public static final String FILE_NAME_MATERIALS = "materials.xml";
-	
+	public static int IDMATERIALS = 0;
+	public static int getNextIdMaterials(){return IDMATERIALS++;}
 	public static Comparator<MaterialsHandler.Electrode> byElectrodePotential = (e1, e2) -> Double.compare(
             e1.potential,e2.potential);
 	public static Comparator<MaterialsHandler.Electrolyte> byElectrolytePotential = (e1, e2) -> Double.compare(
@@ -71,11 +72,13 @@ public class MaterialsHandler{
 		List<Material> rh = ConfigHandler.loadRecipeConfig(FILE_NAME_MATERIALS);
 	    if(rh != null) {
 	    	
-	    	electrodeListByPotential.putAll(rh.stream().filter(m->m instanceof MaterialsHandler.Electrode).map(s->(MaterialsHandler.Electrode)s).sorted(byElectrodePotential).collect(Collectors.toMap(Electrode::getPotential, p->p)));
-	    	electrolyteListByPotential.putAll(rh.stream().filter(m->m instanceof MaterialsHandler.Electrolyte).map(s->(MaterialsHandler.Electrolyte)s).sorted(byElectrolytePotential).collect(Collectors.toMap(Electrolyte::getPotential, p->p)));
-	    	conductiveListByRatio.putAll(rh.stream().filter(m->m instanceof MaterialsHandler.Conductive).map(s->(MaterialsHandler.Conductive)s).sorted(byConductiveRatio).collect(Collectors.toMap(Conductive::getRatioRF, p->p)));
+	    	electrodeListByPotential.putAll(rh.stream().filter(m->m instanceof MaterialsHandler.Electrode).map(s->(MaterialsHandler.Electrode)s).sorted(byElectrodePotential).collect(Collectors.toMap(p->getNextIdMaterials(), p->p)));
+	    	electrolyteListByPotential.putAll(rh.stream().filter(m->m instanceof MaterialsHandler.Electrolyte).map(s->(MaterialsHandler.Electrolyte)s).sorted(byElectrolytePotential).collect(Collectors.toMap(p->getNextIdMaterials(), p->p)));
+	    	conductiveListByRatio.putAll(rh.stream().filter(m->m instanceof MaterialsHandler.Conductive).map(s->(MaterialsHandler.Conductive)s).sorted(byConductiveRatio).collect(Collectors.toMap(p->getNextIdMaterials(), p->p)));
 	    	
-	    	System.out.println("..................................... "+rh.size());
+	    	System.out.println("..................................... "+electrodeListByPotential.size());
+	    	System.out.println("..................................... "+electrolyteListByPotential.size());
+	    	System.out.println("..................................... "+conductiveListByRatio.size());
 	    	//recipes.addAll(rh.recipes);
 	    } else {
 	    	System.out.println("Could not load materials config ");
@@ -153,8 +156,8 @@ public class MaterialsHandler{
 	
 	public static class Electrode extends Material<Electrode>{
 		public double potential = 0;
-		public double [] oxydationNumber;
-		public Electrode(String s, double e, double []o){
+		public List<Double> oxydationNumber;
+		public Electrode(String s, double e, List<Double>o){
 			super(s);
 			this.potential = e;
 			this.oxydationNumber = o;
@@ -176,13 +179,17 @@ public class MaterialsHandler{
 				this.ratioVoltage = rv;
 				this.ratioDecay = rd;
 			}
+			
+			public static Type getTypeFromIndex(int idx){
+				return idx >= Type.values().length ? Type.values()[0] : Type.values()[idx];
+			}
 		}
 		
 		public double potential = 0;
-		public double [] oxydationNumber;
+		public List<Double> oxydationNumber;
 		public Type electrolyteType;
 		
-		public Electrolyte(String s, double e, double[] o, Type type) {
+		public Electrolyte(String s, double e, List<Double> o, Type type) {
 			super(s);
 			this.potential = e;
 			this.oxydationNumber = o;

@@ -4,6 +4,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -19,10 +20,13 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.oredict.OreDictionary;
+import noelflantier.bigbattery.BigBattery;
 import noelflantier.bigbattery.Ressources;
 import noelflantier.bigbattery.common.materials.MaterialsHandler.Material;
 
@@ -33,6 +37,7 @@ public class RecipeParser extends DefaultHandler {
 	public static final String ELEMENT_ELECTROLYTE = "electrolyte";
 	public static final String ELEMENT_CONDUCTIVE = "conductive";
 	public static final String ELEMENT_ITEM_STACK = "itemStack";
+	public static final String ELEMENT_BUCKET_STACK = "bucketStack";
 	public static final String ELEMENT_FLUID_STACK = "fluidStack";
 	
 	public static final String AT_POTENTIAL = "potential";
@@ -116,20 +121,20 @@ public class RecipeParser extends DefaultHandler {
 	    		return;
 	    	}
 	    	if(currentMaterial != null) {
-	    		System.out.println("Recipe " + currentMaterial.materialID + " not closed before encountering a new material.");
+	    		System.out.println("Material not closed before encountering a new material.");
 	        }
 
 	    	String name = getStringValue(AT_NAME, attributes, null);
 	    	if(ELEMENT_ELECTRODE.equals(localName)){
 					double p = getDoubleValue(AT_POTENTIAL, attributes, 0);
-					double o[] = getDoubleArrayValue(AT_OXYDATIONNO, attributes, 0);
+					List<Double> o = getDoubleListValue(AT_OXYDATIONNO, attributes, 0);
 					currentMaterial = new MaterialsHandler.Electrode(name,p,o);
 					currentMaterialClass = MaterialsHandler.Electrode.class;
 	    	}else if(ELEMENT_ELECTROLYTE.equals(localName)){
 					double p = getDoubleValue(AT_POTENTIAL, attributes, 0);
-					double o[] = getDoubleArrayValue(AT_OXYDATIONNO, attributes, 0);
+					List<Double> o = getDoubleListValue(AT_OXYDATIONNO, attributes, 0);
 					int idt = getIntValue(AT_TYPE, attributes, 0);
-					currentMaterial = new MaterialsHandler.Electrolyte(name,p,o, MaterialsHandler.Electrolyte.Type.values()[idt]);
+					currentMaterial = new MaterialsHandler.Electrolyte(name,p,o, MaterialsHandler.Electrolyte.Type.getTypeFromIndex(idt));
 					currentMaterialClass = MaterialsHandler.Electrolyte.class;
 	    	}else if(ELEMENT_CONDUCTIVE.equals(localName)){
 					double p = getDoubleValue(AT_RATIO_RF, attributes, 0);
@@ -138,20 +143,30 @@ public class RecipeParser extends DefaultHandler {
 	    	}
 	    	return;
 	    }
-
 	    
 	    if(currentMaterial == null) {
 	    	System.out.println("Found element <" + localName + "> with no material decleration.");
 	        return;
+	    }	    
+
+	    if(ELEMENT_BUCKET_STACK.equals(localName)){
+	    	Fluid f = getFluid(attributes);
+	    	if(f==null){
+		        System.out.println("Could not find the fluid for the bucketstack");
+		        return;
+	    	}
+	    	ItemStack st = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, f);
+        	if(st!=null)
+        		currentMaterial.addMaterial(st, getItemStackWeight(attributes));
+		    
 	    }
 	    
-
 	    boolean isFluidStack = ELEMENT_FLUID_STACK.equals(localName);
-	    if(ELEMENT_ITEM_STACK.equals(localName)  || isFluidStack) {
-	    	if(isFluidStack){
-            }else{
-	    		currentMaterial.addMaterial(getItemStack(attributes), getItemStackWeight(attributes));
-            }
+	    if(ELEMENT_ITEM_STACK.equals(localName)) {
+        	ItemStack st = getItemStack(attributes);
+        	if(st!=null){
+        		currentMaterial.addMaterial(st, getItemStackWeight(attributes));
+        	}
 	        return;
 	    }
 	}
@@ -159,7 +174,6 @@ public class RecipeParser extends DefaultHandler {
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if(ELEMENT_ROOT_MATERIALS.equals(localName)){
-	    	result = new ArrayList<Material>();
 	    	currentMaterial = null;
 	    	currentMaterialClass = null;
 		    return;
@@ -172,8 +186,14 @@ public class RecipeParser extends DefaultHandler {
 	        	System.out.println("Could not add current material to group root");
 	        }
 	        currentMaterial = null;
+	    	currentMaterialClass = null;
 	        return;
 	    }
+	}
+	
+	public Fluid getFluid(Attributes attributes){
+	    String name = getStringValue(AT_ITEM_NAME, attributes, null);
+		return FluidRegistry.getFluid(name.toLowerCase());
 	}
 	
 	public FluidStack getFluidStack(Attributes attributes){
@@ -197,10 +217,8 @@ public class RecipeParser extends DefaultHandler {
 	    int itemMeta = getIntValue(AT_ITEM_DAMAGE, attributes, 0);
 	    String modId = getStringValue(AT_MOD_ID, attributes, null);
 	    String name = getStringValue(AT_ITEM_NAME, attributes, null);
-	    if(modId.equals(Ressources.MODID))
-	    	name = Ressources.MODID+"_"+name;
-
 	    String orename = getStringValue(AT_ORE_DICT, attributes, null);
+    	
 	    if(orename!=null && OreDictionary.doesOreNameExist(orename)){
 	    	List<ItemStack> ores = OreDictionary.getOres(orename);
 	        if(!ores.isEmpty() && ores.get(0) != null) {
@@ -271,9 +289,9 @@ public class RecipeParser extends DefaultHandler {
 			return def;
 		}
 	}
-	public static double[] getDoubleArrayValue(String qName, Attributes attributes, double def) {
+	public static List<Double> getDoubleListValue(String qName, Attributes attributes, double def) {
 		try {
-			return Arrays.asList(getStringValue(qName, attributes, def + "").split(",")).stream().mapToDouble(str->Double.parseDouble(str)).toArray();
+			return Arrays.asList(getStringValue(qName, attributes, def + "").split(",")).stream().map(str->Double.parseDouble(str)).collect(Collectors.toList());
 			/*
 			List<String> s = Arrays.asList(getStringValue(qName, attributes, def + "").split(","));
 			List<Float> f = s.stream().map(st->Float.parseFloat(st)).collect(Collectors.toList());
@@ -281,7 +299,7 @@ public class RecipeParser extends DefaultHandler {
 			*/
 		} catch (Exception e) {
 			System.out.println("Could not parse a valid float for attribute " + qName + " with value " + getStringValue(qName, attributes, null));
-			return new double[]{def};
+			return new ArrayList<Double>(){{add(def);}};
 		}
 	}
 	

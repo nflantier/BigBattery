@@ -19,37 +19,37 @@ import noelflantier.bigbattery.common.blocks.BlockFluids;
 public class ModFluids {
 
 	public static Fluid fluidChlore;
-	public static Fluid fluidLithium;
-	public static Fluid fluidCalcium;
+	/*public static Fluid fluidLithium;
+	public static Fluid fluidCalcium;*/
 	public static Block blockAqueousChlore;
-	public static Block blockAqueousLithium;
-	public static Block blockAqueousCalcium;
+	/*public static Block blockAqueousLithium;
+	public static Block blockAqueousCalcium;*/
 	
 	public static void preInitCommon() {
 		   
     	fluidChlore = new Fluid(Ressources.UL_NAME_FLUID_CHLORE,new ResourceLocation(Ressources.MODID+":blocks/liquefied_asgardite"),new ResourceLocation(Ressources.MODID+":blocks/liquefied_asgardite_flow")).setDensity(100).setViscosity(100).setTemperature(100);
 		FluidRegistry.registerFluid(fluidChlore);
 		FluidRegistry.addBucketForFluid(fluidChlore);
-		fluidLithium = new Fluid(Ressources.UL_NAME_FLUID_LITHIUM,new ResourceLocation(Ressources.MODID+":blocks/liquefied_asgardite"),new ResourceLocation(Ressources.MODID+":blocks/liquefied_asgardite_flow")).setDensity(100).setViscosity(100).setTemperature(100);
+		/*fluidLithium = new Fluid(Ressources.UL_NAME_FLUID_LITHIUM,new ResourceLocation(Ressources.MODID+":blocks/liquefied_asgardite"),new ResourceLocation(Ressources.MODID+":blocks/liquefied_asgardite_flow")).setDensity(100).setViscosity(100).setTemperature(100);
 		FluidRegistry.registerFluid(fluidLithium);
 		FluidRegistry.addBucketForFluid(fluidLithium);
 		fluidCalcium = new Fluid(Ressources.UL_NAME_FLUID_CALCIUM,new ResourceLocation(Ressources.MODID+":blocks/liquefied_asgardite"),new ResourceLocation(Ressources.MODID+":blocks/liquefied_asgardite_flow")).setDensity(100).setViscosity(100).setTemperature(100);
 		FluidRegistry.registerFluid(fluidCalcium);
-		FluidRegistry.addBucketForFluid(fluidCalcium);
+		FluidRegistry.addBucketForFluid(fluidCalcium);*/
 
 		blockAqueousChlore = new BlockFluids(fluidChlore, Material.WATER, Ressources.UL_NAME_BLOCK_AQUEOUS_CHLORE);
 		GameRegistry.register(blockAqueousChlore);
-		blockAqueousLithium = new BlockFluids(fluidLithium, Material.WATER, Ressources.UL_NAME_BLOCK_AQUEOUS_LITHIUM);
+		/*blockAqueousLithium = new BlockFluids(fluidLithium, Material.WATER, Ressources.UL_NAME_BLOCK_AQUEOUS_LITHIUM);
 		GameRegistry.register(blockAqueousLithium);
 		blockAqueousCalcium = new BlockFluids(fluidCalcium, Material.WATER, Ressources.UL_NAME_BLOCK_AQUEOUS_CALCIUM);
-		GameRegistry.register(blockAqueousCalcium);
+		GameRegistry.register(blockAqueousCalcium);*/
 	}
 	
     @SideOnly(Side.CLIENT)
 	public static void preInitClient() {
     	registerAndIgnoreState(blockAqueousChlore, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_FLUID_CHLORE, "ignore"));
-    	registerAndIgnoreState(blockAqueousLithium, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_FLUID_LITHIUM, "ignore"));
-    	registerAndIgnoreState(blockAqueousCalcium, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_FLUID_CALCIUM, "ignore"));
+    	/*registerAndIgnoreState(blockAqueousLithium, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_FLUID_LITHIUM, "ignore"));
+    	registerAndIgnoreState(blockAqueousCalcium, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_FLUID_CALCIUM, "ignore"));*/
     }
 
     @SideOnly(Side.CLIENT)

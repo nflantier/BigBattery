@@ -66,9 +66,10 @@ public class ModBlocks {
 	public static Block blockIonicChlore;
 	public static Block blockIonicLithium;
 	public static Block blockIonicCalcium;
-	public static Block blockChlore;
+	//public static Block blockChlore;
 	public static Block blockLithium;
 	public static Block blockCalcium;
+	
 	
 	public static void preInitCommon() {
 		
@@ -122,8 +123,8 @@ public class ModBlocks {
 		GameRegistry.register(blockIonicLithium);
 		blockIonicCalcium= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_CALCIUM).setHardness(1).setHardness(1).setResistance(1);
 		GameRegistry.register(blockIonicCalcium);
-		blockChlore= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_CHLORE).setHardness(1).setHardness(1).setResistance(1);
-		GameRegistry.register(blockChlore);
+		/*blockChlore= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_CHLORE).setHardness(1).setHardness(1).setResistance(1);
+		GameRegistry.register(blockChlore);*/
 		blockLithium= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_LITHIUM).setHardness(1).setHardness(1).setResistance(1);
 		GameRegistry.register(blockLithium);
 		blockCalcium= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_CALCIUM).setHardness(1).setHardness(1).setResistance(1);
@@ -162,7 +163,7 @@ public class ModBlocks {
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockIonicChlore), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_IONIC_CHLORE, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockIonicLithium), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_IONIC_LITHIUM, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockIonicCalcium), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_IONIC_CALCIUM, "inventory"));
-    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockChlore), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CHLORE, "inventory"));
+    	//ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockChlore), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CHLORE, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockLithium), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_LITHIUM, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCalcium), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CALCIUM, "inventory"));
     }

@@ -40,8 +40,7 @@ public class Ressources {
 	public static final String UL_NAME_BLOCK_ENRICHED_CLAY = "blockEnrichedClay";
 
 	public static final String UL_NAME_FLUID_CHLORE = "fluidChlore";
-	public static final String UL_NAME_FLUID_LITHIUM = "fluidLithium";
-	public static final String UL_NAME_FLUID_CALCIUM = "fluidCalcium";
+	
 	public static final String UL_NAME_BLOCK_AQUEOUS_CHLORE = "blockAqueousChlore";
 	public static final String UL_NAME_BLOCK_AQUEOUS_LITHIUM = "blockAqueousLithium";
 	public static final String UL_NAME_BLOCK_AQUEOUS_CALCIUM = "blockAqueousCalcium";

@@ -285,9 +285,9 @@ public class MultiBlockBattery {
 				return;
 			
 			potentialDifference = Math.abs(anode.potential - cathode.potential);
-			int anodeOxydationNo = anode.oxydationNumber.length;
-			int cathodeOxydationNo = cathode.oxydationNumber.length;
-			int electrolyteOxydationNo = electrolyte.oxydationNumber.length;
+			int anodeOxydationNo = anode.oxydationNumber.size();
+			int cathodeOxydationNo = cathode.oxydationNumber.size();
+			int electrolyteOxydationNo = electrolyte.oxydationNumber.size();
 			baseAmount = anodeMP.totalAmount + cathodeMP.totalAmount;
 			anodeMP.totalUnit = Math.floor( anodeMP.weight * ( Math.pow(anodeOxydationNo,1.1) * (1000/anodeOxydationNo)) );
 			cathodeMP.totalUnit = Math.floor( cathodeMP.weight * ( Math.pow(cathodeOxydationNo ,1.3) * (1000/cathodeOxydationNo)) );
