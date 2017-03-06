@@ -7,8 +7,7 @@ import net.minecraft.world.World;
 
 public abstract class ABlockBBStructure  extends ABlockContainerBB {
     public static final PropertyBool ISSTRUCT = PropertyBool.create("isstruct");
-
-	protected ABlockBBStructure(Material materialIn) {
+    protected ABlockBBStructure(Material materialIn) {
 		super(materialIn);
 	}
 

@@ -47,7 +47,7 @@ public class ModFluids {
 	
     @SideOnly(Side.CLIENT)
 	public static void preInitClient() {
-    	registerAndIgnoreState(blockAqueousChlore, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_FLUID_CHLORE, "ignore"));
+    	registerAndIgnoreState(blockAqueousChlore, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_AQUEOUS_CHLORE, "ignore"));
     	/*registerAndIgnoreState(blockAqueousLithium, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_FLUID_LITHIUM, "ignore"));
     	registerAndIgnoreState(blockAqueousCalcium, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_FLUID_CALCIUM, "ignore"));*/
     }

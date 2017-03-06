@@ -13,8 +13,11 @@ public class Ressources {
 	public static final String CLIENT_PROXY = "noelflantier."+MODID+".client.ClientProxy";
 	
 
-	public static final String UL_NAME_BLOCK_CASING = "blockBasicCasing";
-	public static final String UL_NAME_BLOCK_CASING_FULL = "blockBasicCasingFull";
+	public static final String UL_NAME_BLOCK_CASING = "blockCasing";
+	public static final String UL_NAME_BLOCK_BASIC_CASING_FULL = "blockBasicCasingFull";
+	public static final String UL_NAME_BLOCK_ADVANCED_CASING_FULL = "blockAdvancedCasingFull";
+
+	public static final String UL_NAME_BLOCK_CONDUCTIVE = "blockConductive";
 	public static final String UL_NAME_BLOCK_PLUG = "blockPlug";
 	
 	public static final String UL_NAME_BLOCK_ORE_SILVER = "blockOreSilver";
@@ -42,12 +45,10 @@ public class Ressources {
 	public static final String UL_NAME_FLUID_CHLORE = "fluidChlore";
 	
 	public static final String UL_NAME_BLOCK_AQUEOUS_CHLORE = "blockAqueousChlore";
-	public static final String UL_NAME_BLOCK_AQUEOUS_LITHIUM = "blockAqueousLithium";
-	public static final String UL_NAME_BLOCK_AQUEOUS_CALCIUM = "blockAqueousCalcium";
+	
 	public static final String UL_NAME_BLOCK_IONIC_CHLORE = "blockIonicChlore";
 	public static final String UL_NAME_BLOCK_IONIC_LITHIUM = "blockIonicLithium";
 	public static final String UL_NAME_BLOCK_IONIC_CALCIUM = "blockIonicCalcium";
-	public static final String UL_NAME_BLOCK_CHLORE = "blockChlore";
 	public static final String UL_NAME_BLOCK_LITHIUM = "blockLithium";
 	public static final String UL_NAME_BLOCK_CALCIUM = "blockCalcium";
 	

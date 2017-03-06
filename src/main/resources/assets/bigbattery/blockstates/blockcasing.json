@@ -1,6 +1,8 @@
 {
     "multipart": [
-        {   "apply": { "model": "bigbattery:blockbasiccasing" }},
+        {   "when": {"type" : "basic"},
+            "apply": { "model": "bigbattery:blockbasiccasing"}
+        },
         
         {   "when": {"OR" :[{ "down": "false" }, {"isstruct" : "false"}]},
             "apply": { "model": "bigbattery:blockbasiccasing-d"}

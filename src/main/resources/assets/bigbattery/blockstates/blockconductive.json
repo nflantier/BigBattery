@@ -1,0 +1,7 @@
+{
+    "multipart": [
+        {   "when": {"type" : "copper"},
+            "apply": { "model": "bigbattery:blockbasiccasing"}
+        }
+    ]
+}

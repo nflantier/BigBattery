@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import noelflantier.bigbattery.Ressources;
 import noelflantier.bigbattery.common.blocks.BlockCasing;
+import noelflantier.bigbattery.common.blocks.BlockConductive;
 import noelflantier.bigbattery.common.blocks.BlockEnrichedClay;
 import noelflantier.bigbattery.common.blocks.BlockIonic;
 import noelflantier.bigbattery.common.blocks.BlockMetals;
@@ -22,11 +23,9 @@ public class ModBlocks {
 
 	public static Block blockCasing;
 	public static Block blockPlug;
-	
-
+	public static Block blockConductive;
 	public static Block blockInterface;
 	
-	//METALS
 	public static Block blockOreSilver;
 	public static Block blockOreLead;
 	public static Block blockOrePlatinium;
@@ -48,25 +47,10 @@ public class ModBlocks {
 	public static Block blockTin;
 	public static Block blockAluminium;
 	
-	/*
-	 * 
-	 * ENRICHEDCLAY lithiumdust
-	 * BONEMEAL calciumdust
-	 * Chl:ore filter you right click water you store coord for 100 tick you cant click in thos coord
-	 * filtre (paper paper paper
-	 * 			flint flint flint
-	 *			paper paper paper)
-	 * STEEL iron coal
-	 * 
-	 * */
-	
-	
-	
-	//ELECTROLYTES
 	public static Block blockIonicChlore;
 	public static Block blockIonicLithium;
 	public static Block blockIonicCalcium;
-	//public static Block blockChlore;
+	
 	public static Block blockLithium;
 	public static Block blockCalcium;
 	
@@ -75,6 +59,8 @@ public class ModBlocks {
 		
 		blockCasing = new BlockCasing(Material.ROCK);
 		GameRegistry.register(blockCasing);
+		blockConductive = new BlockConductive(Material.ROCK);
+		GameRegistry.register(blockConductive);
 		
     	blockPlug = new BlockPlug(Material.ROCK);
 		GameRegistry.register(blockPlug);
@@ -134,7 +120,12 @@ public class ModBlocks {
 	
     @SideOnly(Side.CLIENT)
 	public static void preInitClient() {
-    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCasing), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CASING_FULL, "inventory"));
+    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCasing), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_BASIC_CASING_FULL, "inventory"));
+    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCasing), 2, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_PLUG, "inventory"));
+    	
+    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockConductive), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CONDUCTIVE, "inventory"));
+    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockConductive), 2, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CONDUCTIVE, "inventory"));
+    	
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockPlug), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_PLUG, "inventory"));
         ModelLoader.setCustomStateMapper(blockPlug, (new StateMap.Builder()).ignore(new IProperty[] {BlockPlug.ISSTRUCT}).build());
         

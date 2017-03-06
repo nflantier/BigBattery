@@ -21,6 +21,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import noelflantier.bigbattery.common.blocks.ABlockBBStructure;
+import noelflantier.bigbattery.common.blocks.BlockCasing;
 import noelflantier.bigbattery.common.blocks.BlockPlug;
 import noelflantier.bigbattery.common.handlers.ModBlocks;
 import noelflantier.bigbattery.common.handlers.ModProperties.CasingType;
@@ -59,22 +60,22 @@ public class MultiBlockBattery {
 	public BlockPos ues;
 	
     public static List<Block> allowedStructureBlock= new ArrayList<Block>();
-    public static List<ItemStack> allowedConductiveBlock= new ArrayList<ItemStack>();
-    public static List<ItemStack> allowedElectrolyteBlock= new ArrayList<ItemStack>();
-    public static List<ItemStack> allowedMaterialsBlock= new ArrayList<ItemStack>();
+    //public static List<ItemStack> allowedConductiveBlock= new ArrayList<ItemStack>();
+    //public static List<ItemStack> allowedElectrolyteBlock= new ArrayList<ItemStack>();
+    //public static List<ItemStack> allowedMaterialsBlock= new ArrayList<ItemStack>();
     
     public static List<Block> allowedAutomaticBlock= new ArrayList<Block>();//other structure blocks that are not in this list are manual
     
     public MaterialsBattery materialsB = new MaterialsBattery();
     
     static{
-    	allowedMaterialsBlock.add(new ItemStack(Blocks.IRON_BLOCK));
-    	allowedMaterialsBlock.add(new ItemStack(Blocks.GOLD_BLOCK));
+    	//allowedMaterialsBlock.add(new ItemStack(Blocks.IRON_BLOCK));
+    	//allowedMaterialsBlock.add(new ItemStack(Blocks.GOLD_BLOCK));
     	//allowedMaterialsBlock BLOCK AIR
-    	allowedConductiveBlock.add(new ItemStack(Blocks.REDSTONE_BLOCK));
-    	allowedConductiveBlock.add(new ItemStack(Blocks.LAPIS_BLOCK));
+    	//allowedConductiveBlock.add(new ItemStack(Blocks.REDSTONE_BLOCK));
+    	//allowedConductiveBlock.add(new ItemStack(Blocks.LAPIS_BLOCK));
     	
-    	allowedElectrolyteBlock.add(new ItemStack(Blocks.BOOKSHELF));
+    	//allowedElectrolyteBlock.add(new ItemStack(Blocks.BOOKSHELF));
     	//allowedElectrolyteBlock BLOCK AIR
     	
     	allowedStructureBlock.add(ModBlocks.blockCasing);
@@ -88,10 +89,10 @@ public class MultiBlockBattery {
 		
 	}
 	
-	public class B3D{
+	public static class B3D{
 		public BlockPos dwn;
 		public BlockPos ues;
-		public Random brdm = new Random();
+		public static Random brdm = new Random();
 		
 		public B3D(BlockPos d, BlockPos u){
 			dwn = d;
@@ -293,9 +294,9 @@ public class MultiBlockBattery {
 			cathodeMP.totalUnit = Math.floor( cathodeMP.weight * ( Math.pow(cathodeOxydationNo ,1.3) * (1000/cathodeOxydationNo)) );
 			electrolyteMP.totalUnit= Math.floor( electrolyteMP.weight * ( Math.pow(electrolyteOxydationNo ,electrolyte.electrolyteType.ratioDecay) * (1000/electrolyteOxydationNo)) );
 
-			System.out.println("ano "+anodeMP.totalUnit+"   "+anodeMP.weight+"   "+anodeOxydationNo);
+			/*System.out.println("ano "+anodeMP.totalUnit+"   "+anodeMP.weight+"   "+anodeOxydationNo);
 			System.out.println("cat "+cathodeMP.totalUnit+"   "+cathodeMP.weight+"   "+cathodeOxydationNo);
-			System.out.println("ele "+electrolyteMP.totalUnit+"   "+electrolyteMP.weight+"   "+electrolyteOxydationNo+"  "+electrolyte.electrolyteType.ratioDecay);
+			System.out.println("ele "+electrolyteMP.totalUnit+"   "+electrolyteMP.weight+"   "+electrolyteOxydationNo+"  "+electrolyte.electrolyteType.ratioDecay);*/
 		}
 		
 		public MaterialsBattery setCathodeAndConductive(ItemStack cathodeStack, ItemStack conductive, int amount){
@@ -378,9 +379,10 @@ public class MultiBlockBattery {
 		BlockPos nextPos = currentPos.add(direction.getDirectionVec());
 		IBlockState currentState = world.getBlockState(currentPos);
 		IBlockState nextState = world.getBlockState(nextPos);
-		ItemStack nextits = new ItemStack(nextState.getBlock());
+		ItemStack nextits = new ItemStack(nextState.getBlock(),1,nextState.getBlock().getMetaFromState(nextState));
 
-		if(allowedConductiveBlock.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(nextits))){
+		//System.out.println(nextits.getItemDamage());
+		if(MaterialsHandler.anyMatchConductive(nextits)){
 			if(!mapFacingConductiveItemStack.containsKey(direction))
 				mapFacingConductiveItemStack.put(direction, nextits);
 			return findSide(nextPos, direction, world, range, checkElectrolyteFacing, allowAir);
@@ -389,7 +391,7 @@ public class MultiBlockBattery {
 				electrolyteFacing = direction;
 			}
 		}
-		if(allowedElectrolyteBlock.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(nextits)))
+		if(MaterialsHandler.anyMatchElectrolyte(nextits))
 			return findSide(nextPos, direction, world, range, checkElectrolyteFacing, allowAir);
 		if(allowAir && nextState.getBlock() == Blocks.AIR){
 			return findSide(nextPos, direction, world, range, checkElectrolyteFacing, allowAir);
@@ -425,11 +427,16 @@ public class MultiBlockBattery {
 
 			BlockPos l3 = findSide(plugPos, dummyFacing, world, 0, true, false);
 			BlockPos l4 = findSide(plugPos, dummyFacing.getOpposite(), world, 0, true, false);
+			System.out.println(l1);
+			System.out.println(l2);
+			System.out.println(l3);
+			System.out.println(l4);
+			System.out.println(l5);
 			if(l1 == null || l2 == null || l3 == null || l4 == null || l5 == null || mapFacingConductiveItemStack.size()!=2 ){
 				reset();
 				return false;
 			}
-			
+
 			List<Integer> lx = new ArrayList<Integer>();
 			Collections.addAll(lx,l1.getX(),l2.getX(),l3.getX(),l4.getX(),l5.getX());
 			List<Integer> ly = new ArrayList<Integer>();
@@ -593,7 +600,7 @@ public class MultiBlockBattery {
 					ItemStack n = new ItemStack(s.getBlock());
 					if(x == nbp.getX() && y == nbp.getY() && z == nbp.getZ())
 						fb1 = tf;
-					if(s.getBlock() == Blocks.AIR || allowedMaterialsBlock.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(n)) ){
+					if(s.getBlock() == Blocks.AIR || MaterialsHandler.anyMatchElectrode(n) ){
 						if(s.getBlock() != Blocks.AIR){
 							amountb1++;
 							if(b1 == null)b1 = n.copy();
@@ -621,7 +628,7 @@ public class MultiBlockBattery {
 				for (int z = dwnElectrolyte.getZ()+1 ; z < ues.getZ() ; z++ ){
 					IBlockState s = world.getBlockState(new BlockPos(x,y,z));
 					ItemStack n = new ItemStack(s.getBlock());
-					if(s.getBlock() == Blocks.AIR || allowedMaterialsBlock.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(n)) ){
+					if(s.getBlock() == Blocks.AIR || MaterialsHandler.anyMatchElectrode(n) ){
 						if(s.getBlock() != Blocks.AIR){
 							amountb2++;
 							if(b2 == null)b2 = n.copy();
@@ -743,7 +750,7 @@ public class MultiBlockBattery {
 				for (int z = zmin ; z <= zmax ; z++ ){
 					IBlockState st = world.getBlockState(new BlockPos(x,y,z));
 					ItemStack n = new ItemStack(st.getBlock());
-					if(st.getBlock() == Blocks.AIR || allowedElectrolyteBlock.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(n)) ){
+					if(st.getBlock() == Blocks.AIR || MaterialsHandler.anyMatchElectrolyte(n) ){
 						if(st.getBlock() != Blocks.AIR){
 							amountElectrolyte++;
 							if(electrolyteItemStack == null)electrolyteItemStack = n.copy();
@@ -779,7 +786,7 @@ public class MultiBlockBattery {
 
 		if(currentPos.getX()==limit.getX() && currentPos.getY()==limit.getY() && currentPos.getZ()==limit.getZ())
 			return true;
-		if(conductiveRef.isItemEqualIgnoreDurability(new ItemStack(nextState.getBlock()))){
+		if(conductiveRef.isItemEqualIgnoreDurability(new ItemStack(nextState.getBlock(),1,nextState.getBlock().getMetaFromState(nextState)))){
 			return checkBlockConductive(nextPos, direction, world, limit, conductiveRef);
 		}
 		
@@ -858,7 +865,7 @@ public class MultiBlockBattery {
 	}
 	
 	private boolean checkStructure(World world) {
-				
+		System.out.println(".................................x");
 		//check x wall
 		int [] tx = new int[]{dwn.getX(), ues.getX()};
 		for (int i = 0 ; i < tx.length ; i++ ){
@@ -870,7 +877,7 @@ public class MultiBlockBattery {
 				}
 			}
 		}
-
+		System.out.println(".................................y");
 		//check y wall
 		int [] ty = new int[]{dwn.getY(), ues.getY()};
 		for (int i = 0 ; i < ty.length ; i++ ){
@@ -882,7 +889,7 @@ public class MultiBlockBattery {
 				}
 			}
 		}
-
+		System.out.println(".................................z");
 		//check z wall
 		int [] tz = new int[]{dwn.getZ(), ues.getZ()};
 		for (int i = 0 ; i < tz.length ; i++ ){
@@ -900,18 +907,30 @@ public class MultiBlockBattery {
 	
 	private boolean checkBlockStructure(BlockPos bp, World world){
 		IBlockState s = world.getBlockState(bp);
-		ItemStack ns = new ItemStack(s.getBlock());
+		ItemStack ns = new ItemStack(s.getBlock(),1,s.getBlock().getMetaFromState(s));
+		boolean alcond = MaterialsHandler.anyMatchConductive(ns);
+		
 		if(allowedAutomaticBlock.contains(s.getBlock()))
 			isManual = false;
-		if(!allowedStructureBlock.contains(s.getBlock()) && !allowedConductiveBlock.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(ns)))
+		if(!allowedStructureBlock.contains(s.getBlock()) && !alcond)
 			return false;
-		if(allowedStructureBlock.contains(s.getBlock()) && s.getBlock() instanceof ABlockBBStructure == true && s.getValue(ABlockBBStructure.ISSTRUCT) == true && !isStructured)
-			return false;
-		if(allowedConductiveBlock.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(ns))){
-			boolean b = mapFacingConductiveItemStack.entrySet().stream().noneMatch((f)->f.getValue().isItemEqualIgnoreDurability(new ItemStack(s.getBlock())));
+		if(allowedStructureBlock.contains(s.getBlock()) && s.getBlock() instanceof ABlockBBStructure == true){
+			if(s.getValue(ABlockBBStructure.ISSTRUCT) == true && !isStructured)
+				return false;
+			if(s.getValue(ABlockBBStructure.ISSTRUCT) == false && isStructured)
+				return false;
+		} 
+		if(alcond){
+			boolean b = mapFacingConductiveItemStack.entrySet().stream().noneMatch((f)->f.getValue().isItemEqualIgnoreDurability(ns));
 			if( b == true || isConductiveAllowedHere(bp) == false)
 				return false;
 		}
+		if(s.getPropertyKeys().contains(BlockCasing.CASING_TYPE))
+			if(casingType == null)
+				casingType = s.getValue(BlockCasing.CASING_TYPE);
+			else{
+				return casingType == s.getValue(BlockCasing.CASING_TYPE);
+			}
 		return true;
 	}
 	

@@ -74,9 +74,9 @@ Electrolyte type value 0:aqueous, 1:ionic, 2:solid.
 	</electrolyte>
 	
 	<conductive name="conductive_aluminium" ratioRf="1.1">
-		<itemStack modID="bigbattery" itemName="conductiveAluminium"/>
+		<itemStack modID="bigbattery" itemName="blockConductive" itemMeta="0"/>
 	</conductive>
 	<conductive name="conductive_copper" ratioRf="0.9">
-		<itemStack modID="bigbattery" itemName="conductiveCopper"/>
+		<itemStack modID="bigbattery" itemName="blockConductive" itemMeta="2"/>
 	</conductive>
 </materials>

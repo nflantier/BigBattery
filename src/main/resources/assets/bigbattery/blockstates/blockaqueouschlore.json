@@ -10,7 +10,7 @@
     "variants": {
         "ignore":[{
             "custom": {
-                "fluid": "fluidChlore"
+                "fluid": "fluidchlore"
             }
         }]
     }

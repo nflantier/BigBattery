@@ -1,5 +1,6 @@
 package noelflantier.bigbattery.common.materials;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -11,48 +12,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class MaterialsHandler{
-	/*int i = 1;
-	electrodeListByPotential.put(i,new Electrode("Iron", 3.27F,new double[]{3D}).addMaterial(Blocks.IRON_BLOCK).addMaterial(new ItemStack(Items.IRON_INGOT), 1).setID(i));
-	i++;
-	electrodeListByPotential.put(i,new Electrode("Gold", -0.1F,new double[]{-4D,-3D,-2D,-1D,0D,1D,2D,3D,4D}).addMaterial(Blocks.GOLD_BLOCK).addMaterial(new ItemStack(Items.GOLD_INGOT), 1).addMaterial(new ItemStack(Items.GOLD_NUGGET), -9).setID(i));
-	i++;
-	electrolyteListByPotential.put(i,new Electrolyte("Book", -3.04F,new double[]{1D}, Electrolyte.Type.IONIC).addMaterial(Blocks.BOOKSHELF,9).setID(i));
-	i++;
-	conductiveListByRatio.put(i,new Conductive("RedStone", 1.1F).setID(i).addMaterial(Blocks.REDSTONE_BLOCK,1));
-	i++;
-	conductiveListByRatio.put(i,new Conductive("Lapiz", 0.9F).setID(i).addMaterial(Blocks.LAPIS_BLOCK,1));*/
-	/*i++;
-	electrodeListByPotential.add(i,new Electrode("Silver", 1.98F,new float[]{1F}).setID(i));
-	i++;
-	electrodeListByPotential.add(i,new Electrode("Lead", 1.69F,new float[]{2F}).setID(i));
-	i++;
-	electrodeListByPotential.add(i,new Electrode("Platinium", 1.188F,new float[]{2F,4F}).setID(i));//shiny
-	i++;
-	electrodeListByPotential.add(i,new Electrode("Copper", 0.52F,new float[]{2F}).setID(i));
-	i++;
-	electrodeListByPotential.add(i,new Electrode("Graphite", 0.13F,new float[]{-4F,-3F,-2F,-1F,0F,1F,2F,3F,4F}).setID(i));
-	i++;
-	electrodeListByPotential.add(i,new Electrode("Zinc", -0.13F,new float[]{2F,4F,-4F}).setID(i));
-	i++;
-	electrodeListByPotential.add(i,new Electrode("Nickel", -0.25F,new float[]{2F}).setID(i));//ferrous
-	i++;
-	electrodeListByPotential.add(i,new Electrode("Zinc", -0.76F,new float[]{2F}).setID(i));
-	i++;
-	electrolyteListByPotential.add(i,new Electrolyte("Chlore", 1.35F,new float[]{5F}, Electrolyte.Type.AQUEOUS).setID(i));
-	i++;
-	electrolyteListByPotential.add(i,new Electrolyte("Lithium", -3.04F,new float[]{1F}, Electrolyte.Type.IONIC).setID(i));
-	i++;
-	electrolyteListByPotential.add(i,new Electrolyte("Calcium", -3.8F,new float[]{2F}, Electrolyte.Type.SOLID).setID(i));
-	i++;
-	conductiveListByRatio.add(i,new Conductive("Alluminium", 2.1F).setID(i));
-	i++;
-	conductiveListByRatio.add(i,new Conductive("Copper", 1.2F).setID(i));*/
 	public static Map<Integer,Electrode> electrodeListByPotential= new HashMap<Integer,Electrode>();//desc
 	public static Map<Integer,Electrolyte> electrolyteListByPotential= new HashMap<Integer,Electrolyte>();//desc
 	public static Map<Integer,Conductive> conductiveListByRatio= new HashMap<Integer,Conductive>();//desc
 	public static final String FILE_NAME_MATERIALS = "materials.xml";
-	public static int IDMATERIALS = 0;
-	public static int getNextIdMaterials(){return IDMATERIALS++;}
 	public static Comparator<MaterialsHandler.Electrode> byElectrodePotential = (e1, e2) -> Double.compare(
             e1.potential,e2.potential);
 	public static Comparator<MaterialsHandler.Electrolyte> byElectrolytePotential = (e1, e2) -> Double.compare(
@@ -72,14 +35,19 @@ public class MaterialsHandler{
 		List<Material> rh = ConfigHandler.loadRecipeConfig(FILE_NAME_MATERIALS);
 	    if(rh != null) {
 	    	
-	    	electrodeListByPotential.putAll(rh.stream().filter(m->m instanceof MaterialsHandler.Electrode).map(s->(MaterialsHandler.Electrode)s).sorted(byElectrodePotential).collect(Collectors.toMap(p->getNextIdMaterials(), p->p)));
-	    	electrolyteListByPotential.putAll(rh.stream().filter(m->m instanceof MaterialsHandler.Electrolyte).map(s->(MaterialsHandler.Electrolyte)s).sorted(byElectrolytePotential).collect(Collectors.toMap(p->getNextIdMaterials(), p->p)));
-	    	conductiveListByRatio.putAll(rh.stream().filter(m->m instanceof MaterialsHandler.Conductive).map(s->(MaterialsHandler.Conductive)s).sorted(byConductiveRatio).collect(Collectors.toMap(p->getNextIdMaterials(), p->p)));
-	    	
+	    	electrodeListByPotential.putAll(rh.stream().filter(m->m instanceof MaterialsHandler.Electrode).map(s->(MaterialsHandler.Electrode)s).sorted(byElectrodePotential).collect(Collectors.toMap(Electrode::getID,p->p)));
+	    	electrolyteListByPotential.putAll(rh.stream().filter(m->m instanceof MaterialsHandler.Electrolyte).map(s->(MaterialsHandler.Electrolyte)s).sorted(byElectrolytePotential).collect(Collectors.toMap(Electrolyte::getID, p->p)));
+	    	conductiveListByRatio.putAll(rh.stream().filter(m->m instanceof MaterialsHandler.Conductive).map(s->(MaterialsHandler.Conductive)s).sorted(byConductiveRatio).collect(Collectors.toMap(Conductive::getID, p->p)));
+
+	    	/*System.out.println(".................................");
+	    	electrodeListByPotential.entrySet().stream().forEach((e)->e.getValue().listStack.stream().forEach(System.out::println));
+	    	electrolyteListByPotential.entrySet().stream().forEach((e)->e.getValue().listStack.stream().forEach(System.out::println));
+	    	conductiveListByRatio.entrySet().stream().forEach((e)->e.getValue().listStack.stream().forEach(System.out::println));*/
+	    	/*electrodeListByPotential.entrySet().stream().forEach((e)->e.getValue().weightToStack.entrySet().stream().forEach(System.out::println));
+	    	electrolyteListByPotential.entrySet().stream().forEach((e)->e.getValue().weightToStack.entrySet().stream().forEach(System.out::println));
 	    	System.out.println("..................................... "+electrodeListByPotential.size());
 	    	System.out.println("..................................... "+electrolyteListByPotential.size());
-	    	System.out.println("..................................... "+conductiveListByRatio.size());
-	    	//recipes.addAll(rh.recipes);
+	    	System.out.println("..................................... "+conductiveListByRatio.size());*/
 	    } else {
 	    	System.out.println("Could not load materials config ");
 	    }
@@ -114,16 +82,34 @@ public class MaterialsHandler{
     		return 1;
     	return conductive.weightToStack.entrySet().stream().filter((i)->i.getValue().isItemEqualIgnoreDurability(stack)).findFirst().get().getKey();
     }
+    
+    public static boolean anyMatchConductive(ItemStack stack){
+    	return conductiveListByRatio.entrySet().stream().anyMatch(e->e.getValue().listStack.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(stack)));
+    }
+    public static boolean anyMatchElectrode(ItemStack stack){
+    	return electrodeListByPotential.entrySet().stream().anyMatch(e->e.getValue().listStack.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(stack)));
+    }
+    public static boolean anyMatchElectrolyte(ItemStack stack){
+    	return electrolyteListByPotential.entrySet().stream().anyMatch(e->e.getValue().listStack.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(stack)));
+    }
+    
 	public static class Material<T>{
+		public static int IDMATERIALS = 1;
+		public static int getNextIdMaterials(){return IDMATERIALS++;}
+		
 		public String name;
 		public int materialID;
 		public Map<Double,ItemStack> weightToStack = new HashMap<Double,ItemStack>();
 		public Map<ItemStack,Double> stackToWeight = new HashMap<ItemStack,Double>();
+		public List<ItemStack> listStack = new ArrayList<ItemStack>();
 		
-		public Material(){
-		}
 		public Material(String s){
 			this.name = s;
+			setID(getNextIdMaterials());
+		}
+		
+		public int getID(){
+			return materialID;
 		}
 		
 		public T setID(int i){
@@ -148,8 +134,9 @@ public class MaterialsHandler{
 			return (T) this;
 		}
 		public T addMaterial(ItemStack stack, double weight){
-			weightToStack.put(weight,stack);
-			stackToWeight.put(stack, weight);
+			weightToStack.put(weight,stack.copy());
+			stackToWeight.put(stack.copy(), weight);
+			listStack.add(stack.copy());
 			return (T) this;
 		}
 	}
