@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,7 +39,7 @@ public class BlockConductive extends ABlockBBStructure {
 		super(materialIn);
 		setRegistryName(Ressources.UL_NAME_BLOCK_CONDUCTIVE);
         setUnlocalizedName(Ressources.UL_NAME_BLOCK_CONDUCTIVE);
-        setDefaultState(blockState.getBaseState().withProperty(ISSTRUCT, false).withProperty(FACING, EnumFacing.NORTH).withProperty(CONDUCTIVE_TYPE, ConductiveType.COPPER));
+        setDefaultState(blockState.getBaseState().withProperty(ISSTRUCT, false).withProperty(FACING, EnumFacing.DOWN).withProperty(CONDUCTIVE_TYPE, ConductiveType.COPPER));
 		setHarvestLevel("pickaxe",1);
 		setHardness(2.0F);
 		setResistance(20.0F);
@@ -51,7 +52,21 @@ public class BlockConductive extends ABlockBBStructure {
 		int m = getMetaFromState(state);
         return m % 2 != 0 ? m - 1 : m;
     }
-    
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
+    {
+		if(state.getValue(ISSTRUCT) == false)
+			return state;
+		TileEntity te = worldIn.getTileEntity(pos);
+		if(te!=null && te instanceof ITileHaveMaster){
+			EnumFacing f = ((ITileHaveMaster)te).getFacingFromPlug(pos);
+			if(f != null)
+				state = state.withProperty(FACING, f);
+		}
+        return state;
+    }
+	
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
@@ -85,8 +100,7 @@ public class BlockConductive extends ABlockBBStructure {
 	@Override
     public int getMetaFromState(IBlockState state)
     {
-        int i = ((EnumFacing)state.getValue(FACING)).getIndex();
-        return state.getValue(ISSTRUCT) == true ? i + 6 : i;
+        return state.getValue(CONDUCTIVE_TYPE).ordinal() * 2 + (state.getValue(ISSTRUCT) == true ? 1 : 0 );
     }
 
 }

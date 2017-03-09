@@ -3,7 +3,7 @@
   "textures": {
     "particle": "bigbattery:blocks/plug_side",
     "down": "bigbattery:blocks/plug_down",
-    "up": "bigbattery:blocks/plug_up",
+    "up": "#plugup",
     "east": "bigbattery:blocks/plug_side",
     "west": "bigbattery:blocks/plug_side",
     "north": "bigbattery:blocks/plug_side",

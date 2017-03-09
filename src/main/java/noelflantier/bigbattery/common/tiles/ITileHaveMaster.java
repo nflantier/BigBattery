@@ -2,6 +2,7 @@ package noelflantier.bigbattery.common.tiles;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import noelflantier.bigbattery.common.helpers.MultiBlockMessage;
@@ -54,4 +55,13 @@ public interface ITileHaveMaster {
     		return new BlockPos(nbt.getInteger("masterx"),nbt.getInteger("mastery"),nbt.getInteger("masterz"));	
     	return null;
     }
+	default EnumFacing getFacingFromPlug(BlockPos pos){
+		if(getWorldForMaster()==null || getMasterPos()==null)
+			return null;
+		TileEntity t = getWorldForMaster().getTileEntity(getMasterPos());
+		if(t!=null && t instanceof ITileMaster && ((ITileMaster)t).getStructure() !=null && ((ITileMaster)t).getStructure().isStructured && ((ITileMaster)t).getStructure().plugFacing!=null){
+			return ((ITileMaster)t).getStructure().plugFacing.getOpposite();
+		}
+		return null;
+	}
 }

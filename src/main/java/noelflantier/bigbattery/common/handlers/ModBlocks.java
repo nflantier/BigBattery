@@ -132,7 +132,7 @@ public class ModBlocks {
     	}
     	
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockPlug), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_PLUG, "inventory"));
-        ModelLoader.setCustomStateMapper(blockPlug, (new StateMap.Builder()).ignore(new IProperty[] {ABlockBBStructure.ISSTRUCT}).build());
+    	//ModelLoader.setCustomStateMapper(blockPlug, (new StateMap.Builder()).ignore(new IProperty[] {ABlockBBStructure.ISSTRUCT}).build());
         
 
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockOreSilver), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ORE_SILVER, "inventory"));

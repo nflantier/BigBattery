@@ -1,12 +1,35 @@
 {
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "plugup": "bigbattery:blocks/plug_up"
+        },
+        "model": "bigbattery:blockplug" 
+    },
     "variants": {
-        "normal": { "model": "bigbattery:blockplug" },
-        "inventory": { "model": "bigbattery:blockplug" },
-        "facing=down":  { "model": "bigbattery:blockplug", "x": 180 },
-        "facing=up":    { "model": "bigbattery:blockplug" },
-        "facing=north": { "model": "bigbattery:blockplug", "x" : 90},
-        "facing=south": { "model": "bigbattery:blockplug", "x": 270 },
-        "facing=west":  { "model": "bigbattery:blockplug", "x": 90, "y":270 },
-        "facing=east":  { "model": "bigbattery:blockplug", "x": 90, "y":90 }
+        "normal": [{
+        }],
+        "inventory": [{
+        }],
+        "facing":{
+                "down":  { "transform": { "rotation": [ {"x":180}, {"y":0}, {"z":0} ] } },
+                "up":    {  },
+                "north": { "transform": { "rotation": [ {"x":90}, {"y":0}, {"z":0} ] } },
+                "south": { "transform": { "rotation": [ {"x":270}, {"y":0}, {"z":0} ] } },
+                "west":  { "transform": { "rotation": [ {"x":90}, {"y":270}, {"z":0} ] } },
+                "east":  { "transform": { "rotation": [ {"x":90}, {"y":90}, {"z":0} ] } }
+        },
+        "isstruct":{
+            "true":{
+                "textures": {
+                    "plugup": "bigbattery:blocks/plug_up_c"
+                }
+            },
+            "false":{
+                "textures": {
+                    "plugup": "bigbattery:blocks/plug_up"
+                }
+            }
+        }
     }
 }
