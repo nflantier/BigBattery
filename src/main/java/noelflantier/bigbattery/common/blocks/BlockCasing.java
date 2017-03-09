@@ -2,13 +2,17 @@ package noelflantier.bigbattery.common.blocks;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -51,9 +55,15 @@ public class BlockCasing extends ABlockBBStructure {
         GameRegistry.register(new ItemBlockCasing(this), getRegistryName());
 	}
 
-    
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity)
+    {
+        return state.getValue(CASING_TYPE) == CasingType.BASIC ? SoundType.GLASS : SoundType.METAL;
+    }
+	
+	@Override
+	public TileEntity createNewTileEntity(World worldIn, int meta) 
+	{
 		return getStateFromMeta(meta).getValue(ISSTRUCT) == true ? new TileCasing() : null;
 	}
 
@@ -62,15 +72,6 @@ public class BlockCasing extends ABlockBBStructure {
     {
 		int m = getMetaFromState(state);
         return m % 2 != 0 ? m - 1 : m;
-    }
-
-	@Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-    {
-		if(!worldIn.isRemote){
-			//worldIn.setBlockState(pos, state.withProperty(ISSTRUCT, !state.getValue(ISSTRUCT)));
-		}
-        return false;
     }
 	
 	@Override
@@ -86,7 +87,6 @@ public class BlockCasing extends ABlockBBStructure {
         state = state.withProperty(DOWN, this.getConnectedBlock(worldIn, pos, EnumFacing.DOWN));
         return state;
     }
-	
     
     private Boolean getConnectedBlock(IBlockAccess worldIn, BlockPos pos, EnumFacing direction)
     {
@@ -95,53 +95,17 @@ public class BlockCasing extends ABlockBBStructure {
         IBlockState iblockstate = worldIn.getBlockState(pos.offset(direction));
 		return iblockstate.getBlock() == this && iblockstate.getValue(ISSTRUCT) == true;
     }
-    
-
-	@Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
-    {
-        if (!worldIn.isRemote)
-        {
-        	//worldIn.notifyNeighborsOfStateChange(pos, state.getBlock(), true); 
-        }
-    }
 
 	@Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {        
-		if (!worldIn.isRemote)
-	    {
-	    	//worldIn.notifyNeighborsOfStateChange(pos, state.getBlock(), true);
-			TileEntity te = worldIn.getTileEntity(pos);
-			if( te != null && te instanceof ITileHaveMaster){
-				((ITileHaveMaster)te).toMaster(pos, MultiBlockMessage.CHECK);
-			}
-	    }
-        super.breakBlock(worldIn, pos, state);
-
+		breakBlockBB(worldIn, pos, state);
     }
 
 	@Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
     {
-		IBlockState st = worldIn.getBlockState(fromPos);
-		if(!worldIn.isRemote && state.getPropertyKeys().contains(ISSTRUCT) && state.getValue(ISSTRUCT) == true){
-			TileEntity te = worldIn.getTileEntity(pos);
-			if( te != null && te instanceof ITileHaveMaster){
-				if(st.getBlock() instanceof ABlockBBStructure == false){
-					if( !((ITileHaveMaster)te).isMasterStructured() )
-						worldIn.setBlockState(pos, state.withProperty(ISSTRUCT, false));
-					return;
-				}
-				if( !((ITileHaveMaster)te).isMasterStillHere())
-					worldIn.setBlockState(pos, state.withProperty(ISSTRUCT, false));
-			}
-		}
-    }
-
-	@Override
-    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor){
-    	
+		neighborChangedBB(state, worldIn, pos, blockIn, fromPos);
     }
 
 	@Override
@@ -166,7 +130,7 @@ public class BlockCasing extends ABlockBBStructure {
 	@Override
     public boolean isFullCube(IBlockState state)
     {
-        return false;
+        return state.getValue(CASING_TYPE) == CasingType.ADVANCED;
     }
 
     @Override
@@ -179,7 +143,7 @@ public class BlockCasing extends ABlockBBStructure {
 	@Override
     public boolean isOpaqueCube(IBlockState state)
     {
-        return false;
+        return state.getValue(CASING_TYPE) == CasingType.ADVANCED;
     }
 	
 	@SideOnly(Side.CLIENT)
@@ -188,6 +152,10 @@ public class BlockCasing extends ABlockBBStructure {
 		 if(blockState.getValue(ISSTRUCT) == false)
 			 return true;
 		
+		 IBlockState s = blockAccess.getBlockState(pos.add(side.getDirectionVec()));
+		 if(s.getBlock() == this)
+			 return blockState.getValue(CASING_TYPE) != s.getValue(CASING_TYPE);
+		 
 		 if(side == EnumFacing.UP && blockState.getValue(UP) == true )
 			 return false;
 		 if(side == EnumFacing.DOWN && blockState.getValue(DOWN) == true )

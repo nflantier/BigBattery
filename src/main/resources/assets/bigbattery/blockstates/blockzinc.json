@@ -2,7 +2,7 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "all": "bigbattery:blocks/zinc"
+            "all": "bigbattery:blocks/block_zinc"
         },
         "model": "bigbattery:blockmetal" 
     },

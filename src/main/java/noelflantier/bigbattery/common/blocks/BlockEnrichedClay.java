@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +25,7 @@ public class BlockEnrichedClay extends ABlockBB{
 		setRegistryName(Ressources.UL_NAME_BLOCK_ENRICHED_CLAY);
 		setUnlocalizedName(Ressources.UL_NAME_BLOCK_ENRICHED_CLAY);
         GameRegistry.register(new ItemBlock(this), getRegistryName());
+        setSoundType(SoundType.GROUND);
 	}
 
 	@Override

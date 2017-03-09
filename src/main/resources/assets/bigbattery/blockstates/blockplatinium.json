@@ -2,7 +2,7 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "all": "bigbattery:blocks/platinium"
+            "all": "bigbattery:blocks/block_platinium"
         },
         "model": "bigbattery:blockmetal" 
     },

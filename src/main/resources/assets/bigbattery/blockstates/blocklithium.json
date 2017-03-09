@@ -2,7 +2,7 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "all": "bigbattery:blocks/lithium"
+            "all": "bigbattery:blocks/block_lithium"
         },
         "model": "bigbattery:blockmetal" 
     },

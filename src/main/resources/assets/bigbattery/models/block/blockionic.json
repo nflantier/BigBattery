@@ -1,6 +1,31 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "#all"
-  }
+{   "parent": "block/block",
+    "textures": {
+        "particle": "#all",
+        "inside": "bigbattery:blocks/ionic_agent",
+        "texture": "#all"
+    },
+    "elements": [
+        {   "from": [ 2, 2, 2 ],
+            "to": [ 14, 14, 14 ],
+            "faces": {
+                "down":  { "uv": [ 2, 2, 14, 14 ], "texture": "#inside" },
+                "up":    { "uv": [ 2, 2, 14, 14 ], "texture": "#inside" },
+                "north": { "uv": [ 2, 2, 14, 14 ], "texture": "#inside" },
+                "south": { "uv": [ 2, 2, 14, 14 ], "texture": "#inside" },
+                "west":  { "uv": [ 2, 2, 14, 14 ], "texture": "#inside" },
+                "east":  { "uv": [ 2, 2, 14, 14 ], "texture": "#inside" }
+            }
+        },
+        {   "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#texture" },
+                "up":    { "uv": [ 0, 0, 16, 16 ], "texture": "#texture" },
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#texture" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#texture" },
+                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#texture" },
+                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#texture" }
+            }
+        }
+    ]
 }

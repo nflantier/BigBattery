@@ -2,7 +2,7 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "all": "bigbattery:blocks/silver"
+            "all": "bigbattery:blocks/block_silver"
         },
         "model": "bigbattery:blockore" 
     },

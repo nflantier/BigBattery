@@ -6,11 +6,13 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import noelflantier.bigbattery.Ressources;
+import noelflantier.bigbattery.common.blocks.ABlockBBStructure;
 import noelflantier.bigbattery.common.blocks.BlockCasing;
 import noelflantier.bigbattery.common.blocks.BlockConductive;
 import noelflantier.bigbattery.common.blocks.BlockEnrichedClay;
@@ -18,6 +20,7 @@ import noelflantier.bigbattery.common.blocks.BlockIonic;
 import noelflantier.bigbattery.common.blocks.BlockMetals;
 import noelflantier.bigbattery.common.blocks.BlockOres;
 import noelflantier.bigbattery.common.blocks.BlockPlug;
+import noelflantier.bigbattery.common.handlers.ModProperties.ConductiveType;
 
 public class ModBlocks {
 
@@ -64,56 +67,56 @@ public class ModBlocks {
 		
     	blockPlug = new BlockPlug(Material.ROCK);
 		GameRegistry.register(blockPlug);
-		blockOreSilver = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_SILVER).setHardness(1).setHardness(1).setResistance(1);
+		blockOreSilver = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_SILVER).setHardness(1).setResistance(1);
 		GameRegistry.register(blockOreSilver);
-		blockOreLead = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_LEAD).setHardness(1).setHardness(1).setResistance(1);
+		blockOreLead = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_LEAD).setHardness(1).setResistance(1);
 		GameRegistry.register(blockOreLead);
-		blockOrePlatinium = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_PLATINIUM).setHardness(1).setHardness(1).setResistance(1);
+		blockOrePlatinium = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_PLATINIUM).setHardness(1).setResistance(1);
 		GameRegistry.register(blockOrePlatinium);
-		blockOreCopper = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_COPPER).setHardness(1).setHardness(1).setResistance(1);
+		blockOreCopper = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_COPPER).setHardness(1).setResistance(1);
 		GameRegistry.register(blockOreCopper);
-		blockOreNickel = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_NICKEL).setHardness(1).setHardness(1).setResistance(1);
+		blockOreNickel = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_NICKEL).setHardness(1).setResistance(1);
 		GameRegistry.register(blockOreNickel);
-		blockOreZinc = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_ZINC).setHardness(1).setHardness(1).setResistance(1);
+		blockOreZinc = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_ZINC).setHardness(1).setResistance(1);
 		GameRegistry.register(blockOreZinc);
-		blockOreTin = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_TIN).setHardness(1).setHardness(1).setResistance(1);
+		blockOreTin = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_TIN).setHardness(1).setResistance(1);
 		GameRegistry.register(blockOreTin);
-		blockOreAluminium = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_ALUMINIUM).setHardness(1).setHardness(1).setResistance(1);
+		blockOreAluminium = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_ALUMINIUM).setHardness(1).setResistance(1);
 		GameRegistry.register(blockOreAluminium);
 
-		blockEnrichedClay = new BlockEnrichedClay(Material.CLAY).setHardness(0.6F).setHardness(1).setResistance(1);
+		blockEnrichedClay = new BlockEnrichedClay(Material.CLAY).setHardness(0.6F);
 		GameRegistry.register(blockEnrichedClay);
 		
-		blockSilver = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_SILVER).setHardness(1).setHardness(1).setResistance(1);
+		blockSilver = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_SILVER).setHardness(1).setResistance(1);
 		GameRegistry.register(blockSilver);
-		blockLead = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_LEAD).setHardness(1).setHardness(1).setResistance(1);
+		blockLead = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_LEAD).setHardness(1).setResistance(1);
 		GameRegistry.register(blockLead);
-		blockPlatinium = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_PLATINIUM).setHardness(1).setHardness(1).setResistance(1);
+		blockPlatinium = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_PLATINIUM).setHardness(1).setResistance(1);
 		GameRegistry.register(blockPlatinium);
-		blockCopper = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_COPPER).setHardness(1).setHardness(1).setResistance(1);
+		blockCopper = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_COPPER).setHardness(1).setResistance(1);
 		GameRegistry.register(blockCopper);
-		blockGraphite = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_GRAPHITE).setHardness(1).setHardness(1).setResistance(1);
+		blockGraphite = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_GRAPHITE).setHardness(1).setResistance(1);
 		GameRegistry.register(blockGraphite);
-		blockNickel = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_NICKEL).setHardness(1).setHardness(1).setResistance(1);
+		blockNickel = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_NICKEL).setHardness(1).setResistance(1);
 		GameRegistry.register(blockNickel);
-		blockZinc = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_ZINC).setHardness(1).setHardness(1).setResistance(1);
+		blockZinc = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_ZINC).setHardness(1).setResistance(1);
 		GameRegistry.register(blockZinc);
-		blockTin = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_TIN).setHardness(1).setHardness(1).setResistance(1);
+		blockTin = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_TIN).setHardness(1).setResistance(1);
 		GameRegistry.register(blockTin);
-		blockAluminium = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_ALUMINIUM).setHardness(1).setHardness(1).setResistance(1);
+		blockAluminium = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_ALUMINIUM).setHardness(1).setResistance(1);
 		GameRegistry.register(blockAluminium);
 
-		blockIonicChlore= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_CHLORE).setHardness(1).setHardness(1).setResistance(1);
+		blockIonicChlore= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_CHLORE).setHardness(1).setResistance(1);
 		GameRegistry.register(blockIonicChlore);
-		blockIonicLithium= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_LITHIUM).setHardness(1).setHardness(1).setResistance(1);
+		blockIonicLithium= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_LITHIUM).setHardness(1).setResistance(1);
 		GameRegistry.register(blockIonicLithium);
-		blockIonicCalcium= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_CALCIUM).setHardness(1).setHardness(1).setResistance(1);
+		blockIonicCalcium= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_CALCIUM).setHardness(1).setResistance(1);
 		GameRegistry.register(blockIonicCalcium);
-		/*blockChlore= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_CHLORE).setHardness(1).setHardness(1).setResistance(1);
+		/*blockChlore= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_CHLORE).setHardness(1).setResistance(1);
 		GameRegistry.register(blockChlore);*/
-		blockLithium= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_LITHIUM).setHardness(1).setHardness(1).setResistance(1);
+		blockLithium= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_LITHIUM).setHardness(1).setResistance(1);
 		GameRegistry.register(blockLithium);
-		blockCalcium= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_CALCIUM).setHardness(1).setHardness(1).setResistance(1);
+		blockCalcium= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_CALCIUM).setHardness(1).setResistance(1);
 		GameRegistry.register(blockCalcium);
     	 	
 	}
@@ -121,13 +124,15 @@ public class ModBlocks {
     @SideOnly(Side.CLIENT)
 	public static void preInitClient() {
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCasing), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_BASIC_CASING_FULL, "inventory"));
-    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCasing), 2, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_PLUG, "inventory"));
+    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCasing), 2, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ADVANCED_CASING_FULL, "inventory"));
     	
-    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockConductive), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CONDUCTIVE, "inventory"));
-    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockConductive), 2, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CONDUCTIVE, "inventory"));
+    	
+    	for(int i = 0 ; i < ConductiveType.values().length ; i++){
+    		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockConductive), blockConductive.getMetaFromState(blockConductive.getDefaultState().withProperty(BlockConductive.CONDUCTIVE_TYPE, ConductiveType.getType(i))), new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CONDUCTIVE, "facing=north,isstruct=false,type="+ConductiveType.getType(i).getName()));
+    	}
     	
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockPlug), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_PLUG, "inventory"));
-        ModelLoader.setCustomStateMapper(blockPlug, (new StateMap.Builder()).ignore(new IProperty[] {BlockPlug.ISSTRUCT}).build());
+        ModelLoader.setCustomStateMapper(blockPlug, (new StateMap.Builder()).ignore(new IProperty[] {ABlockBBStructure.ISSTRUCT}).build());
         
 
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockOreSilver), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ORE_SILVER, "inventory"));

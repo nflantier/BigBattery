@@ -22,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import noelflantier.bigbattery.common.blocks.ABlockBBStructure;
 import noelflantier.bigbattery.common.blocks.BlockCasing;
+import noelflantier.bigbattery.common.blocks.BlockConductive;
 import noelflantier.bigbattery.common.blocks.BlockPlug;
 import noelflantier.bigbattery.common.handlers.ModBlocks;
 import noelflantier.bigbattery.common.handlers.ModProperties.CasingType;
@@ -825,6 +826,8 @@ public class MultiBlockBattery {
 		IBlockState s = world.getBlockState(bp);
 		if(s!=null && s.getBlock() instanceof ABlockBBStructure)
 			world.setBlockState(bp, s.withProperty(ABlockBBStructure.ISSTRUCT, true));
+		if(s!=null && s.getBlock() instanceof BlockConductive)
+			world.setBlockState(bp, s.withProperty(ABlockBBStructure.ISSTRUCT, true).withProperty(BlockConductive.FACING, plugFacing.getOpposite()));
 		TileEntity te = world.getTileEntity(bp);
 		if(te!=null && te instanceof ITileHaveMaster){
 			((ITileHaveMaster)te).setMaster(plugPos);
@@ -865,7 +868,6 @@ public class MultiBlockBattery {
 	}
 	
 	private boolean checkStructure(World world) {
-		System.out.println(".................................x");
 		//check x wall
 		int [] tx = new int[]{dwn.getX(), ues.getX()};
 		for (int i = 0 ; i < tx.length ; i++ ){
@@ -877,7 +879,6 @@ public class MultiBlockBattery {
 				}
 			}
 		}
-		System.out.println(".................................y");
 		//check y wall
 		int [] ty = new int[]{dwn.getY(), ues.getY()};
 		for (int i = 0 ; i < ty.length ; i++ ){
@@ -889,7 +890,6 @@ public class MultiBlockBattery {
 				}
 			}
 		}
-		System.out.println(".................................z");
 		//check z wall
 		int [] tz = new int[]{dwn.getZ(), ues.getZ()};
 		for (int i = 0 ; i < tz.length ; i++ ){
@@ -925,12 +925,12 @@ public class MultiBlockBattery {
 			if( b == true || isConductiveAllowedHere(bp) == false)
 				return false;
 		}
-		if(s.getPropertyKeys().contains(BlockCasing.CASING_TYPE))
+		/*if(s.getPropertyKeys().contains(BlockCasing.CASING_TYPE))
 			if(casingType == null)
 				casingType = s.getValue(BlockCasing.CASING_TYPE);
 			else{
 				return casingType == s.getValue(BlockCasing.CASING_TYPE);
-			}
+			}*/
 		return true;
 	}
 	

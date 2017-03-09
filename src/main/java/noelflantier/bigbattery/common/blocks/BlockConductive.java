@@ -47,32 +47,27 @@ public class BlockConductive extends ABlockBBStructure {
 	
 	@Override
     public int damageDropped(IBlockState state)
-    {
+	{
 		int m = getMetaFromState(state);
         return m % 2 != 0 ? m - 1 : m;
     }
     
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	public TileEntity createNewTileEntity(World worldIn, int meta)
+	{
 		return getStateFromMeta(meta).getValue(ISSTRUCT) == true ? new TileConductive() : null;
 	}
 	
 	@Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
     {
-		IBlockState st = worldIn.getBlockState(fromPos);
-		if(!worldIn.isRemote && state.getPropertyKeys().contains(ISSTRUCT) && state.getValue(ISSTRUCT) == true){
-			TileEntity te = worldIn.getTileEntity(pos);
-			if( te != null && te instanceof ITileHaveMaster){
-				if(st.getBlock() instanceof ABlockBBStructure == false){
-					if( !((ITileHaveMaster)te).isMasterStructured() )
-						worldIn.setBlockState(pos, state.withProperty(ISSTRUCT, false));
-					return;
-				}
-				if( !((ITileHaveMaster)te).isMasterStillHere())
-					worldIn.setBlockState(pos, state.withProperty(ISSTRUCT, false));
-			}
-		}
+		neighborChangedBB(state, worldIn, pos, blockIn, fromPos);
+    }
+
+	@Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+    {        
+		breakBlockBB(worldIn, pos, state);
     }
 	
 	@Override
@@ -90,7 +85,8 @@ public class BlockConductive extends ABlockBBStructure {
 	@Override
     public int getMetaFromState(IBlockState state)
     {
-        return state.getValue(CONDUCTIVE_TYPE).ordinal() * 2 + (state.getValue(ISSTRUCT) == true ? 1 : 0 );
+        int i = ((EnumFacing)state.getValue(FACING)).getIndex();
+        return state.getValue(ISSTRUCT) == true ? i + 6 : i;
     }
 
 }

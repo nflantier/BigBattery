@@ -27,7 +27,7 @@ public class ModFluids {
 	
 	public static void preInitCommon() {
 		   
-    	fluidChlore = new Fluid(Ressources.UL_NAME_FLUID_CHLORE,new ResourceLocation(Ressources.MODID+":blocks/liquefied_asgardite"),new ResourceLocation(Ressources.MODID+":blocks/liquefied_asgardite_flow")).setDensity(100).setViscosity(100).setTemperature(100);
+    	fluidChlore = new Fluid(Ressources.UL_NAME_FLUID_CHLORE,new ResourceLocation(Ressources.MODID+":blocks/liquefied_asgardite"),new ResourceLocation(Ressources.MODID+":blocks/liquefied_asgardite_flow")).setDensity(100).setViscosity(500).setTemperature(100);
 		FluidRegistry.registerFluid(fluidChlore);
 		FluidRegistry.addBucketForFluid(fluidChlore);
 		/*fluidLithium = new Fluid(Ressources.UL_NAME_FLUID_LITHIUM,new ResourceLocation(Ressources.MODID+":blocks/liquefied_asgardite"),new ResourceLocation(Ressources.MODID+":blocks/liquefied_asgardite_flow")).setDensity(100).setViscosity(100).setTemperature(100);

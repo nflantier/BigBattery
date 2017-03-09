@@ -1,7 +1,7 @@
 {
 
     "variants": {
-        "normal": { "model": "bigbattery:blockbasiccasingfull" },
-        "inventory": { "model": "bigbattery:blockbasiccasingfull" }
+        "normal": { "model": "bigbattery:blockadvancedcasingfull" },
+        "inventory": { "model": "bigbattery:blockadvancedcasingfull" }
     }
 }

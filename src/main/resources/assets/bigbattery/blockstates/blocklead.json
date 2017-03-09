@@ -2,7 +2,7 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "all": "bigbattery:blocks/lead"
+            "all": "bigbattery:blocks/block_lead"
         },
         "model": "bigbattery:blockmetal" 
     },

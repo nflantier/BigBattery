@@ -2,7 +2,7 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "all": "bigbattery:blocks/calcium"
+            "all": "bigbattery:blocks/block_calcium"
         },
         "model": "bigbattery:blockmetal" 
     },

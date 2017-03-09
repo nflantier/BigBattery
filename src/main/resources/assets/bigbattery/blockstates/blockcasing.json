@@ -3,44 +3,69 @@
         {   "when": {"type" : "basic"},
             "apply": { "model": "bigbattery:blockbasiccasing"}
         },
+        {   "when": {"type" : "advanced"},
+            "apply": { "model": "bigbattery:blockadvancedcasing"}
+        },
         
         {   "when": {"OR" :[{ "down": "false" }, {"isstruct" : "false"}]},
             "apply": { "model": "bigbattery:blockbasiccasing-d"}
         },
-        {   "when": { "down": "true","isstruct" : "true"},
+        {   "when": { "type" : "basic", "down": "true","isstruct" : "true"},
             "apply": { "model": "bigbattery:blockbasiccasing-dt"}
         },
         {   "when": {"OR" :[{ "up": "false" }, {"isstruct" : "false"}]},
             "apply": { "model": "bigbattery:blockbasiccasing-u", "x": 180  }
         },
-        {   "when": { "up": "true" ,"isstruct" : "true"},
+        {   "when": { "type" : "basic", "up": "true" ,"isstruct" : "true"},
             "apply": { "model": "bigbattery:blockbasiccasing-ut", "x": 180  }
         },
         
         {   "when": {"OR" :[{ "north": "false" }, {"isstruct" : "false"}]},
             "apply": { "model": "bigbattery:blockbasiccasing-n"}
         },
-        {   "when": { "north": "true" , "isstruct" : "true"},
+        {   "when": { "type" : "basic", "north": "true" , "isstruct" : "true"},
             "apply": { "model": "bigbattery:blockbasiccasing-nt"}
         },
         {   "when": {"OR" :[{ "south": "false" }, {"isstruct" : "false"}]},
             "apply": { "model": "bigbattery:blockbasiccasing-s", "y": 180}
         },
-        {   "when": { "south": "true" , "isstruct" : "true"},
+        {   "when": { "type" : "basic", "south": "true" , "isstruct" : "true"},
             "apply": { "model": "bigbattery:blockbasiccasing-st", "y": 180}
         },
         
         {   "when": {"OR" :[{ "west": "false" }, {"isstruct" : "false"}]},
             "apply": { "model": "bigbattery:blockbasiccasing-w"}
         },
-        {   "when": { "west": "true" , "isstruct" : "true"},
+        {   "when": { "type" : "basic", "west": "true" , "isstruct" : "true"},
             "apply": { "model": "bigbattery:blockbasiccasing-wt"}
         },
         {   "when": {"OR" :[{ "east": "false" }, {"isstruct" : "false"}]},
             "apply": { "model": "bigbattery:blockbasiccasing-e", "y": 180}
         },
-        {   "when": { "east": "true" , "isstruct" : "true"},
+        {   "when": { "type" : "basic", "east": "true" , "isstruct" : "true"},
             "apply": { "model": "bigbattery:blockbasiccasing-et", "y": 180}
+        },
+        
+        
+        {   "when": { "type" : "advanced", "down": "true","isstruct" : "true"},
+            "apply": { "model": "bigbattery:blockadvancedcasing-dt"}
+        },
+        {   "when": { "type" : "advanced", "up": "true" ,"isstruct" : "true"},
+            "apply": { "model": "bigbattery:blockadvancedcasing-ut", "x": 180  }
+        },
+        
+        {   "when": { "type" : "advanced", "north": "true" , "isstruct" : "true"},
+            "apply": { "model": "bigbattery:blockadvancedcasing-nt"}
+        },
+        {   "when": { "type" : "advanced", "south": "true" , "isstruct" : "true"},
+            "apply": { "model": "bigbattery:blockadvancedcasing-st", "y": 180}
+        },
+        
+        {   "when": { "type" : "advanced", "west": "true" , "isstruct" : "true"},
+            "apply": { "model": "bigbattery:blockadvancedcasing-wt"}
+        },
+        {   "when": { "type" : "advanced", "east": "true" , "isstruct" : "true"},
+            "apply": { "model": "bigbattery:blockadvancedcasing-et", "y": 180}
         }
     ]
 }
