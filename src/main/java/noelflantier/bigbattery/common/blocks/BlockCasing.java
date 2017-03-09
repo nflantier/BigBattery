@@ -50,8 +50,8 @@ public class BlockCasing extends ABlockBBStructure {
         setUnlocalizedName(Ressources.UL_NAME_BLOCK_CASING);
         setDefaultState(blockState.getBaseState().withProperty(ISSTRUCT, false).withProperty(CASING_TYPE, CasingType.BASIC).withProperty(UP, false).withProperty(DOWN, false).withProperty(NORTH, false).withProperty(EAST, false).withProperty(SOUTH, false).withProperty(WEST, false));
 		setHarvestLevel("pickaxe",1);
-		setHardness(2.0F);
-		setResistance(20.0F);
+		setHardness(3.0F);
+		setResistance(100.0F);
         GameRegistry.register(new ItemBlockCasing(this), getRegistryName());
 	}
 

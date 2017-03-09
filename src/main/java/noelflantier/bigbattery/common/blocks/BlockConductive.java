@@ -41,8 +41,8 @@ public class BlockConductive extends ABlockBBStructure {
         setUnlocalizedName(Ressources.UL_NAME_BLOCK_CONDUCTIVE);
         setDefaultState(blockState.getBaseState().withProperty(ISSTRUCT, false).withProperty(FACING, EnumFacing.DOWN).withProperty(CONDUCTIVE_TYPE, ConductiveType.COPPER));
 		setHarvestLevel("pickaxe",1);
-		setHardness(2.0F);
-		setResistance(20.0F);
+		setHardness(3.0F);
+		setResistance(100.0F);
         GameRegistry.register(new ItemBlockConductive(this), getRegistryName());
 	}
 	

@@ -69,7 +69,7 @@ public class BlockPlug extends ABlockBBStructure {
 			if(hand == EnumHand.MAIN_HAND){
 				if(playerIn.getHeldItem(EnumHand.MAIN_HAND).getItem() == Items.STICK){
 					TileEntity te = worldIn.getTileEntity(pos);
-					if( te != null && te instanceof ITileMaster){
+					if( te != null && te instanceof ITileMaster && !((ITileMaster)te).getStructure().isStructured){
 						((ITileMaster)te).getStructure().batteryCheckAndSetupStructure(worldIn, pos, playerIn);
 					}
 					return true;

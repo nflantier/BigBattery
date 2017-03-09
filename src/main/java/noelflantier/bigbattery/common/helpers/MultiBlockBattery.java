@@ -81,7 +81,6 @@ public class MultiBlockBattery {
     	
     	allowedStructureBlock.add(ModBlocks.blockCasing);
     	allowedStructureBlock.add(ModBlocks.blockPlug);
-    	allowedStructureBlock.add(Blocks.ANVIL);
     	
     	allowedAutomaticBlock.add(Blocks.ANVIL);
     }
@@ -407,46 +406,52 @@ public class MultiBlockBattery {
 		}
 		return null;
 	}
+	
+	public boolean getStructure(World world){
+		reset();
+
+		EnumFacing dummyFacing = plugFacing;
 		
+		BlockPos l5 = findSide(plugPos, dummyFacing, world, 0, false, true);
+		
+		dummyFacing = dummyFacing.getAxis().isVertical() ? dummyFacing.rotateAround(EnumFacing.Axis.X) : dummyFacing.rotateY();
+		BlockPos l1 = findSide(plugPos, dummyFacing, world, 0, true, false);
+		BlockPos l2 = findSide(plugPos, dummyFacing.getOpposite(), world, 0, true, false);
+
+		dummyFacing = dummyFacing.rotateAround(plugFacing.getAxis());
+
+		BlockPos l3 = findSide(plugPos, dummyFacing, world, 0, true, false);
+		BlockPos l4 = findSide(plugPos, dummyFacing.getOpposite(), world, 0, true, false);
+		/*System.out.println(l1);
+		System.out.println(l2);
+		System.out.println(l3);
+		System.out.println(l4);
+		System.out.println(l5);*/
+		if(l1 == null || l2 == null || l3 == null || l4 == null || l5 == null || mapFacingConductiveItemStack.size()!=2 ){
+			reset();
+			return false;
+		}
+
+		List<Integer> lx = new ArrayList<Integer>();
+		Collections.addAll(lx,l1.getX(),l2.getX(),l3.getX(),l4.getX(),l5.getX());
+		List<Integer> ly = new ArrayList<Integer>();
+		Collections.addAll(ly,l1.getY(),l2.getY(),l3.getY(),l4.getY(),l5.getY());
+		List<Integer> lz = new ArrayList<Integer>();
+		Collections.addAll(lz,l1.getZ(),l2.getZ(),l3.getZ(),l4.getZ(),l5.getZ());
+
+		dwn = new BlockPos(Collections.min(lx),Collections.min(ly),Collections.min(lz));
+		ues = new BlockPos(Collections.max(lx),Collections.max(ly),Collections.max(lz));
+		return true;
+	}
+	
 	public boolean batteryCheckAndSetupStructure(World world, BlockPos ppos, @Nullable EntityPlayer player){
 		init(ppos, world.getBlockState(ppos));
 		if(!init)
 			return false;
 		
 		if(!isStructured){
-			reset();
-
-			EnumFacing dummyFacing = plugFacing;
-			
-			BlockPos l5 = findSide(plugPos, dummyFacing, world, 0, false, true);
-			
-			dummyFacing = dummyFacing.getAxis().isVertical() ? dummyFacing.rotateAround(EnumFacing.Axis.X) : dummyFacing.rotateY();
-			BlockPos l1 = findSide(plugPos, dummyFacing, world, 0, true, false);
-			BlockPos l2 = findSide(plugPos, dummyFacing.getOpposite(), world, 0, true, false);
-	
-			dummyFacing = dummyFacing.rotateAround(plugFacing.getAxis());
-
-			BlockPos l3 = findSide(plugPos, dummyFacing, world, 0, true, false);
-			BlockPos l4 = findSide(plugPos, dummyFacing.getOpposite(), world, 0, true, false);
-			System.out.println(l1);
-			System.out.println(l2);
-			System.out.println(l3);
-			System.out.println(l4);
-			System.out.println(l5);
-			if(l1 == null || l2 == null || l3 == null || l4 == null || l5 == null || mapFacingConductiveItemStack.size()!=2 ){
-				reset();
-				return false;
-			}
-
-			List<Integer> lx = new ArrayList<Integer>();
-			Collections.addAll(lx,l1.getX(),l2.getX(),l3.getX(),l4.getX(),l5.getX());
-			List<Integer> ly = new ArrayList<Integer>();
-			Collections.addAll(ly,l1.getY(),l2.getY(),l3.getY(),l4.getY(),l5.getY());
-			List<Integer> lz = new ArrayList<Integer>();
-			Collections.addAll(lz,l1.getZ(),l2.getZ(),l3.getZ(),l4.getZ(),l5.getZ());
-
-			dwn = new BlockPos(Collections.min(lx),Collections.min(ly),Collections.min(lz));
-			ues = new BlockPos(Collections.max(lx),Collections.max(ly),Collections.max(lz));
+			if(!getStructure(world))
+				 return false;
 		}
 
 		boolean chst = checkStructure(world);
@@ -454,10 +459,10 @@ public class MultiBlockBattery {
 		boolean chel = isStructured ? true : isManual ? checkElectrolyte(world) : interfaceElectrolyte != null ? true : checkElectrolyte(world);
 		boolean chma = isStructured ? true : isManual ? checkMaterials(world) : interfaceAnode != null && interfaceCathode != null ? true : checkMaterials(world);
 
-		System.out.println(chst);
+		/*System.out.println(chst);
 		System.out.println(chco);
 		System.out.println(chel);
-		System.out.println(chma);
+		System.out.println(chma);*/
 		isValid = chst && chco && chel && chma;
 		
 		if(!isValid){
@@ -869,6 +874,7 @@ public class MultiBlockBattery {
 	
 	private boolean checkStructure(World world) {
 		//check x wall
+		//System.out.println("....................... x");
 		int [] tx = new int[]{dwn.getX(), ues.getX()};
 		for (int i = 0 ; i < tx.length ; i++ ){
 			int x = tx[i];
@@ -880,6 +886,7 @@ public class MultiBlockBattery {
 			}
 		}
 		//check y wall
+		//System.out.println("....................... y");
 		int [] ty = new int[]{dwn.getY(), ues.getY()};
 		for (int i = 0 ; i < ty.length ; i++ ){
 			int y = ty[i];
@@ -891,6 +898,7 @@ public class MultiBlockBattery {
 			}
 		}
 		//check z wall
+		//System.out.println("....................... z");
 		int [] tz = new int[]{dwn.getZ(), ues.getZ()};
 		for (int i = 0 ; i < tz.length ; i++ ){
 			int z = tz[i];
@@ -909,7 +917,7 @@ public class MultiBlockBattery {
 		IBlockState s = world.getBlockState(bp);
 		ItemStack ns = new ItemStack(s.getBlock(),1,s.getBlock().getMetaFromState(s));
 		boolean alcond = MaterialsHandler.anyMatchConductive(ns);
-		
+
 		if(allowedAutomaticBlock.contains(s.getBlock()))
 			isManual = false;
 		if(!allowedStructureBlock.contains(s.getBlock()) && !alcond)

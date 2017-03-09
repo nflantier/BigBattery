@@ -24,7 +24,6 @@ public class Ressources {
 	public static final String UL_NAME_BLOCK_ORE_LEAD = "blockOreLead";
 	public static final String UL_NAME_BLOCK_ORE_PLATINIUM = "blockOrePlatinium";
 	public static final String UL_NAME_BLOCK_ORE_COPPER = "blockOreCopper";
-	public static final String UL_NAME_BLOCK_ORE_GRAPHITE = "blockOreGraphite";
 	public static final String UL_NAME_BLOCK_ORE_NICKEL = "blockOreNickel";
 	public static final String UL_NAME_BLOCK_ORE_ZINC = "blockOreZinc";
 	public static final String UL_NAME_BLOCK_ORE_TIN = "blockOreTin";

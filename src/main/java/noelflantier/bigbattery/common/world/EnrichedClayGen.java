@@ -15,15 +15,11 @@ import noelflantier.bigbattery.common.handlers.ModBlocks;
 
 public class EnrichedClayGen extends WorldGenerator{
 	
-	public int numberOfBlocks = 8;
+	public int numberOfBlocks = 12;
 	public int ymin = 55;
 	public int ymax = 70;
 	
 	public void generate(World worldIn, Random rand, int xch, int zch) {
-		/*int y = rand.nextInt(ymax-ymin)+ymin;
-		int x = xch + rand.nextInt(16);
-		int z = zch + rand.nextInt(16);
-		generate(worldIn, rand, new BlockPos(x,y,z));*/
 		for (int y = ymin; y < ymax; y++) {
 			final int x = xch + rand.nextInt(16);
 			final int z = zch + rand.nextInt(16);

@@ -30,7 +30,7 @@ public class BigBattery {
     @EventHandler
     public void preinit(FMLPreInitializationEvent event)
     {
-    	bbTabs = new CreativeTabs("SFArtifacts"){
+    	bbTabs = new CreativeTabs(Ressources.NAME){
     		@SideOnly(Side.CLIENT)
     		public ItemStack getTabIconItem(){
     			return new ItemStack(Items.APPLE);

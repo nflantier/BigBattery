@@ -64,59 +64,59 @@ public class ModBlocks {
 		GameRegistry.register(blockCasing);
 		blockConductive = new BlockConductive(Material.ROCK);
 		GameRegistry.register(blockConductive);
-		
-    	blockPlug = new BlockPlug(Material.ROCK);
+		//obsidian hardness 50 resistance 2000
+    	blockPlug = new BlockPlug(Material.ROCK).setHardness(3.0F).setResistance(100.0F);
 		GameRegistry.register(blockPlug);
-		blockOreSilver = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_SILVER).setHardness(1).setResistance(1);
+		blockOreSilver = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_SILVER).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockOreSilver);
-		blockOreLead = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_LEAD).setHardness(1).setResistance(1);
+		blockOreLead = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_LEAD).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockOreLead);
-		blockOrePlatinium = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_PLATINIUM).setHardness(1).setResistance(1);
+		blockOrePlatinium = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_PLATINIUM).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockOrePlatinium);
-		blockOreCopper = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_COPPER).setHardness(1).setResistance(1);
+		blockOreCopper = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_COPPER).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockOreCopper);
-		blockOreNickel = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_NICKEL).setHardness(1).setResistance(1);
+		blockOreNickel = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_NICKEL).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockOreNickel);
-		blockOreZinc = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_ZINC).setHardness(1).setResistance(1);
+		blockOreZinc = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_ZINC).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockOreZinc);
-		blockOreTin = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_TIN).setHardness(1).setResistance(1);
+		blockOreTin = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_TIN).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockOreTin);
-		blockOreAluminium = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_ALUMINIUM).setHardness(1).setResistance(1);
+		blockOreAluminium = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_ALUMINIUM).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockOreAluminium);
 
 		blockEnrichedClay = new BlockEnrichedClay(Material.CLAY).setHardness(0.6F);
 		GameRegistry.register(blockEnrichedClay);
 		
-		blockSilver = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_SILVER).setHardness(1).setResistance(1);
+		blockSilver = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_SILVER).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockSilver);
-		blockLead = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_LEAD).setHardness(1).setResistance(1);
+		blockLead = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_LEAD).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockLead);
-		blockPlatinium = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_PLATINIUM).setHardness(1).setResistance(1);
+		blockPlatinium = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_PLATINIUM).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockPlatinium);
-		blockCopper = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_COPPER).setHardness(1).setResistance(1);
+		blockCopper = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_COPPER).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockCopper);
-		blockGraphite = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_GRAPHITE).setHardness(1).setResistance(1);
+		blockGraphite = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_GRAPHITE).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockGraphite);
-		blockNickel = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_NICKEL).setHardness(1).setResistance(1);
+		blockNickel = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_NICKEL).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockNickel);
-		blockZinc = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_ZINC).setHardness(1).setResistance(1);
+		blockZinc = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_ZINC).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockZinc);
-		blockTin = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_TIN).setHardness(1).setResistance(1);
+		blockTin = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_TIN).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockTin);
-		blockAluminium = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_ALUMINIUM).setHardness(1).setResistance(1);
+		blockAluminium = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_ALUMINIUM).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockAluminium);
 
-		blockIonicChlore= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_CHLORE).setHardness(1).setResistance(1);
+		blockIonicChlore= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_CHLORE).setHardness(4.0F).setResistance(100.0F);
 		GameRegistry.register(blockIonicChlore);
-		blockIonicLithium= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_LITHIUM).setHardness(1).setResistance(1);
+		blockIonicLithium= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_LITHIUM).setHardness(4.0F).setResistance(100.0F);
 		GameRegistry.register(blockIonicLithium);
-		blockIonicCalcium= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_CALCIUM).setHardness(1).setResistance(1);
+		blockIonicCalcium= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_CALCIUM).setHardness(4.0F).setResistance(100.0F);
 		GameRegistry.register(blockIonicCalcium);
 		/*blockChlore= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_CHLORE).setHardness(1).setResistance(1);
 		GameRegistry.register(blockChlore);*/
-		blockLithium= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_LITHIUM).setHardness(1).setResistance(1);
+		blockLithium= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_LITHIUM).setHardness(4.0F).setResistance(5.0F);
 		GameRegistry.register(blockLithium);
-		blockCalcium= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_CALCIUM).setHardness(1).setResistance(1);
+		blockCalcium= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_CALCIUM).setHardness(4.0F).setResistance(5.0F);
 		GameRegistry.register(blockCalcium);
     	 	
 	}
