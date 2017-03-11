@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import noelflantier.bigbattery.common.CommonProxy;
+import noelflantier.bigbattery.common.handlers.ModBlocks;
 
 @Mod(modid = Ressources.MODID, name = Ressources.NAME, version = Ressources.VERSION)
 public class BigBattery {
@@ -33,7 +34,7 @@ public class BigBattery {
     	bbTabs = new CreativeTabs(Ressources.NAME){
     		@SideOnly(Side.CLIENT)
     		public ItemStack getTabIconItem(){
-    			return new ItemStack(Items.APPLE);
+    			return new ItemStack(ModBlocks.blockPlug);
     		}
     	};
     	myProxy.preInit(event);

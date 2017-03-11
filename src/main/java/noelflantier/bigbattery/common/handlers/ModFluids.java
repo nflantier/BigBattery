@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import noelflantier.bigbattery.Ressources;
-import noelflantier.bigbattery.common.blocks.BlockFluids;
+import noelflantier.bigbattery.common.blocks.BlockFluid;
 
 public class ModFluids {
 
@@ -37,7 +37,7 @@ public class ModFluids {
 		FluidRegistry.registerFluid(fluidCalcium);
 		FluidRegistry.addBucketForFluid(fluidCalcium);*/
 
-		blockAqueousChlore = new BlockFluids(fluidChlore, Material.WATER, Ressources.UL_NAME_BLOCK_AQUEOUS_CHLORE);
+		blockAqueousChlore = new BlockFluid(fluidChlore, Material.WATER, Ressources.UL_NAME_BLOCK_AQUEOUS_CHLORE);
 		GameRegistry.register(blockAqueousChlore);
 		/*blockAqueousLithium = new BlockFluids(fluidLithium, Material.WATER, Ressources.UL_NAME_BLOCK_AQUEOUS_LITHIUM);
 		GameRegistry.register(blockAqueousLithium);

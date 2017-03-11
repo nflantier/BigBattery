@@ -42,12 +42,13 @@ public class MaterialsHandler{
 	    	/*System.out.println(".................................");
 	    	electrodeListByPotential.entrySet().stream().forEach((e)->e.getValue().listStack.stream().forEach(System.out::println));
 	    	electrolyteListByPotential.entrySet().stream().forEach((e)->e.getValue().listStack.stream().forEach(System.out::println));
-	    	conductiveListByRatio.entrySet().stream().forEach((e)->e.getValue().listStack.stream().forEach(System.out::println));*/
-	    	/*electrodeListByPotential.entrySet().stream().forEach((e)->e.getValue().weightToStack.entrySet().stream().forEach(System.out::println));
+	    	conductiveListByRatio.entrySet().stream().forEach((e)->e.getValue().listStack.stream().forEach(System.out::println));
+	    	electrodeListByPotential.entrySet().stream().forEach((e)->e.getValue().weightToStack.entrySet().stream().forEach(System.out::println));
 	    	electrolyteListByPotential.entrySet().stream().forEach((e)->e.getValue().weightToStack.entrySet().stream().forEach(System.out::println));
 	    	System.out.println("..................................... "+electrodeListByPotential.size());
 	    	System.out.println("..................................... "+electrolyteListByPotential.size());
-	    	System.out.println("..................................... "+conductiveListByRatio.size());*/
+	    	System.out.println("..................................... "+conductiveListByRatio.size());
+	    	electrolyteListByPotential.entrySet().stream().forEach((e)->e.getValue().weightToStack.entrySet().stream().forEach(System.out::println));*/
 	    } else {
 	    	System.out.println("Could not load materials config ");
 	    }
@@ -142,8 +143,17 @@ public class MaterialsHandler{
 	}
 	
 	public static class Electrode extends Material<Electrode>{
+		
+		public static enum TYPE{
+			NONE,
+			ANODE,
+			CATHODE;
+		}
+		
 		public double potential = 0;
 		public List<Double> oxydationNumber;
+		public TYPE type = TYPE.NONE;
+		
 		public Electrode(String s, double e, List<Double>o){
 			super(s);
 			this.potential = e;
@@ -151,6 +161,9 @@ public class MaterialsHandler{
 		}
 		public double getPotential(){
 			return potential;
+		}
+		public void setType(TYPE t){
+			type = t;
 		}
 	}
 

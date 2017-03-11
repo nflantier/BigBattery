@@ -33,14 +33,15 @@ public class TilePlug extends ATileBBTicking implements ITileMaster, IEnergyStor
 		if(!getStructure().isStructured)
 			return;
 
-		energyStorage.extractEnergy(1000000, false);
+		//energyStorage.extractEnergy(1000000, false);
 		if(energyStorage.getEnergyStored()>=energyStorage.getMaxEnergyStored())
 			return;
-		int rf = (int) mbb.materialsB.generateEnergy();
+		int rf = (int) mbb.materialsBattery.generateEnergy();
+		
 		int truerf = energyStorage.receiveEnergy(rf,true);
 		if(truerf>0 && rf>0){
 			energyStorage.receiveEnergy(rf,false);
-			mbb.materialsB.handleMaterials(getWorld(), (float)truerf/(float)rf);
+			mbb.materialsBattery.handleMaterials(getWorld(), (float)truerf/(float)rf);
 		}		
     	if(energyStorage.getEnergyStored()!=this.lastEnergyStoredAmount)
     		PacketHandler.sendToAllAround(new PacketPlug(this.getPos(), energyStorage.getEnergyStored(), this.lastEnergyStoredAmount),this);
@@ -51,7 +52,7 @@ public class TilePlug extends ATileBBTicking implements ITileMaster, IEnergyStor
 
 	@Override
 	public void setEnergyCapacity() {
-		capacity = (int) mbb.materialsB.generateEnergy();
+		capacity = (int) mbb.materialsBattery.generateEnergy();
 		energyStorage = new EnergyStorage(capacity);	
 	}
 	
@@ -92,7 +93,8 @@ public class TilePlug extends ATileBBTicking implements ITileMaster, IEnergyStor
         capacity = nbt.getInteger("capacity");
         energyStorage = new EnergyStorage(capacity);
         //energyStorage.receiveEnergy(nbt.getInteger("energy"), false);
-        CapabilityEnergy.ENERGY.getStorage().readNBT(CapabilityEnergy.ENERGY, getCapability(CapabilityEnergy.ENERGY,null), null, nbt.getTag("capabilityEnergy"));
+        if(nbt.getTag("capabilityEnergy") != null)
+        	CapabilityEnergy.ENERGY.getStorage().readNBT(CapabilityEnergy.ENERGY, getCapability(CapabilityEnergy.ENERGY,null), null, nbt.getTag("capabilityEnergy"));
     }
 
 	@Override

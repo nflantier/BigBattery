@@ -16,11 +16,13 @@ import noelflantier.bigbattery.common.blocks.ABlockBBStructure;
 import noelflantier.bigbattery.common.blocks.BlockCasing;
 import noelflantier.bigbattery.common.blocks.BlockConductive;
 import noelflantier.bigbattery.common.blocks.BlockEnrichedClay;
+import noelflantier.bigbattery.common.blocks.BlockInterface;
 import noelflantier.bigbattery.common.blocks.BlockIonic;
 import noelflantier.bigbattery.common.blocks.BlockMetals;
 import noelflantier.bigbattery.common.blocks.BlockOres;
 import noelflantier.bigbattery.common.blocks.BlockPlug;
 import noelflantier.bigbattery.common.handlers.ModProperties.ConductiveType;
+import noelflantier.bigbattery.common.handlers.ModProperties.InterfaceType;
 
 public class ModBlocks {
 
@@ -64,6 +66,8 @@ public class ModBlocks {
 		GameRegistry.register(blockCasing);
 		blockConductive = new BlockConductive(Material.ROCK);
 		GameRegistry.register(blockConductive);
+		blockInterface = new BlockInterface(Material.ROCK);
+		GameRegistry.register(blockInterface);
 		//obsidian hardness 50 resistance 2000
     	blockPlug = new BlockPlug(Material.ROCK).setHardness(3.0F).setResistance(100.0F);
 		GameRegistry.register(blockPlug);
@@ -118,6 +122,21 @@ public class ModBlocks {
 		GameRegistry.register(blockLithium);
 		blockCalcium= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_CALCIUM).setHardness(4.0F).setResistance(5.0F);
 		GameRegistry.register(blockCalcium);
+		
+		/*
+		 * electrode
+		 * lithium diamond
+		 * lithium graphite 
+		 * endcrystal
+		 * 
+		 * electrolyte
+		 * dragon breath IONIC
+		 * 
+		 * conductive
+		 * nether star
+		 * 
+		 * 
+		 */
     	 	
 	}
 	
@@ -126,11 +145,12 @@ public class ModBlocks {
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCasing), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_BASIC_CASING_FULL, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCasing), 2, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ADVANCED_CASING_FULL, "inventory"));
     	
-    	
     	for(int i = 0 ; i < ConductiveType.values().length ; i++){
     		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockConductive), blockConductive.getMetaFromState(blockConductive.getDefaultState().withProperty(BlockConductive.CONDUCTIVE_TYPE, ConductiveType.getType(i))), new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CONDUCTIVE, "facing=north,isstruct=false,type="+ConductiveType.getType(i).getName()));
     	}
-    	
+    	for(int i = 0 ; i < InterfaceType.values().length ; i++){
+    		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockInterface), blockInterface.getMetaFromState(blockInterface.getDefaultState().withProperty(BlockInterface.INTERFACE_TYPE, InterfaceType.getType(i))), new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_INTERFACE, "isstruct=false,type="+InterfaceType.getType(i).getName()));
+    	}
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockPlug), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_PLUG, "inventory"));
     	//ModelLoader.setCustomStateMapper(blockPlug, (new StateMap.Builder()).ignore(new IProperty[] {ABlockBBStructure.ISSTRUCT}).build());
         

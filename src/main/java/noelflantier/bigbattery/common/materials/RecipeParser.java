@@ -79,18 +79,18 @@ public class RecipeParser extends DefaultHandler {
 
 	@Override
 	public void warning(SAXParseException e) throws SAXException {
-		System.out.println("Warning while loading recipes from config : " + e.getMessage());
+		System.out.println("BigBattery materials.xml : Warning while loading recipes from config : " + e.getMessage());
 	}
 
 	@Override
 	public void error(SAXParseException e) throws SAXException {
-		System.out.println("Error while loading recipes from config : " + e.getMessage());
+		System.out.println("BigBattery materials.xml : Error while loading recipes from config : " + e.getMessage());
 		e.printStackTrace();
 	}
 
 	@Override
 	public void fatalError(SAXParseException e) throws SAXException {
-		System.out.println("Error while loading recipes from config : " + e.getMessage());
+		System.out.println("BigBattery materials.xml : Error while loading recipes from config : " + e.getMessage());
 		e.printStackTrace();
 	}
 
@@ -108,7 +108,7 @@ public class RecipeParser extends DefaultHandler {
 		//System.out.println("...................................................... START"+localName);
 		if(ELEMENT_ROOT_MATERIALS.equals(localName)){
 			if(result != null) {
-				System.out.println("Multiple materials elements found.");
+				System.out.println("BigBattery materials.xml : Multiple materials elements found.");
 		    } else {
 		    	result = new ArrayList<Material>();
 		    }
@@ -117,11 +117,11 @@ public class RecipeParser extends DefaultHandler {
 			    
 	    if(ELEMENT_ELECTRODE.equals(localName) || ELEMENT_ELECTROLYTE.equals(localName) || ELEMENT_CONDUCTIVE.equals(localName)){
 	    	if(result==null){
-	    		System.out.println("No materials root element");
+	    		System.out.println("BigBattery materials.xml : No materials root element");
 	    		return;
 	    	}
 	    	if(currentMaterial != null) {
-	    		System.out.println("Material not closed before encountering a new material.");
+	    		System.out.println("BigBattery materials.xml : Material not closed before encountering a new material.");
 	        }
 
 	    	String name = getStringValue(AT_NAME, attributes, null);
@@ -145,14 +145,14 @@ public class RecipeParser extends DefaultHandler {
 	    }
 	    
 	    if(currentMaterial == null) {
-	    	System.out.println("Found element <" + localName + "> with no material decleration.");
+	    	System.out.println("BigBattery materials.xml : Found element <" + localName + "> with no material decleration.");
 	        return;
 	    }	    
 
 	    if(ELEMENT_BUCKET_STACK.equals(localName)){
 	    	Fluid f = getFluid(attributes);
 	    	if(f==null){
-		        System.out.println("Could not find the fluid for the bucketstack");
+		        System.out.println("BigBattery materials.xml : Could not find the fluid for the bucketstack");
 		        return;
 	    	}
 	    	ItemStack st = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, f);
@@ -183,7 +183,7 @@ public class RecipeParser extends DefaultHandler {
 	        if(currentMaterial != null) {
 	        	result.add(currentMaterial);
 	        } else {
-	        	System.out.println("Could not add current material to group root");
+	        	System.out.println("BigBattery materials.xml : Could not add current material to group root");
 	        }
 	        currentMaterial = null;
 	    	currentMaterialClass = null;
@@ -205,7 +205,7 @@ public class RecipeParser extends DefaultHandler {
 	    }
 	    Fluid fluid = FluidRegistry.getFluid(name);
 	    if(fluid == null) {
-	    	System.out.println("When parsing recipes could not find fluid with name: "+ name);
+	    	System.out.println("BigBattery materials.xml : When parsing recipes could not find fluid with name: "+ name);
 	    	return null;
 	    }
 		return new FluidStack(fluid, amount);
@@ -244,7 +244,7 @@ public class RecipeParser extends DefaultHandler {
 	    	}	
 	    }
 	    if(stack == null) {
-	    	System.out.println("Could not create an item stack");
+	    	System.out.println("BigBattery materials.xml : Could not create an item stack");
 	        return null;
 	    }
 		return stack;
@@ -268,7 +268,7 @@ public class RecipeParser extends DefaultHandler {
 		try {
 			return Integer.parseInt(getStringValue(qName, attributes, def + ""));
 		} catch (Exception e) {
-			System.out.println("Could not parse a valid int for attribute " + qName + " with value " + getStringValue(qName, attributes, null));
+			System.out.println("BigBattery materials.xml : Could not parse a valid int for attribute " + qName + " with value " + getStringValue(qName, attributes, null));
 			return def;
 		}
 	}
@@ -277,7 +277,7 @@ public class RecipeParser extends DefaultHandler {
 		try {
 			return Float.parseFloat(getStringValue(qName, attributes, def + ""));
 		} catch (Exception e) {
-			System.out.println("Could not parse a valid float for attribute " + qName + " with value " + getStringValue(qName, attributes, null));
+			System.out.println("BigBattery materials.xml : Could not parse a valid float for attribute " + qName + " with value " + getStringValue(qName, attributes, null));
 			return def;
 		}
 	}
@@ -285,7 +285,7 @@ public class RecipeParser extends DefaultHandler {
 		try {
 			return Double.parseDouble(getStringValue(qName, attributes, def + ""));
 		} catch (Exception e) {
-			System.out.println("Could not parse a valid float for attribute " + qName + " with value " + getStringValue(qName, attributes, null));
+			System.out.println("BigBattery materials.xml : Could not parse a valid float for attribute " + qName + " with value " + getStringValue(qName, attributes, null));
 			return def;
 		}
 	}
@@ -298,7 +298,7 @@ public class RecipeParser extends DefaultHandler {
 			return ArrayUtils.toPrimitive(f.toArray(new Float[0]));
 			*/
 		} catch (Exception e) {
-			System.out.println("Could not parse a valid float for attribute " + qName + " with value " + getStringValue(qName, attributes, null));
+			System.out.println("BigBattery materials.xml : Could not parse a valid float for attribute " + qName + " with value " + getStringValue(qName, attributes, null));
 			return new ArrayList<Double>(){{add(def);}};
 		}
 	}

@@ -12,6 +12,45 @@ import net.minecraft.util.IStringSerializable;
 
 public class ModProperties {
 	
+    public enum InterfaceType implements IStringSerializable{
+    	ELECTRODE("electrode"),
+    	ELECTROLYTE("electrolyte");
+
+    	public String name;
+    	
+    	private InterfaceType(String name) {
+    		this.name = name;
+		}
+    	
+		@Override
+		public String getName() {
+			return name;
+		}
+		
+		public static InterfaceType getType(int idx){
+			return idx >= InterfaceType.values().length ? InterfaceType.values()[0] : InterfaceType.values()[idx];
+		}
+    }
+    
+	public static class PropertyInterfaceType extends PropertyEnum<InterfaceType>{
+
+		protected PropertyInterfaceType(String name, Collection<InterfaceType> allowedValues) {
+			super(name, InterfaceType.class, allowedValues);
+		}
+		public static PropertyInterfaceType create(String name)
+	    {
+	        return create(name, Predicates.<InterfaceType>alwaysTrue());
+	    }
+	    public static PropertyInterfaceType create(String name, Predicate<InterfaceType> filter)
+	    {
+	        return create(name, Collections2.<InterfaceType>filter(Lists.newArrayList(InterfaceType.values()), filter));
+	    }
+	    public static PropertyInterfaceType create(String name, Collection<InterfaceType> values)
+	    {
+	        return new PropertyInterfaceType(name, values);
+	    }
+	}
+	
     public enum ConductiveType implements IStringSerializable{
     	ALLUMINIUM("aluminium"),
     	COPPER("copper");

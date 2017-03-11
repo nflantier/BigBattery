@@ -7,8 +7,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import noelflantier.bigbattery.BigBattery;
 
-public class BlockFluids extends BlockFluidClassic{
-	public BlockFluids(Fluid fluid, Material material, String ulname) {
+public class BlockFluid extends BlockFluidClassic{
+	public BlockFluid(Fluid fluid, Material material, String ulname) {
 		super(fluid, material);
 		setRegistryName(ulname);
         setUnlocalizedName(ulname);

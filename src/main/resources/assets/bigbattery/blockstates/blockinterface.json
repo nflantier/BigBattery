@@ -1,0 +1,33 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "all": "bigbattery:blocks/interface_anode"
+        },
+        "model": "bigbattery:blockinterface" 
+    },
+    "variants": {
+        "normal": [{
+        }],
+        "inventory": [{
+        }],
+        "isstruct":{
+            "true":{
+            },
+            "false":{
+            }
+        },
+        "type":{
+            "electrode":{
+                "textures": {
+                    "all": "bigbattery:blocks/interface_electrode"
+                }
+            },
+            "electrolyte":{
+                "textures": {
+                    "all": "bigbattery:blocks/interface_electrolyte"
+                }
+            }
+        }
+    }
+}

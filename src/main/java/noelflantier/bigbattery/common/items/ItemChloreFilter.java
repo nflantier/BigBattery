@@ -24,13 +24,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import noelflantier.bigbattery.common.handlers.ModConfig;
 import noelflantier.bigbattery.common.handlers.ModItems;
 
 public class ItemChloreFilter extends ItemBB{
 	
 	public static Map<BlockPos, Integer> listFilterClicked = new MapMaker().weakKeys().weakValues().makeMap();
-	public static int rangeChlore = 4;
-	public static int tickChlore = 1000;
 	public static int baseDrop = 0;
 	public static Random rdm = new Random();
 
@@ -61,7 +60,7 @@ public class ItemChloreFilter extends ItemBB{
     }
     
 	public boolean isPosOutOfChlore(BlockPos posClicked, BlockPos oldPos){
-		int r = rangeChlore <= 0 ? 1 : rangeChlore;
+		int r = ModConfig.rangeChlore <= 0 ? 1 : ModConfig.rangeChlore;
 		return posClicked.getDistance(oldPos.getX(), oldPos.getY(), oldPos.getZ()) < r;
 	}
 
@@ -94,7 +93,7 @@ public class ItemChloreFilter extends ItemBB{
                 boolean nochlore = listFilterClicked.entrySet().stream().anyMatch(b->isPosOutOfChlore(blockpos, b.getKey()));
                 if(nochlore)
                     return new ActionResult(EnumActionResult.PASS, itemstack);
-                listFilterClicked.put(blockpos, tickChlore);
+                listFilterClicked.put(blockpos, ModConfig.tickChlore);
                 itemstack.damageItem(1, playerIn);
                 int lvlf = (int) Math.pow(EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("fortune"), itemstack),1.5);
 	            worldIn.spawnEntity(new EntityItem(worldIn, blockpos.getX()+0.5, blockpos.getY()+0.5, blockpos.getZ()+0.5, new ItemStack(ModItems.itemDustChlore, rdm.nextInt(5) + baseDrop + (int)(Math.floor(lvlf/2)) + rdm.nextInt(lvlf + 1))));

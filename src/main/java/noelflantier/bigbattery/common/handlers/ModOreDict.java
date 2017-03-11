@@ -34,5 +34,7 @@ public class ModOreDict {
 		OreDictionary.registerOre("ingotSteel", ModItems.itemIngotSteel);
 		OreDictionary.registerOre("ingotTin", ModItems.itemIngotTin);
 		OreDictionary.registerOre("ingotZinc", ModItems.itemIngotZinc);
+		
+		OreDictionary.registerOre("enrichedClay", ModBlocks.blockEnrichedClay);
 	}
 }

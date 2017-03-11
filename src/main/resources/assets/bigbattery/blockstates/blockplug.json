@@ -14,10 +14,10 @@
         "facing":{
                 "down":  { "transform": { "rotation": [ {"x":180}, {"y":0}, {"z":0} ] } },
                 "up":    {  },
-                "north": { "transform": { "rotation": [ {"x":90}, {"y":0}, {"z":0} ] } },
-                "south": { "transform": { "rotation": [ {"x":270}, {"y":0}, {"z":0} ] } },
-                "west":  { "transform": { "rotation": [ {"x":90}, {"y":270}, {"z":0} ] } },
-                "east":  { "transform": { "rotation": [ {"x":90}, {"y":90}, {"z":0} ] } }
+                "north": { "transform": { "rotation": [ {"x":270}, {"y":0}, {"z":0} ] } },
+                "south": { "transform": { "rotation": [ {"x":90}, {"y":0}, {"z":0} ] } },
+                "west":  { "transform": { "rotation": [ {"x":90}, {"y":0}, {"z":90} ] } },
+                "east":  { "transform": { "rotation": [ {"x":90}, {"y":0}, {"z":270} ] } }
         },
         "isstruct":{
             "true":{

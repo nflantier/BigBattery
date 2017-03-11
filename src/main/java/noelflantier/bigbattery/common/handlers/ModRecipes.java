@@ -31,6 +31,10 @@ public class ModRecipes {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockPlug,1,0),  "SSS", "RDR", "SSS", 'R',Items.REDSTONE ,'S', "ingotSteel", 'D', Items.DIAMOND));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockCasing,4,0),  "SSS", "SGS", "SSS", 'G',Blocks.GLASS ,'S', "ingotSteel"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockCasing,8,2),  "SSS", "SIS", "SSS", 'I',Blocks.IRON_BLOCK ,'S', "ingotSteel"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockInterface,1,0),  "SDS", "SCS", "SDS",'S', "ingotSteel", 'D', Blocks.HOPPER, 'C', Blocks.CAULDRON));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.blockInterface,1,0), new ItemStack(ModBlocks.blockInterface,1,4)));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.blockInterface,1,2), new ItemStack(ModBlocks.blockInterface,1,0)));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.blockInterface,1,4), new ItemStack(ModBlocks.blockInterface,1,2)));
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockConductive,2,0), "SSS","SSS", "AAA", 'A',"ingotAluminium",'S', "ingotSteel"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockConductive,2,2), "SSS","SSS", "AAA", 'A',"ingotCopper",'S', "ingotSteel"));
