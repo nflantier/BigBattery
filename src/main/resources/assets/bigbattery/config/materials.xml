@@ -48,7 +48,8 @@ Electrolyte type value 0:aqueous, 1:ionic, 2:solid.
 	
 	<electrolyte name="aqueous_chlore" potential="1.35" oxydationNo="5" type="0">
 		<itemStack modID="bigbattery" itemName="blockAqueousChlore" weight="1"/>
-		<bucketStack modID="bigbattery" itemName="fluidchlore" weight="9"/>
+		<bucketStack modID="bigbattery" itemName="fluidchlore" weight="1"/>
+        <fluidStack modID="bigbattery" itemName="fluidchlore" amount="1000"/>
 	</electrolyte>
 	<electrolyte name="ionic_chlore" potential="1.35" oxydationNo="5" type="1">
 		<itemStack modID="bigbattery" itemName="blockIonicChlore" weight="1"/>

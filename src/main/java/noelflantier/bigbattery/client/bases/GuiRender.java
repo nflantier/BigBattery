@@ -76,7 +76,7 @@ public class GuiRender {
 	    int posY = (int) (y + height - renderAmount);
 
 		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-	    int color = fluid.getFluid().getColor(fluid);
+		int color = fluid.getFluid().getColor(fluid);
 	    GL11.glColor3ub((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
 
 	    GL11.glEnable(GL11.GL_BLEND);
@@ -96,10 +96,14 @@ public class GuiRender {
 	        Tessellator tessellator = Tessellator.getInstance();
 	        VertexBuffer vertexbuffer = tessellator.getBuffer();
 	        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-	        vertexbuffer.pos(drawX, drawY + drawHeight, 0).tex(minU, minV + (maxV - minV) * drawHeight / 16F).endVertex();
-	        vertexbuffer.pos(drawX + drawWidth, drawY + drawHeight, 0).tex(minU + (maxU - minU) * drawWidth / 16F, minV + (maxV - minV) * drawHeight / 16F).endVertex();
-	        vertexbuffer.pos(drawX + drawWidth, drawY,0).tex(minU + (maxU - minU) * drawWidth / 16F, minV).endVertex();
-	        vertexbuffer.pos(drawX, drawY, 0).tex(minU, minV).endVertex();
+	        /*vertexbuffer.pos(drawX, drawY + drawHeight, 0).tex(icon.getInterpolatedU(0), icon.getInterpolatedV(drawHeight / 16F)).endVertex();
+	        vertexbuffer.pos(drawX + drawWidth, drawY + drawHeight, 0).tex(icon.getInterpolatedU(drawWidth / 16F), icon.getInterpolatedV(drawHeight / 16F)).endVertex();
+	        vertexbuffer.pos(drawX + drawWidth, drawY,0).tex(icon.getInterpolatedU(drawWidth / 16F), icon.getInterpolatedV(0)).endVertex();
+	        vertexbuffer.pos(drawX, drawY, 0).tex(icon.getInterpolatedU(0), icon.getInterpolatedV(0)).endVertex();*/
+	        vertexbuffer.pos(drawX, drawY + drawHeight, zLevel).tex(minU, minV + (maxV - minV) * drawHeight / 16F).endVertex();
+	        vertexbuffer.pos(drawX + drawWidth, drawY + drawHeight, zLevel).tex(minU + (maxU - minU) * drawWidth / 16F, minV + (maxV - minV) * drawHeight / 16F).endVertex();
+	        vertexbuffer.pos(drawX + drawWidth, drawY,zLevel).tex(minU + (maxU - minU) * drawWidth / 16F, minV).endVertex();
+	        vertexbuffer.pos(drawX, drawY, zLevel).tex(minU, minV).endVertex();
 	        tessellator.draw();
 	      }
 	    }

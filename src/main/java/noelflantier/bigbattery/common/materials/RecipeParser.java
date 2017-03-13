@@ -161,7 +161,13 @@ public class RecipeParser extends DefaultHandler {
 		    
 	    }
 	    
-	    boolean isFluidStack = ELEMENT_FLUID_STACK.equals(localName);
+	    if(ELEMENT_FLUID_STACK.equals(localName)) {
+        	FluidStack st = getFluidStack(attributes);
+        	if(st!=null){
+        		currentMaterial.addMaterial(st, 1);
+        	}
+	        return;
+	    }
 	    if(ELEMENT_ITEM_STACK.equals(localName)) {
         	ItemStack st = getItemStack(attributes);
         	if(st!=null){

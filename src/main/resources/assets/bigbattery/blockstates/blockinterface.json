@@ -11,23 +11,25 @@
         }],
         "inventory": [{
         }],
-        "isstruct":{
-            "true":{
-            },
-            "false":{
+        "isstruct=false,type=electrode":[{
+            "textures": {
+                "all": "bigbattery:blocks/interface_electrode"
             }
-        },
-        "type":{
-            "electrode":{
-                "textures": {
-                    "all": "bigbattery:blocks/interface_electrode"
-                }
-            },
-            "electrolyte":{
-                "textures": {
-                    "all": "bigbattery:blocks/interface_electrolyte"
-                }
+        }],
+        "isstruct=true,type=electrode":[{
+            "textures": {
+                "all": "bigbattery:blocks/interface_electrode_c"
             }
-        }
+        }],
+        "isstruct=false,type=electrolyte":[{
+            "textures": {
+                "all": "bigbattery:blocks/interface_electrolyte"
+            }
+        }],
+        "isstruct=true,type=electrolyte":[{
+            "textures": {
+                "all": "bigbattery:blocks/interface_electrolyte_c"
+            }
+        }]
     }
 }

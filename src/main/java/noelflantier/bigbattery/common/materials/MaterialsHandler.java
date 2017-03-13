@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class MaterialsHandler{
@@ -54,34 +55,48 @@ public class MaterialsHandler{
 	    }
 	}
 	
+
+    public static MaterialsHandler.Electrolyte getElectrolyteFromStack(FluidStack stack){
+    	return electrolyteListByPotential.entrySet().stream().filter((e)->e.getValue().fluidStack.stream().anyMatch((w)->w.equals(stack))).findFirst().get().getValue();
+    }
+    
+    public static int getFluidAmountFromStack(MaterialsHandler.Electrolyte electrolyte, FluidStack stack){
+    	if(electrolyte == null || stack == null)
+    		return 0;
+    	return electrolyte.fluidStack.stream().filter((i)->i.equals(stack)).findFirst().get().amount;
+    }
+    
 	public static MaterialsHandler.Electrode getElectrodeFromStack(ItemStack stack){
-    	return electrodeListByPotential.entrySet().stream().filter((e)->e.getValue().weightToStack.entrySet().stream().anyMatch((w)->w.getValue().isItemEqualIgnoreDurability(stack))).findFirst().get().getValue();
+    	return electrodeListByPotential.entrySet().stream().filter((e)->e.getValue().listStack.stream().anyMatch((w)->w.isItemEqualIgnoreDurability(stack))).findFirst().get().getValue();
     }
 
     public static double getWeightFromStack(MaterialsHandler.Electrode electrode, ItemStack stack){
     	if(electrode == null || stack == null)
     		return 1;
-    	return electrode.weightToStack.entrySet().stream().filter((i)->i.getValue().isItemEqualIgnoreDurability(stack)).findFirst().get().getKey();
+    	return electrode.stackToWeight.entrySet().stream().filter((i)->i.getKey().isItemEqualIgnoreDurability(stack)).findFirst().get().getValue();
+    	//return electrode.weightToStack.entrySet().stream().filter((i)->i.getValue().isItemEqualIgnoreDurability(stack)).findFirst().get().getKey();
     }
     
     public static MaterialsHandler.Electrolyte getElectrolyteFromStack(ItemStack stack){
-    	return electrolyteListByPotential.entrySet().stream().filter((e)->e.getValue().weightToStack.entrySet().stream().anyMatch((w)->w.getValue().isItemEqualIgnoreDurability(stack))).findFirst().get().getValue();
+    	return electrolyteListByPotential.entrySet().stream().filter((e)->e.getValue().listStack.stream().anyMatch((w)->w.isItemEqualIgnoreDurability(stack))).findFirst().get().getValue();
     }
 
     public static double getWeightFromStack(MaterialsHandler.Electrolyte electrolyte, ItemStack stack){
     	if(electrolyte == null || stack == null)
     		return 1;
-    	return electrolyte.weightToStack.entrySet().stream().filter((i)->i.getValue().isItemEqualIgnoreDurability(stack)).findFirst().get().getKey();
+    	return electrolyte.stackToWeight.entrySet().stream().filter((i)->i.getKey().isItemEqualIgnoreDurability(stack)).findFirst().get().getValue();
+    	//return electrolyte.weightToStack.entrySet().stream().filter((i)->i.getValue().isItemEqualIgnoreDurability(stack)).findFirst().get().getKey();
     }
     
     public static MaterialsHandler.Conductive getConductiveFromStack(ItemStack stack){
-    	return conductiveListByRatio.entrySet().stream().filter((e)->e.getValue().weightToStack.entrySet().stream().anyMatch((w)->w.getValue().isItemEqualIgnoreDurability(stack))).findFirst().get().getValue();
+    	return conductiveListByRatio.entrySet().stream().filter((e)->e.getValue().listStack.stream().anyMatch((w)->w.isItemEqualIgnoreDurability(stack))).findFirst().get().getValue();
     }
 
     public static double getWeightFromStack(MaterialsHandler.Conductive conductive, ItemStack stack){
     	if(conductive == null || stack == null)
     		return 1;
-    	return conductive.weightToStack.entrySet().stream().filter((i)->i.getValue().isItemEqualIgnoreDurability(stack)).findFirst().get().getKey();
+    	return conductive.stackToWeight.entrySet().stream().filter((i)->i.getKey().isItemEqualIgnoreDurability(stack)).findFirst().get().getValue();
+    	//return conductive.weightToStack.entrySet().stream().filter((i)->i.getValue().isItemEqualIgnoreDurability(stack)).findFirst().get().getKey();
     }
     
     public static boolean anyMatchConductive(ItemStack stack){
@@ -93,6 +108,9 @@ public class MaterialsHandler{
     public static boolean anyMatchElectrolyte(ItemStack stack){
     	return electrolyteListByPotential.entrySet().stream().anyMatch(e->e.getValue().listStack.stream().anyMatch((l)->l.isItemEqualIgnoreDurability(stack)));
     }
+    public static boolean anyMatchElectrolyte(FluidStack stack){
+    	return electrolyteListByPotential.entrySet().stream().anyMatch(e->e.getValue().fluidStack.stream().anyMatch((l)->l.equals(stack)));
+    }
     
 	public static class Material<T>{
 		public static int IDMATERIALS = 1;
@@ -103,6 +121,7 @@ public class MaterialsHandler{
 		public Map<Double,ItemStack> weightToStack = new HashMap<Double,ItemStack>();
 		public Map<ItemStack,Double> stackToWeight = new HashMap<ItemStack,Double>();
 		public List<ItemStack> listStack = new ArrayList<ItemStack>();
+		public List<FluidStack> fluidStack = new ArrayList<FluidStack>();
 		
 		public Material(String s){
 			this.name = s;
@@ -134,9 +153,15 @@ public class MaterialsHandler{
 			}
 			return (T) this;
 		}
+		public T addMaterial(FluidStack stack, double weight){
+			fluidStack.add(stack.copy());
+			return (T) this;
+		}
 		public T addMaterial(ItemStack stack, double weight){
-			weightToStack.put(weight,stack.copy());
-			stackToWeight.put(stack.copy(), weight);
+			if(!weightToStack.containsKey(weight))
+				weightToStack.put(weight,stack.copy());
+			if(!weightToStack.containsKey(stack))
+				stackToWeight.put(stack.copy(), weight);
 			listStack.add(stack.copy());
 			return (T) this;
 		}

@@ -13,13 +13,12 @@ import noelflantier.bigbattery.common.tiles.TilePlug;
 
 public class GuiPlug extends GuiNF{
 
-	private static final ResourceLocation guiselements = new ResourceLocation(Ressources.MODID+":textures/gui/gui_elements.png");
 	private static final ResourceLocation bground = new ResourceLocation(Ressources.MODID+":textures/gui/gui_plug.png");
 	
 	TilePlug tile;
 	public GuiPlug(InventoryPlayer inventory, TilePlug tile) {
 		super(new ContainerPlug(inventory, tile));
-		this.xSize = 197;
+		this.xSize = 176;
 		this.ySize = 135;
 		this.tile = tile;
 	}

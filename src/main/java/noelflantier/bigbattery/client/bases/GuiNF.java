@@ -11,6 +11,8 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
+import net.minecraft.util.ResourceLocation;
+import noelflantier.bigbattery.Ressources;
 
 public abstract class GuiNF extends GuiContainer{
 
@@ -19,6 +21,7 @@ public abstract class GuiNF extends GuiContainer{
 	
 	public boolean componentloaded = false;
 	public Hashtable<String, GuiComponent> componentList = new Hashtable<String, GuiComponent>();
+	public static final ResourceLocation guiselements = new ResourceLocation(Ressources.MODID+":textures/gui/gui_elements.png");
 	public String curentToolTipComponent = "";
 	public ArrayList<Character> onlyNumericKey= new ArrayList<Character>(){{
 		add('0');add('1');add('2');add('3');add('4');add('5');add('6');add('7');add('8');add('9');add('+');add('-');

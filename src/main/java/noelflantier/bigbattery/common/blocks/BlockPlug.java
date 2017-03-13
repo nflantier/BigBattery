@@ -54,7 +54,7 @@ public class BlockPlug extends ABlockBBStructure {
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
     {
-        return this.getDefaultState().withProperty(FACING, facing);
+        return this.getDefaultState().withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer));
     }
 	
 	@Override
@@ -65,17 +65,19 @@ public class BlockPlug extends ABlockBBStructure {
 	@Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-		if(!worldIn.isRemote){
-			if(hand == EnumHand.MAIN_HAND){
-				if(playerIn.getHeldItem(EnumHand.MAIN_HAND).getItem() == Items.STICK){
-					TileEntity te = worldIn.getTileEntity(pos);
-					if( te != null && te instanceof ITileMaster && !((ITileMaster)te).getStructure().isStructured){
-						((ITileMaster)te).getStructure().batteryCheckAndSetupStructure(worldIn, pos, playerIn);
-					}
-					return true;
-				}else
-					playerIn.openGui(BigBattery.instance, ModGuis.guiIDPlug, worldIn, pos.getX(), pos.getY(), pos.getZ());
+		if(worldIn.isRemote || playerIn.isSneaking() || hand == EnumHand.OFF_HAND)
+			return true;
+		
+		if(playerIn.getHeldItem(EnumHand.MAIN_HAND).getItem() == Items.STICK){
+			TileEntity te = worldIn.getTileEntity(pos);
+			if( te != null && te instanceof ITileMaster && !((ITileMaster)te).getStructure().isStructured){
+				((ITileMaster)te).getStructure().batteryCheckAndSetupStructure(worldIn, pos, playerIn);
 			}
+			return true;
+		}
+		if(state.getValue(ISSTRUCT) == true){
+			playerIn.openGui(BigBattery.instance, ModGuis.guiIDPlug, worldIn, pos.getX(), pos.getY(), pos.getZ());
+			return true;
 		}
         return false;
     }
