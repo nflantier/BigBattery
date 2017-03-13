@@ -14,6 +14,8 @@ public class EnergyStoragePlug extends EnergyStorage{
 	
 	public void setCapacity(int e){
         capacity = e;
+        maxReceive = e;
+        maxExtract = e;
 	}
 	
 	public int recieve(int maxReceive, boolean simulate){

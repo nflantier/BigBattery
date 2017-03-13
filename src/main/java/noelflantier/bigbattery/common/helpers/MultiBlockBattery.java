@@ -319,7 +319,7 @@ public class MultiBlockBattery {
 			electrode1MP.currentUnit -= ( rdm.nextDouble() + 1 ) * rationRF +1;
 			electrode2MP.currentUnit -= ( rdm.nextDouble() + 1 ) * rationRF +1;
 			electrolyteMP.currentUnit -= ( rdm.nextDouble() + 1 ) * rationRF +1;
-			
+
 			/*System.out.println("ano "+anodeMP.currentUnit);
 			System.out.println("cath "+cathodeMP.currentUnit);
 			System.out.println("ele "+electrolyteMP.currentUnit);*/
@@ -330,7 +330,7 @@ public class MultiBlockBattery {
 				return 0;
 			}
 
-			//System.out.println(electrode2MP.currentUnit+"    "+electrode1MP.currentUnit+"  "+electrolyteMP.currentUnit);
+			System.out.println(electrode2MP.currentUnit+"    "+electrode1MP.currentUnit+"  "+electrolyteMP.currentUnit);
 			double cate = 1;
 			double anoe = 1;
 			if(electrode1.type == TYPE.ANODE){
@@ -1284,4 +1284,8 @@ public class MultiBlockBattery {
         isStructured = nbt.getBoolean("isStructured");
         materialsBattery.readFromNBT(nbt);
     }
+
+	public String getStringSize() {
+		return "X : "+(ues.getX()-dwn.getX())+" Y : "+(ues.getY()-dwn.getY())+" Z : "+(ues.getZ()-dwn.getZ());
+	}
 }

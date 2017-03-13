@@ -76,6 +76,7 @@ public class BlockPlug extends ABlockBBStructure {
 			return true;
 		}
 		if(state.getValue(ISSTRUCT) == true){
+
 			playerIn.openGui(BigBattery.instance, ModGuis.guiIDPlug, worldIn, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}

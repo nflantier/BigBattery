@@ -1,25 +1,28 @@
 package noelflantier.bigbattery.common.items;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.MapMaker;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -99,8 +102,17 @@ public class ItemChloreFilter extends ItemBB{
 	            worldIn.spawnEntity(new EntityItem(worldIn, blockpos.getX()+0.5, blockpos.getY()+0.5, blockpos.getZ()+0.5, new ItemStack(ModItems.itemDustChlore, rdm.nextInt(5) + baseDrop + (int)(Math.floor(lvlf/2)) + rdm.nextInt(lvlf + 1))));
                 return new ActionResult(EnumActionResult.SUCCESS, itemstack);
             }
-            
             return new ActionResult(EnumActionResult.PASS, itemstack);
         }
     }
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)){
+			list.add(String.format(I18n.format("item.itemChloreFilter.desc")+" "+ModConfig.tickChlore+" "+I18n.format("item.itemChloreFilter.desc2")+" "+ModConfig.rangeChlore+" "+I18n.format("item.itemChloreFilter.desc3")));
+		}else{
+			list.add(String.format(I18n.format("item.itemShift.desc", TextFormatting.WHITE + "" + TextFormatting.ITALIC)));
+		}
+	}
 }

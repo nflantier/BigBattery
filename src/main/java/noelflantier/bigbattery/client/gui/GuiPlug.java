@@ -2,6 +2,7 @@ package noelflantier.bigbattery.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import noelflantier.bigbattery.Ressources;
 import noelflantier.bigbattery.client.bases.GuiButtonImage;
@@ -33,10 +34,17 @@ public class GuiPlug extends GuiNF{
 		this.componentList.put("mf", new GuiComponent(6, 5, 100, 10){{
 			addText("Plug :", 0, 0);
 		}});
-		
-		this.componentList.put("btws", new GuiComponent(0,0){{
-			addImageButton(new GuiButtonImage(0,guiLeft+50,guiTop+35, 22, 20, new GuiImage(45, 29, 32,32 , 0F, 0F, 1F, 1F,guiselements)), 0.5F,0.25F,4,4, true);
-		}});
+		if(tile.getStructure()!=null){
+			if(tile.getStructure().isStructured){
+				this.componentList.put("cu", new GuiComponent(6,25){{
+					addText("Can generate : "+((int)tile.getStructure().materialsBattery.generateEnergy())+" RF", 0, 0);
+					addText("Currently : "+(tile.lastEnergyStoredAmount-tile.energyStorage.getEnergyStored())+" RF/T", 0, 0);
+					addText("Size : "+tile.getStructure().getStringSize(), 0, 0);
+				}});
+			}else{
+				
+			}
+		}
 	}
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {

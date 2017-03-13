@@ -40,14 +40,14 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
 
 		int truerf = energyStorage.recieve(rf,true);
 		if(truerf>0 && rf>0){
-			energyStorage.recieve(rf,false);
+			int g = energyStorage.recieve(rf,false);
 			mbb.materialsBattery.handleMaterials(getWorld(), (float)truerf/(float)rf);
 		}else
 			setEnergyCapacity();
-    	if(energyStorage.getEnergyStored()!=this.lastEnergyStoredAmount)
-    		PacketHandler.sendToAllAround(new PacketPlug(this.getPos(), energyStorage.getEnergyStored(), this.lastEnergyStoredAmount),this);
-    	
-		lastEnergyStoredAmount= energyStorage.getEnergyStored();
+		
+    	PacketHandler.sendToAllAround(new PacketPlug(getPos(), energyStorage.getEnergyStored(), lastEnergyStoredAmount),this);
+
+		lastEnergyStoredAmount = energyStorage.getEnergyStored();
 	}
 
 
