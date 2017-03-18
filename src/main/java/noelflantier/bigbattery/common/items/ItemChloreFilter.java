@@ -110,9 +110,9 @@ public class ItemChloreFilter extends ItemBB{
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)){
-			list.add(String.format(I18n.format("item.itemChloreFilter.desc")+" "+ModConfig.tickChlore+" "+I18n.format("item.itemChloreFilter.desc2")+" "+ModConfig.rangeChlore+" "+I18n.format("item.itemChloreFilter.desc3")));
+			list.add(I18n.format("item.itemChloreFilter.desc")+" "+ModConfig.tickChlore+" "+I18n.format("item.itemChloreFilter.desc2")+" "+ModConfig.rangeChlore+" "+I18n.format("item.itemChloreFilter.desc3"));
 		}else{
-			list.add(String.format(I18n.format("item.itemShift.desc", TextFormatting.WHITE + "" + TextFormatting.ITALIC)));
+			list.add(I18n.format("item.itemShift.desc", TextFormatting.WHITE + "" + TextFormatting.ITALIC));
 		}
 	}
 }

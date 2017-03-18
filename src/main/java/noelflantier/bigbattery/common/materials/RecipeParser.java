@@ -219,7 +219,7 @@ public class RecipeParser extends DefaultHandler {
 	
 	public ItemStack getItemStack(Attributes attributes){
 	    ItemStack stack = null;
-	    int stackSize = getIntValue(AT_QUANTITY, attributes, 1);
+	    int stackSize = getItemStackWeight(attributes) < 1.0D ? (int)Math.abs(getItemStackWeight(attributes)) : getIntValue(AT_QUANTITY, attributes, 1);
 	    int itemMeta = getIntValue(AT_ITEM_DAMAGE, attributes, 0);
 	    String modId = getStringValue(AT_MOD_ID, attributes, null);
 	    String name = getStringValue(AT_ITEM_NAME, attributes, null);
@@ -258,7 +258,7 @@ public class RecipeParser extends DefaultHandler {
 
 
 	private double getItemStackWeight(Attributes attributes) {
-		return getDoubleValue(AT_WEIGHT, attributes, 1);
+		return getDoubleValue(AT_WEIGHT, attributes, 1.0D);
 	}
 	
 	public static boolean getBooleanValue(String qName, Attributes attributes, boolean def) {

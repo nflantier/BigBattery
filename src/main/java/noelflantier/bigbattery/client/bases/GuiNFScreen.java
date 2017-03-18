@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Optional;
+import java.util.Map.Entry;
 
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -35,6 +38,27 @@ public class GuiNFScreen extends GuiScreen{
             this.mc.player.closeScreen();
         }
     }
+
+	@Override
+	public void drawScreen(int x, int y, float f)
+    {
+		super.drawScreen(x, y, f);
+		Enumeration<String> enumKey = this.fullComponentList.keys();
+		while (enumKey.hasMoreElements()) {
+		    String key = enumKey.nextElement();
+		    this.fullComponentList.get(key).draw(x, y);
+		}
+    	drawItemStackHovered(x,y);
+    }
+	
+	public void drawItemStackHovered(int x, int y){
+		Optional<Entry<String, GuiComponent>> result = fullComponentList.entrySet().stream().filter((e)->e.getValue().getItemStackHovered(x, y).isPresent()).findFirst();
+		if( result.isPresent() ){
+			Optional<ItemStack> io = result.get().getValue().getItemStackHovered(x, y);
+			if( io.isPresent() )
+				renderToolTip(io.get(), x, y);
+		}
+	}
 	
 	public void loadComponents(){
 		if(this.componentloaded)return;

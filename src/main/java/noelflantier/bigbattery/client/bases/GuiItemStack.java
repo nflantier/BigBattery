@@ -65,7 +65,7 @@ public class GuiItemStack extends GuiComponentBase{
 
 	@Override
 	public boolean isMouseHover(int mx, int my){
-    	return mx<=this.x+this.width && mx>=this.x && my<this.y+this.height && my>this.y;
+    	return mx <= this.x + this.width && mx >= this.x && my <= this.y + this.height && my >= this.y;
 	}
 
 }

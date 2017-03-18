@@ -14,6 +14,7 @@ public class ModConfig {
 	public static int rangeChlore;
 	public static int tickChlore;
 	public static int amountFluidInterfaceCapacity;
+	public static int maximumEnrichedClayVainSize;
 
 	
 	public static void preInitCommon(FMLPreInitializationEvent event) {
@@ -31,10 +32,11 @@ public class ModConfig {
 	
 	public static void syncConfig() {
 		try {
-			maxSizeBattery = config.get(Configuration.CATEGORY_GENERAL, "number of blocks", 200, "Maximun size in block of any side for battery.").getInt();
+			maxSizeBattery = config.get(Configuration.CATEGORY_GENERAL, "number of blocks", 100, "Maximun size in block of any side for battery.").getInt();
 			rangeChlore = config.get(Configuration.CATEGORY_GENERAL, "range of blocks", 4, "Range of block that will no longer contains chlore around the block clicked.").getInt();
 			tickChlore = config.get(Configuration.CATEGORY_GENERAL, "number of ticks", 1000, "Ticks while the block clicked is out of chlore.").getInt();
 			amountFluidInterfaceCapacity = config.get(Configuration.CATEGORY_GENERAL, "mB", 10000, "The tank capacity of the electrolyte interface").getInt();
+			maximumEnrichedClayVainSize = config.get(Configuration.CATEGORY_GENERAL, "number of blocks", 24, "The maximun number of enriched clay you can find in a vain.").getInt();
 			
 		}
 		catch (Exception e) {

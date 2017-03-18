@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import org.lwjgl.opengl.GL11;
 
@@ -137,7 +138,19 @@ public class GuiComponent extends GuiComponentBase{
 				recipe.guiItemStackToCraft.get(k).y=recipe.y+GuiRecipe.TYPE.VANILLA.height/2-GuiRecipe.heightSlot;			
 			}
 			
+		}else if(recipe.recipeType==GuiRecipe.TYPE.FURNACE){
+			for(int k = 0 ; k < recipe.guiItemStackList.size() ; k++){
+				recipe.guiItemStackList.get(k).x=((k%3)*GuiRecipe.widthDSlot)+recipe.x;
+				recipe.guiItemStackList.get(k).y=((k/3)*GuiRecipe.heightDSlot)+recipe.y;			
+			}
+			for(int k = 0 ; k < recipe.guiItemStackToCraft.size() ; k++){
+				recipe.guiItemStackToCraft.get(k).x=recipe.x+k*GuiRecipe.widthSlot+GuiRecipe.TYPE.FURNACE.width-GuiRecipe.widthSlot;
+				recipe.guiItemStackToCraft.get(k).y=recipe.y;			
+			}
+		
 		}
+			
+			
 	}
 	
 	public void updateRecipe(){
@@ -283,8 +296,15 @@ public class GuiComponent extends GuiComponentBase{
 		return mx<=this.x+this.width && mx>=this.x && my<this.y-this.scrollingYMarge+this.height && my>this.y-this.scrollingYMarge;
 	}
 
-	public ItemStack getItemStackHovered(int x, int y) {
-	    if(!itemStackList.isEmpty()){
+	public Optional<ItemStack> getItemStackHovered(int x, int y) {
+		if(itemStackList.isEmpty())
+			return Optional.empty();
+		Optional<GuiItemStack> result =  itemStackList.stream().filter( (i) -> i.stack != null 
+				&& i.idRecipe >= this.currentGuiRecipe * this.nbGuiRecipeHorizontal * this.nbGuiRecipeVertical 
+				&& i.idRecipe < this.currentGuiRecipe * this.nbGuiRecipeHorizontal * this.nbGuiRecipeVertical + this.nbGuiRecipeHorizontal * this.nbGuiRecipeVertical 
+				&& i.isMouseHover(x, y) ).findFirst();
+		return result.isPresent() ? Optional.ofNullable(result.get().stack) : Optional.empty();
+	    /*if(!itemStackList.isEmpty()){
 	    	for(int i = 0 ; i < itemStackList.size() ; i++){
 	    		if(itemStackList.get(i).stack!=null 
 	    				&& itemStackList.get(i).idRecipe>=this.currentGuiRecipe*this.nbGuiRecipeHorizontal*this.nbGuiRecipeVertical 
@@ -295,6 +315,6 @@ public class GuiComponent extends GuiComponentBase{
 	    		}
 	    	}
 	    }
-		return null;
+		return null;*/
 	}
 }

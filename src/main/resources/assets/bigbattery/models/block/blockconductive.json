@@ -1,8 +1,7 @@
 {
     "parent": "block/block",
     "textures": {
-        "particle": "bigbattery:blocks/conductive_top",
-        "side": "bigbattery:blocks/conductive_side"
+        "particle": "bigbattery:blocks/conductive_top"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],

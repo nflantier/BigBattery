@@ -14,6 +14,10 @@ public class ModOreDict {
 		OreDictionary.registerOre("blockSilver", ModBlocks.blockSilver);
 		OreDictionary.registerOre("blockTin", ModBlocks.blockTin);
 		OreDictionary.registerOre("blockZinc", ModBlocks.blockZinc);
+		OreDictionary.registerOre("blockZinc", ModBlocks.blockZinc);
+		OreDictionary.registerOre("blockLithium", ModBlocks.blockLithium);
+		OreDictionary.registerOre("blockCalcium", ModBlocks.blockCalcium);
+		OreDictionary.registerOre("blockLithiumGraphite", ModBlocks.blockLithiumGraphite);
 		
 		OreDictionary.registerOre("oreAluminium", ModBlocks.blockOreAluminium);
 		OreDictionary.registerOre("oreCopper", ModBlocks.blockOreCopper);
@@ -34,6 +38,10 @@ public class ModOreDict {
 		OreDictionary.registerOre("ingotSteel", ModItems.itemIngotSteel);
 		OreDictionary.registerOre("ingotTin", ModItems.itemIngotTin);
 		OreDictionary.registerOre("ingotZinc", ModItems.itemIngotZinc);
+		
+		OreDictionary.registerOre("dustCalcium", ModItems.itemDustCalcium);
+		OreDictionary.registerOre("dustChlore", ModItems.itemDustChlore);
+		OreDictionary.registerOre("dustLithium", ModItems.itemDustLithium);
 		
 		OreDictionary.registerOre("enrichedClay", ModBlocks.blockEnrichedClay);
 	}

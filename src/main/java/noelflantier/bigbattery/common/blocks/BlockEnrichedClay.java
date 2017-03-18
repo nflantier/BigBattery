@@ -39,7 +39,7 @@ public class BlockEnrichedClay extends ABlockBB{
         List<ItemStack> ret = new ArrayList<ItemStack>();
 
         Random rand = world instanceof World ? ((World)world).rand : RANDOM;
-        ret.add(new ItemStack(Items.CLAY_BALL, rand.nextInt(3)));
+        ret.add(new ItemStack(Items.CLAY_BALL, rand.nextInt(2)));
         ret.add(new ItemStack(ModItems.itemDustLithium, 3 + rand.nextInt(3) + rand.nextInt((int) (Math.pow(fortune,1.1) + 1))));
         return ret;
     	

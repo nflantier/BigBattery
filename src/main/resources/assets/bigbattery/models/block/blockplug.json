@@ -1,12 +1,12 @@
 {
   "parent": "block/cube",
   "textures": {
-    "particle": "bigbattery:blocks/plug_side",
+    "particle": "#plugside",
     "down": "bigbattery:blocks/plug_down",
     "up": "#plugup",
-    "east": "bigbattery:blocks/plug_side",
-    "west": "bigbattery:blocks/plug_side",
-    "north": "bigbattery:blocks/plug_side",
-    "south": "bigbattery:blocks/plug_side"
+    "east": "#plugside",
+    "west": "#plugside",
+    "north": "#plugside",
+    "south": "#plugside"
   }
 }

@@ -6,11 +6,14 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Map.Entry;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import noelflantier.bigbattery.Ressources;
 
@@ -111,10 +114,30 @@ public abstract class GuiNF extends GuiContainer{
 		Locale.setDefault(Locale.US);
 		curentToolTipComponent = "";
     	super.drawScreen(x, y, f);
+    	drawItemStackHovered(x,y);
     	drawToolTips(x,y);
 		drawOver(x,y);
 	}
 
+	public void drawItemStackHovered(int x, int y){
+		Optional<Entry<String, GuiComponent>> result = componentList.entrySet().stream().filter((e)->e.getValue().getItemStackHovered(x-guiLeft, y-guiTop).isPresent()).findFirst();
+		if( result.isPresent() ){
+			Optional<ItemStack> io = result.get().getValue().getItemStackHovered(x-guiLeft, y-guiTop);
+			if( io.isPresent() )
+				renderToolTip(io.get(), x, y);
+		}
+		//ItemStack io = g.getItemStackHovered(x-guiLeft, y-guiTop);
+    	/*ItemStack io = null;
+		Enumeration<String> enumKey = this.componentList.keys();
+		while (enumKey.hasMoreElements()) {
+		    String key = enumKey.nextElement();
+		    if( io == null )
+		    	io = this.componentList.get(key).getItemStackHovered(x-guiLeft, y-guiTop);
+		    if( io != null )
+		    	break;
+		}*/
+	}
+	
 	public void drawImageButtons(int x, int y){
 		for (int k = 0; k < this.buttonList.size(); ++k){
 			if(this.buttonList.get(k) instanceof GuiButtonImage){

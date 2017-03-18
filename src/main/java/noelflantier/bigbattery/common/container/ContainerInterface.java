@@ -87,4 +87,41 @@ public class ContainerInterface extends Container {
 		return playerIn.getDistanceSq(tile.getPos().getX()+0.5F, tile.getPos().getY()+0.5F, tile.getPos().getZ()+0.5F)<=64;
 	}
 
+	@Override
+    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
+    {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = (Slot)this.inventorySlots.get(index);
+
+        if (slot != null && slot.getHasStack())
+        {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
+
+            if (index < 36)
+            {
+                if (!this.mergeItemStack(itemstack1, 36, this.inventorySlots.size(), false))
+                {
+                    return ItemStack.EMPTY;
+                }
+            }
+            else if (!this.mergeItemStack(itemstack1, 0, 36, false))
+            {
+                return ItemStack.EMPTY;
+            }
+
+            if (itemstack1.isEmpty())
+            {
+                slot.putStack(ItemStack.EMPTY);
+            }
+            else
+            {
+                slot.onSlotChanged();
+            }
+        }
+
+        return itemstack;
+    }
+
+	
 }

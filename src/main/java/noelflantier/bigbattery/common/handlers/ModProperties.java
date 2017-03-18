@@ -53,7 +53,9 @@ public class ModProperties {
 	
     public enum ConductiveType implements IStringSerializable{
     	ALLUMINIUM("aluminium"),
-    	COPPER("copper");
+    	COPPER("copper"),
+    	EMERALD("emerald"),
+    	NETHERSTAR("netherstar");
 
     	public String name;
     	
@@ -91,8 +93,8 @@ public class ModProperties {
 	}
     
     public enum CasingType implements IStringSerializable{
-    	BASIC("basic"),
-    	ADVANCED("advanced");
+    	GLASS("glass"),
+    	IRON("iron");
 
     	public String name;
     	

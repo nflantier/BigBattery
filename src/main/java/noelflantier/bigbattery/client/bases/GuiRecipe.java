@@ -3,6 +3,7 @@ package noelflantier.bigbattery.client.bases;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.lwjgl.opengl.GL11;
@@ -11,8 +12,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import noelflantier.bigbattery.Ressources;
@@ -20,7 +23,8 @@ import noelflantier.bigbattery.Ressources;
 public class GuiRecipe extends GuiComponentBase{
 	
 	public static enum TYPE{
-		VANILLA("VANILLA",70,60);
+		VANILLA("VANILLA",70,60),
+		FURNACE("FURNACE",70,18);
 		
 		public String usageName;
 		public int width;
@@ -43,16 +47,12 @@ public class GuiRecipe extends GuiComponentBase{
 	public static int widthSlot = 16;
 	public static int heightDSlot = 17;
 	public static int widthDSlot = 17;
-	public static final ResourceLocation guiselements = new ResourceLocation(Ressources.MODID+":textures/gui/guisElements.png");
-	public GuiImage horizontal = new GuiImage(0, 0, 32,2 , 0F, 0.75F, 0.25F, 0.75F+2/128F, guiselements);
-	public GuiImage vertical = new GuiImage(0, 0, 2,32 , 0F, 0.75F, 2/128F, 1F, guiselements);
 	
 	public GuiRecipe(String name, int x, int y, ItemStack toCraft, TYPE type){
 		super(x,y);
 		this.name = name;
 		this.recipeType = type;
 		getAndSetRecipe(toCraft);
-		this.guiItemStackToCraft.addAll(getGuiItemStack(new ArrayList<ItemStack>(){{add(toCraft);}}));
 	}
 	public GuiRecipe(String name, int x, int y, List<GuiItemStack> toCraft, TYPE type, List<GuiItemStack> li){
 		super(x,y);
@@ -61,25 +61,63 @@ public class GuiRecipe extends GuiComponentBase{
 		this.guiItemStackList.addAll(li);
 		this.guiItemStackToCraft.addAll(toCraft);
 	}
-	
-	public static List<GuiItemStack> getGuiItemStack(List<ItemStack> l){
-		List<GuiItemStack> gis = new ArrayList<GuiItemStack>();
-		l.forEach((g)->gis.add(new GuiItemStack(g)));
-		return gis;
+	public GuiRecipe(String name, int x, int y, ItemStack toCraft, List<GuiItemStack> li){
+		super(x,y);
+		this.name = name;
+		this.recipeType = TYPE.VANILLA;
+		this.guiItemStackList.addAll(li);
+		this.guiItemStackToCraft.add(new GuiItemStack(toCraft));
 	}
 	
-	public boolean isStackSame(ItemStack st1, ItemStack st2){
+	public static List<GuiItemStack> getGuiItemStack(List<ItemStack> l){
+		return l.stream().map(i->new GuiItemStack(i)).collect(Collectors.toList());
+	}
+	
+	public static boolean isStackSame(ItemStack st1, ItemStack st2){
 		return st1!=null && st2!=null && ( st1.getItem() == st2.getItem() ) && ( st1.getItemDamage() == st2.getItemDamage() );
 	}
 	
-	public void computeVanillaRecipes(IRecipe recipe){
+	public static List<GuiItemStack> computeVanillaRecipes(IRecipe recipe){
 		if(recipe instanceof ShapedRecipes){
-			this.guiItemStackList.addAll(getGuiItemStack(new ArrayList<ItemStack>(Arrays.asList(((ShapedRecipes)recipe).recipeItems))));
+			//this.guiItemStackList.addAll(getGuiItemStack(new ArrayList<ItemStack>(Arrays.asList(((ShapedRecipes)recipe).recipeItems))));
 		}else if (recipe instanceof ShapelessOreRecipe){
-			this.guiItemStackList.addAll(getGuiItemStack(new ArrayList<ItemStack>(Arrays.asList(((ShapelessOreRecipe)recipe).getInput().toArray(new ItemStack[]{})))));
+			//Arrays.asList(((ShapelessOreRecipe)recipe).getInput()).stream().forEach(e-> {if(e!=null){System.out.println(e.getClass());}});
+			
+			List<ItemStack> li = new ArrayList<ItemStack>();
+			for(int i = 0 ; i < ((ShapelessOreRecipe)recipe).getInput().size() ; i++ ){
+				Object o = ((ShapelessOreRecipe)recipe).getInput().get(i);
+				if(o instanceof ItemStack)
+					li.add((ItemStack) o);
+				else if(o instanceof NonNullList<?>)
+					li.add( ( ( NonNullList<ItemStack> ) o ).get(0) );
+				else
+					li.add(null);
+			}
+			return getGuiItemStack(li);
 		}else if (recipe instanceof ShapedOreRecipe){
-			this.guiItemStackList.addAll(getGuiItemStack(new ArrayList<ItemStack>(Arrays.asList(Arrays.copyOf(((ShapedOreRecipe)recipe).getInput(), ((ShapedOreRecipe)recipe).getInput().length, ItemStack[].class)))));
+			Arrays.asList(((ShapedOreRecipe)recipe).getInput()).stream().forEach(e-> {if(e!=null && e instanceof ItemStack && ((ItemStack)e).getMetadata() >= OreDictionary.WILDCARD_VALUE){((ItemStack)e).setItemDamage(0);}});
+			List<ItemStack> li = new ArrayList<ItemStack>();
+			for(int i = 0 ; i < ((ShapedOreRecipe)recipe).getInput().length ; i++ ){
+				Object o = ((ShapedOreRecipe)recipe).getInput()[i];
+				if(o instanceof ItemStack)
+					li.add((ItemStack) o);
+				else if(o instanceof NonNullList<?>)
+					li.add( ( ( NonNullList<ItemStack> ) o ).get(0) );
+				else
+					li.add(null);
+			}
+			return getGuiItemStack(li);
 		}
+		return null;
+	}
+	
+	public static List<List<GuiItemStack>> getGuiVanillaRecipesForStack(String name, int x, int y, ItemStack stack){
+		List<List<GuiItemStack>> lg = new ArrayList<List<GuiItemStack>>();
+		List<IRecipe> li = (List<IRecipe>) CraftingManager.getInstance().getRecipeList().stream().filter((s)->isStackSame(((IRecipe)s).getRecipeOutput(),stack)).collect(Collectors.toList());
+		if(li.isEmpty())
+			return null;
+		li.stream().forEach(g->lg.add(computeVanillaRecipes(g)));
+		return lg;
 	}
 	
 	public boolean getAndSetRecipe(ItemStack stack){
@@ -87,7 +125,8 @@ public class GuiRecipe extends GuiComponentBase{
 			vanillaRecipes = (List<IRecipe>) CraftingManager.getInstance().getRecipeList().stream().filter((s)->isStackSame(((IRecipe)s).getRecipeOutput(),stack)).collect(Collectors.toList());
 			if(vanillaRecipes.isEmpty())
 				return false;
-			vanillaRecipes.forEach((r)->computeVanillaRecipes(r));
+			guiItemStackToCraft.addAll(getGuiItemStack(new ArrayList<ItemStack>(){{add(vanillaRecipes.get(0).getRecipeOutput());}}));
+			guiItemStackList.addAll(computeVanillaRecipes(vanillaRecipes.stream().findFirst().get()));
 		}
 		return true;
 	}
@@ -138,6 +177,16 @@ public class GuiRecipe extends GuiComponentBase{
 			vertical.draw(x, y);
 			vertical.x = this.x+widthSlot*2+1;
 			vertical.draw(x, y);
+		}else if(this.recipeType==TYPE.FURNACE){
+			horizontal.width = widthSlot+1;
+			horizontal.height = 1;
+			horizontal.x = this.x;
+			horizontal.y = this.y+heightSlot;
+			horizontal.draw(x, y);
+
+			arrowH.x=this.x+20;
+			arrowH.y=this.y-6;
+			arrowH.draw(x, y);
 		}
 	}
 	
@@ -150,6 +199,14 @@ public class GuiRecipe extends GuiComponentBase{
 				horizontal.height = 1;
 				horizontal.x = this.x+TYPE.VANILLA.width-widthSlot;
 				horizontal.y = this.y+TYPE.VANILLA.height/2;
+				horizontal.draw(x, y);
+			}
+		}else if(this.recipeType==TYPE.FURNACE){
+			for(int i = 0 ; i<this.guiItemStackToCraft.size();i++){
+				horizontal.width = widthSlot;
+				horizontal.height = 1;
+				horizontal.x = this.x+TYPE.FURNACE.width-widthSlot;
+				horizontal.y = this.y+heightSlot;
 				horizontal.draw(x, y);
 			}
 		}

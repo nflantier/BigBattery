@@ -1,20 +1,22 @@
 package noelflantier.bigbattery.common.container;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
-import noelflantier.bigbattery.common.handlers.ModItems;
 import noelflantier.bigbattery.common.handlers.ModProperties.InterfaceType;
-import noelflantier.bigbattery.common.helpers.MultiBlockBattery.MaterialsBattery;
 import noelflantier.bigbattery.common.materials.MaterialsHandler;
 
 public class InventoryInterface extends ItemStackHandler{
 	
    	public InterfaceType type = null;
-	public static final int slotFilter = 18;
+	public static final int slotFilter1 = 18;
+	public static final int slotFilter2 = 19;
+	public static final List<Integer> slotsFilter = new ArrayList<Integer>(){{add(slotFilter1);}};
    	
    	public InventoryInterface() {
 		super();
@@ -26,7 +28,7 @@ public class InventoryInterface extends ItemStackHandler{
     @Override
     public void setStackInSlot(int slot, @Nonnull ItemStack stack)
     {
-    	if(slot==slotFilter){
+    	if(slotsFilter.contains(slot)){
     		
     	}else
     		super.setStackInSlot(slot, stack);
@@ -40,7 +42,7 @@ public class InventoryInterface extends ItemStackHandler{
    	@Override
    	public int getSlotLimit(int slot)
    	{
-   		return slot == slotFilter ? 1 : 64;
+   		return slotsFilter.contains(slot) ? 1 : 64;
    	}
    	
 	@Override
@@ -50,10 +52,10 @@ public class InventoryInterface extends ItemStackHandler{
         if(stack.isEmpty())
             return ItemStack.EMPTY;
 
-        if(!getStackInSlot(slotFilter).isEmpty()){
-        	if(!getStackInSlot(slotFilter).isItemEqualIgnoreDurability(stack))
+        /*if(!getStackInSlot(slotFilter).isEmpty()){
+        	if(!MaterialsHandler.areItemStackSameOre(getStackInSlot(slotFilter),stack, false))
         		return stack;
-        }
+        }*/
         return isItemValidForSlot(slot, stack) ? super.insertItem(slot, stack, simulate) : stack;
     }
 	
@@ -62,10 +64,13 @@ public class InventoryInterface extends ItemStackHandler{
 	}
 	
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if(slot == slotFilter)
+		if(slotsFilter.contains(slot))
 			return true;
 		if(type == null)
 			return false;
+        if(slotsFilter.stream().anyMatch(i->!getStackInSlot(i).isEmpty()))
+        	if(slotsFilter.stream().noneMatch(i->MaterialsHandler.areItemStackSameOre(getStackInSlot(i),stack, false)))
+        		return false;
 		switch(type){
 			case ELECTRODE : 
 				return MaterialsHandler.anyMatchElectrode(stack);

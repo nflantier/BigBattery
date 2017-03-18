@@ -12,26 +12,38 @@
         "inventory": [{
         }],
         "facing":{
-                "down":  { "transform": { "rotation": [ {"x":180}, {"y":0}, {"z":0} ] } },
-                "up":    {  },
-                "north": { "transform": { "rotation": [ {"x":90}, {"y":0}, {"z":0} ] } },
-                "south": { "transform": { "rotation": [ {"x":270}, {"y":0}, {"z":0} ] } },
-                "west":  { "transform": { "rotation": [ {"x":90}, {"y":270}, {"z":0} ] } },
-                "east":  { "transform": { "rotation": [ {"x":90}, {"y":90}, {"z":0} ] } }
+                "down":  {  },
+                "up":    { "transform": { "rotation": [ {"x":180}, {"y":0}, {"z":0} ] } },
+                "north": { "transform": { "rotation": [ {"x":270}, {"y":0}, {"z":0} ] } },
+                "south": { "transform": { "rotation": [ {"x":90}, {"y":0}, {"z":0} ] } },
+                "west":  { "transform": { "rotation": [ {"x":0}, {"y":0}, {"z":90} ] } },
+                "east":  { "transform": { "rotation": [ {"x":0}, {"y":0}, {"z":270} ] } }
         },
         "isstruct":{
             "true":{
                 "textures": {
-                    "top": "bigbattery:blocks/conductive_top_c"
+                    "top": "bigbattery:blocks/conductive_top_c",
+                    "side": "bigbattery:blocks/conductive_side_c"
                 }
             },
             "false":{
                 "textures": {
-                    "top": "bigbattery:blocks/conductive_top"
+                    "top": "bigbattery:blocks/conductive_top",
+                    "side": "bigbattery:blocks/conductive_side"
                 }
             }
         },
         "type":{
+            "netherstar":{
+                "textures": {
+                    "material": "bigbattery:blocks/block_nether_star"
+                }
+            },
+            "emerald":{
+                "textures": {
+                    "material": "blocks/emerald_block"
+                }
+            },
             "copper":{
                 "textures": {
                     "material": "bigbattery:blocks/block_copper"

@@ -48,7 +48,7 @@ public class BlockCasing extends ABlockBBStructure {
 		super(materialIn);
 		setRegistryName(Ressources.UL_NAME_BLOCK_CASING);
         setUnlocalizedName(Ressources.UL_NAME_BLOCK_CASING);
-        setDefaultState(blockState.getBaseState().withProperty(ISSTRUCT, false).withProperty(CASING_TYPE, CasingType.BASIC).withProperty(UP, false).withProperty(DOWN, false).withProperty(NORTH, false).withProperty(EAST, false).withProperty(SOUTH, false).withProperty(WEST, false));
+        setDefaultState(blockState.getBaseState().withProperty(ISSTRUCT, false).withProperty(CASING_TYPE, CasingType.GLASS).withProperty(UP, false).withProperty(DOWN, false).withProperty(NORTH, false).withProperty(EAST, false).withProperty(SOUTH, false).withProperty(WEST, false));
 		setHarvestLevel("pickaxe",1);
 		setHardness(3.0F);
 		setResistance(100.0F);
@@ -58,7 +58,7 @@ public class BlockCasing extends ABlockBBStructure {
 	@Override
     public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity)
     {
-        return state.getValue(CASING_TYPE) == CasingType.BASIC ? SoundType.GLASS : SoundType.METAL;
+        return state.getValue(CASING_TYPE) == CasingType.GLASS ? SoundType.GLASS : SoundType.METAL;
     }
 	
 	@Override
@@ -130,7 +130,7 @@ public class BlockCasing extends ABlockBBStructure {
 	@Override
     public boolean isFullCube(IBlockState state)
     {
-        return state.getValue(CASING_TYPE) == CasingType.ADVANCED;
+        return state.getValue(CASING_TYPE) == CasingType.IRON;
     }
 
     @Override
@@ -143,7 +143,7 @@ public class BlockCasing extends ABlockBBStructure {
 	@Override
     public boolean isOpaqueCube(IBlockState state)
     {
-        return state.getValue(CASING_TYPE) == CasingType.ADVANCED;
+        return state.getValue(CASING_TYPE) == CasingType.IRON;
     }
 	
 	@SideOnly(Side.CLIENT)

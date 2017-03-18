@@ -7,6 +7,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import noelflantier.bigbattery.client.gui.GuiInterface;
 import noelflantier.bigbattery.client.gui.GuiPlug;
+import noelflantier.bigbattery.client.gui.manual.NGuiManual;
 import noelflantier.bigbattery.common.container.ContainerInterface;
 import noelflantier.bigbattery.common.container.ContainerPlug;
 import noelflantier.bigbattery.common.tiles.TileInterface;
@@ -15,6 +16,7 @@ import noelflantier.bigbattery.common.tiles.TilePlug;
 public class ModGuis implements IGuiHandler {
 	public static final int guiIDPlug = 0;
 	public static final int guiIDInterface = 1;
+	public static final int guiIDManual= 2;
 	
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -52,6 +54,8 @@ public class ModGuis implements IGuiHandler {
 					}
 					return null;
 			}
+		}else if(ID == ModGuis.guiIDManual){
+			return new NGuiManual(player);
 		}
 		return null;
 	}

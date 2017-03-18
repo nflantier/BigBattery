@@ -1,30 +1,37 @@
 package noelflantier.bigbattery.common.world;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import noelflantier.bigbattery.common.handlers.ModBlocks;
+import noelflantier.bigbattery.common.handlers.ModConfig;
 
 public class EnrichedClayGen extends WorldGenerator{
 	
-	public int numberOfBlocks = 12;
 	public int ymin = 55;
-	public int ymax = 70;
+	public int ymax = 65;
 	
 	public void generate(World worldIn, Random rand, int xch, int zch) {
-		for (int y = ymin; y < ymax; y++) {
+		List<Integer> l = new ArrayList<Integer>();
+		while(l.size() < 10){
+			int r = rand.nextInt(ymax-ymin)+ymin;
+			if(!l.contains(r))
+				l.add(r);
+		}
+		//-5202994061371810039
+		System.out.println("........................................................ "+l.size());
+		l.stream().forEach(e->generate(worldIn, rand, new BlockPos(xch + rand.nextInt(16),e,zch + rand.nextInt(16))));
+		/*for (int y = ymin; y < ymax; y++) {
 			final int x = xch + rand.nextInt(16);
 			final int z = zch + rand.nextInt(16);
 			generate(worldIn, rand, new BlockPos(x,y,z));
-		}
+		}*/
 	}
 	
 	@Override
@@ -93,7 +100,7 @@ public class EnrichedClayGen extends WorldGenerator{
         }
         else
         {
-            int i = rand.nextInt(this.numberOfBlocks - 2) + 2;
+            int i = rand.nextInt(ModConfig.maximumEnrichedClayVainSize - 5) + 5;
             int j = 1;
 
             for (int k = position.getX() - i; k <= position.getX() + i; ++k)
@@ -110,8 +117,9 @@ public class EnrichedClayGen extends WorldGenerator{
                             BlockPos blockpos = new BlockPos(k, k1, l);
                             Block block = worldIn.getBlockState(blockpos).getBlock();
 
-                            if (/*block == Blocks.DIRT ||*/ block == Blocks.CLAY)
+                            if (block == Blocks.DIRT || block == Blocks.CLAY)
                             {
+                        		System.out.println("........................................................ "+blockpos);
                                 worldIn.setBlockState(blockpos, ModBlocks.blockEnrichedClay.getDefaultState(), 2);
                             }
                         }

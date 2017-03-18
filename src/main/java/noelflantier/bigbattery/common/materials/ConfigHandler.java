@@ -26,7 +26,7 @@ public class ConfigHandler {
     		e.printStackTrace();
     	}
         if(!file.exists()) {
-        	System.out.println("Could not load default recipes from " + file + " as the file does not exist.");
+        	System.out.println("BigBattery materials.xml : Could not load default recipes from " + file + " as the file does not exist.");
         	return null;
         }
         

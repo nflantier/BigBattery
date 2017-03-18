@@ -2,7 +2,8 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "plugup": "bigbattery:blocks/plug_up"
+            "plugup": "bigbattery:blocks/plug_up",
+            "plugside": "bigbattery:blocks/plug_side"
         },
         "model": "bigbattery:blockplug" 
     },
@@ -22,12 +23,14 @@
         "isstruct":{
             "true":{
                 "textures": {
-                    "plugup": "bigbattery:blocks/plug_up_c"
+                    "plugup": "bigbattery:blocks/plug_up_c",
+                    "plugside": "bigbattery:blocks/plug_side_c"
                 }
             },
             "false":{
                 "textures": {
-                    "plugup": "bigbattery:blocks/plug_up"
+                    "plugup": "bigbattery:blocks/plug_up",
+                    "plugside": "bigbattery:blocks/plug_side"
                 }
             }
         }

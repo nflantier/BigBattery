@@ -14,8 +14,8 @@ public class Ressources {
 	
 
 	public static final String UL_NAME_BLOCK_CASING = "blockCasing";
-	public static final String UL_NAME_BLOCK_BASIC_CASING_FULL = "blockBasicCasingFull";
-	public static final String UL_NAME_BLOCK_ADVANCED_CASING_FULL = "blockAdvancedCasingFull";
+	public static final String UL_NAME_BLOCK_GLASS_CASING_FULL = "blockGlassCasingFull";
+	public static final String UL_NAME_BLOCK_IRON_CASING_FULL = "blockIronCasingFull";
 
 	public static final String UL_NAME_BLOCK_CONDUCTIVE = "blockConductive";
 	public static final String UL_NAME_BLOCK_INTERFACE = "blockInterface";
@@ -40,6 +40,8 @@ public class Ressources {
 	public static final String UL_NAME_BLOCK_TIN = "blockTin";
 	public static final String UL_NAME_BLOCK_ALUMINIUM = "blockAluminium";
 	
+	public static final String UL_NAME_BLOCK_LITHIUM_GRAPHITE = "blockLithiumGraphite";
+	
 	public static final String UL_NAME_BLOCK_ENRICHED_CLAY = "blockEnrichedClay";
 
 	public static final String UL_NAME_FLUID_CHLORE = "fluidChlore";
@@ -48,6 +50,7 @@ public class Ressources {
 	public static final String UL_NAME_BLOCK_IONIC_CHLORE = "blockIonicChlore";
 	public static final String UL_NAME_BLOCK_IONIC_LITHIUM = "blockIonicLithium";
 	public static final String UL_NAME_BLOCK_IONIC_CALCIUM = "blockIonicCalcium";
+	public static final String UL_NAME_BLOCK_IONIC_DRAGON_BREATH= "blockIonicDragonBreath";
 	public static final String UL_NAME_BLOCK_LITHIUM = "blockLithium";
 	public static final String UL_NAME_BLOCK_CALCIUM = "blockCalcium";
 	
@@ -61,6 +64,8 @@ public class Ressources {
 	public static final String UL_NAME_ITEM_INGOT_TIN = "itemIngotTin";
 	public static final String UL_NAME_ITEM_INGOT_ALUMINIUM = "itemIngotAluminium";
 	public static final String UL_NAME_ITEM_INGOT_STEEL = "itemIngotSteel";
+	
+	public static final String UL_NAME_ITEM_MANUAL = "itemManual";
 	
 	public static final String UL_NAME_ITEM_DUST_CHLORE = "itemDustChlore";
 	public static final String UL_NAME_ITEM_DUST_LITHIUM = "itemDustLithium";

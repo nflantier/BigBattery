@@ -20,6 +20,7 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
     public EnergyStoragePlug energyStorage = new EnergyStoragePlug(0);//capacity equal the amount of rf generated in one tick from the current tick structure
 	public int capacity = 0;
 	public int lastEnergyStoredAmount = -1;
+	public int currentRF = -1;
 	public boolean isGenerating = false;
 	
 	public TilePlug(){
@@ -30,22 +31,25 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
 	public void update() {
 		if(this.world.isRemote)
 			return;
+		if(mbb.plugPos == null)
+			mbb.plugPos = getPos();
 		if(!getStructure().isStructured)
 			return;
 
 		energyStorage.extractEnergy(1000000, false);
-		if(energyStorage.getEnergyStored()>=energyStorage.getMaxEnergyStored())
+		if(energyStorage.getEnergyStored()>=energyStorage.getMaxEnergyStored()){
+			//setEnergyCapacity();
 			return;
-		int rf = (int) mbb.materialsBattery.generateEnergy();
-
-		int truerf = energyStorage.recieve(rf,true);
-		if(truerf>0 && rf>0){
-			int g = energyStorage.recieve(rf,false);
-			mbb.materialsBattery.handleMaterials(getWorld(), (float)truerf/(float)rf);
+		}
+		currentRF = (int) mbb.materialsBattery.generateEnergy();
+		int truerf = energyStorage.recieve(currentRF,true);
+		if(truerf>0 && currentRF>0){
+			int g = energyStorage.recieve(currentRF,false);
+			mbb.materialsBattery.handleMaterials(getWorld(), (float)truerf/(float)currentRF);
 		}else
 			setEnergyCapacity();
 		
-    	PacketHandler.sendToAllAround(new PacketPlug(getPos(), energyStorage.getEnergyStored(), lastEnergyStoredAmount),this);
+    	PacketHandler.sendToAllAround(new PacketPlug(getPos(), energyStorage.getEnergyStored(), lastEnergyStoredAmount, currentRF, mbb.materialsBattery.getMaterialsId() ),this);
 
 		lastEnergyStoredAmount = energyStorage.getEnergyStored();
 	}

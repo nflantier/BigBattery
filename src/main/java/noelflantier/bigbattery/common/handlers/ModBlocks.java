@@ -5,6 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
@@ -51,10 +52,12 @@ public class ModBlocks {
 	public static Block blockZinc;
 	public static Block blockTin;
 	public static Block blockAluminium;
+	public static Block blockLithiumGraphite;
 	
 	public static Block blockIonicChlore;
 	public static Block blockIonicLithium;
 	public static Block blockIonicCalcium;
+	public static Block blockIonicDragonBreath;
 	
 	public static Block blockLithium;
 	public static Block blockCalcium;
@@ -88,7 +91,7 @@ public class ModBlocks {
 		blockOreAluminium = new BlockOres(Material.IRON, Ressources.UL_NAME_BLOCK_ORE_ALUMINIUM).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockOreAluminium);
 
-		blockEnrichedClay = new BlockEnrichedClay(Material.CLAY).setHardness(0.6F);
+		blockEnrichedClay = new BlockEnrichedClay(Material.CLAY).setHardness(0.5F);
 		GameRegistry.register(blockEnrichedClay);
 		
 		blockSilver = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_SILVER).setHardness(3.0F).setResistance(5.0F);
@@ -109,6 +112,8 @@ public class ModBlocks {
 		GameRegistry.register(blockTin);
 		blockAluminium = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_ALUMINIUM).setHardness(3.0F).setResistance(5.0F);
 		GameRegistry.register(blockAluminium);
+		blockLithiumGraphite = new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_LITHIUM_GRAPHITE).setHardness(3.0F).setResistance(5.0F);
+		GameRegistry.register(blockLithiumGraphite);
 
 		blockIonicChlore= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_CHLORE).setHardness(4.0F).setResistance(100.0F);
 		GameRegistry.register(blockIonicChlore);
@@ -116,8 +121,8 @@ public class ModBlocks {
 		GameRegistry.register(blockIonicLithium);
 		blockIonicCalcium= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_CALCIUM).setHardness(4.0F).setResistance(100.0F);
 		GameRegistry.register(blockIonicCalcium);
-		/*blockChlore= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_CHLORE).setHardness(1).setResistance(1);
-		GameRegistry.register(blockChlore);*/
+		blockIonicDragonBreath= new BlockIonic(Material.GOURD, Ressources.UL_NAME_BLOCK_IONIC_DRAGON_BREATH).setHardness(4.0F).setResistance(100.0F);
+		GameRegistry.register(blockIonicDragonBreath);
 		blockLithium= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_LITHIUM).setHardness(4.0F).setResistance(5.0F);
 		GameRegistry.register(blockLithium);
 		blockCalcium= new BlockMetals(Material.IRON, Ressources.UL_NAME_BLOCK_CALCIUM).setHardness(4.0F).setResistance(5.0F);
@@ -125,28 +130,18 @@ public class ModBlocks {
 		
 		/*
 		 * electrode
-		 * lithium diamond
-		 * lithium graphite 
 		 * endcrystal
-		 * 
-		 * electrolyte
-		 * dragon breath IONIC
-		 * 
-		 * conductive
-		 * nether star
-		 * 
-		 * 
 		 */
-    	 	
+    	 
 	}
 	
     @SideOnly(Side.CLIENT)
 	public static void preInitClient() {
-    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCasing), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_BASIC_CASING_FULL, "inventory"));
-    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCasing), 2, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ADVANCED_CASING_FULL, "inventory"));
+    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCasing), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_GLASS_CASING_FULL, "inventory"));
+    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCasing), 2, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_IRON_CASING_FULL, "inventory"));
     	
     	for(int i = 0 ; i < ConductiveType.values().length ; i++){
-    		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockConductive), blockConductive.getMetaFromState(blockConductive.getDefaultState().withProperty(BlockConductive.CONDUCTIVE_TYPE, ConductiveType.getType(i))), new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CONDUCTIVE, "facing=north,isstruct=false,type="+ConductiveType.getType(i).getName()));
+    		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockConductive), blockConductive.getMetaFromState(blockConductive.getDefaultState().withProperty(BlockConductive.CONDUCTIVE_TYPE, ConductiveType.getType(i))), new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CONDUCTIVE, "facing=south,isstruct=false,type="+ConductiveType.getType(i).getName()));
     	}
     	for(int i = 0 ; i < InterfaceType.values().length ; i++){
     		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockInterface), blockInterface.getMetaFromState(blockInterface.getDefaultState().withProperty(BlockInterface.INTERFACE_TYPE, InterfaceType.getType(i))), new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_INTERFACE, "isstruct=false,type="+InterfaceType.getType(i).getName()));
@@ -175,11 +170,12 @@ public class ModBlocks {
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockZinc), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ZINC, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockTin), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_TIN, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockAluminium), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_ALUMINIUM, "inventory"));
+    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockLithiumGraphite), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_LITHIUM_GRAPHITE, "inventory"));
 
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockIonicChlore), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_IONIC_CHLORE, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockIonicLithium), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_IONIC_LITHIUM, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockIonicCalcium), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_IONIC_CALCIUM, "inventory"));
-    	//ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockChlore), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CHLORE, "inventory"));
+    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockIonicDragonBreath), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_IONIC_DRAGON_BREATH, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockLithium), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_LITHIUM, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCalcium), 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CALCIUM, "inventory"));
     }

@@ -27,6 +27,7 @@ public class ModRecipes {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockSilver,1,0),  "iii", "iii", "iii", 'i', "ingotSilver"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockTin,1,0),  "iii", "iii", "iii", 'i', "ingotTin"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockZinc,1,0),  "iii", "iii", "iii", 'i', "ingotZinc"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockLithiumGraphite,1,0),  "isi", "sss", "isi", 'i', "dustLithium", 's', "ingotGraphite"));
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockPlug,1,0),  "SSS", "RDR", "SSS", 'R',Items.REDSTONE ,'S', "ingotSteel", 'D', Items.DIAMOND));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockCasing,4,0),  "SSS", "SGS", "SSS", 'G',Blocks.GLASS ,'S', "ingotSteel"));
@@ -36,18 +37,22 @@ public class ModRecipes {
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockConductive,2,0), "SSS","SSS", "AAA", 'A',"ingotAluminium",'S', "ingotSteel"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockConductive,2,2), "SSS","SSS", "AAA", 'A',"ingotCopper",'S', "ingotSteel"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockConductive,2,4), "SSS","SSS", "AAA", 'A',Items.EMERALD,'S', "ingotSteel"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockConductive,2,6), "SSS","SSS", "AAA", 'A',Items.NETHER_STAR,'S', "ingotSteel"));
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.itemChloreFilter,1,0),  "IPI", "CFC", "IPI", 'P',Items.PAPER ,'C', Items.COAL, 'I', Items.IRON_INGOT, 'F', Items.FLINT));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModItems.itemDustCalcium,16,0), new ItemStack(Items.DYE,1,15), new ItemStack(Items.DYE,1,15), new ItemStack(Items.DYE,1,15), new ItemStack(Items.DYE,1,15), new ItemStack(Items.DYE,1,15), new ItemStack(Items.DYE,1,15), new ItemStack(Items.DYE,1,15), new ItemStack(Items.DYE,1,15),new ItemStack(Items.WATER_BUCKET,1,0)));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModItems.itemDustCalcium,2,0), new ItemStack(Items.DYE,1,15),new ItemStack(Items.WATER_BUCKET,1,0)));
 		
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModItems.itemManual,1,0), new ItemStack(Items.BOOK,1,0),"ingotSteel"));
+		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.blockIonicCalcium,2,0), new ItemStack(ModItems.itemIonicAgent,1,0), new ItemStack(Items.WATER_BUCKET,1,0), new ItemStack(ModItems.itemDustCalcium,1,0), new ItemStack(ModItems.itemDustCalcium,1,0)));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.blockIonicChlore,2,0), new ItemStack(ModItems.itemIonicAgent,1,0), new ItemStack(Items.WATER_BUCKET,1,0), new ItemStack(ModItems.itemDustChlore,1,0), new ItemStack(ModItems.itemDustChlore,1,0)));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.blockIonicLithium,2,0), new ItemStack(ModItems.itemIonicAgent,1,0), new ItemStack(Items.WATER_BUCKET,1,0), new ItemStack(ModItems.itemDustLithium,1,0), new ItemStack(ModItems.itemDustLithium,1,0)));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.blockIonicDragonBreath,4,0), new ItemStack(ModItems.itemIonicAgent,1,0), new ItemStack(ModItems.itemIonicAgent,1,0), new ItemStack(Items.WATER_BUCKET,1,0), new ItemStack(Items.DRAGON_BREATH,1,0)));
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockCalcium,1,0),  "SSS", "SSS", "SSS", 'S', new ItemStack(ModItems.itemDustCalcium,1,0)));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.blockLithium,1,0),  "SSS", "SSS", "SSS", 'S', new ItemStack(ModItems.itemDustLithium,1,0)));
-		;
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.fluidChlore), new ItemStack(Items.WATER_BUCKET,1,0), new ItemStack(ModItems.itemDustChlore,1,0), new ItemStack(ModItems.itemDustChlore,1,0)));
 		
@@ -55,8 +60,19 @@ public class ModRecipes {
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModItems.itemIngotSteel,3,0), new ItemStack(Items.COAL,1,0),new ItemStack(Items.IRON_INGOT,1,0),new ItemStack(Items.IRON_INGOT,1,0),new ItemStack(Items.IRON_INGOT,1,0)));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModItems.itemIngotSteel,3,0), new ItemStack(Items.COAL,1,1),new ItemStack(Items.IRON_INGOT,1,0),new ItemStack(Items.IRON_INGOT,1,0),new ItemStack(Items.IRON_INGOT,1,0)));
 		
+		GameRegistry.addSmelting(new ItemStack(Items.COAL,1,1), new ItemStack(ModItems.itemIngotGraphite,1,0), 0);
 		GameRegistry.addSmelting(new ItemStack(Items.COAL,1,0), new ItemStack(ModItems.itemIngotGraphite,1,0), 0);
+		OreDictionary.getOres("dustCoal").stream().forEach(i->GameRegistry.addSmelting(i.copy(), new ItemStack(ModItems.itemIngotGraphite,1,0), 0));
 		GameRegistry.addSmelting(new ItemStack(Items.IRON_INGOT,1,0), new ItemStack(ModItems.itemIngotSteel,1,0), 0);
 		GameRegistry.addSmelting(new ItemStack(Items.FERMENTED_SPIDER_EYE,1,0), new ItemStack(ModItems.itemIonicAgent,8,0), 0);
+		
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.blockOreAluminium,1,0), new ItemStack(ModItems.itemIngotAluminium,1,0), 0);
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.blockOreCopper,1,0), new ItemStack(ModItems.itemIngotCopper,1,0), 0);
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.blockOreLead,1,0), new ItemStack(ModItems.itemIngotLead,1,0), 0);
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.blockOreNickel,1,0), new ItemStack(ModItems.itemIngotNickel,1,0), 0);
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.blockOrePlatinium,1,0), new ItemStack(ModItems.itemIngotPlatinium,1,0), 0);
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.blockOreSilver,1,0), new ItemStack(ModItems.itemIngotSilver,1,0), 0);
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.blockOreTin,1,0), new ItemStack(ModItems.itemIngotTin,1,0), 0);
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.blockOreZinc,1,0), new ItemStack(ModItems.itemIngotZinc,1,0), 0);
 	}
 }

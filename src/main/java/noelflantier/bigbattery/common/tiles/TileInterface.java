@@ -38,7 +38,7 @@ public class TileInterface extends TileSimpleHM implements ITickable{
         {
             if(stack.isEmpty())
                 return ItemStack.EMPTY;
-            if(slot==slotFilter)
+            if(slotsFilter.contains(slot))
             	return stack;
             return super.insertItem(slot, stack, simulate);
         }
@@ -71,7 +71,7 @@ public class TileInterface extends TileSimpleHM implements ITickable{
 		if(t == null || t.getStructure() == null || !t.getStructure().isStructured){
 		}else{
 			for( int i = 0 ; i < inventory.getStacks().size() ; i++){
-				if(i == InventoryInterface.slotFilter)
+				if(InventoryInterface.slotsFilter.contains(i))
 					continue;
 				if(inventory.getStacks().get(i).isEmpty())
 					continue;
@@ -82,9 +82,11 @@ public class TileInterface extends TileSimpleHM implements ITickable{
 				}
 			}
 			if(inventory.type == ModProperties.InterfaceType.ELECTROLYTE){
-				ActionResult<FluidStack> ar = t.getStructure().handleConsumeFluidStack(getWorld(), tank.getFluid(), inventory.type);
-				if(ar.getType() == EnumActionResult.SUCCESS){
-					tank.setFluid(ar.getResult());
+				if(tank.getFluid()!=null && tank.getFluid().amount>0){
+					ActionResult<FluidStack> ar = t.getStructure().handleConsumeFluidStack(getWorld(), tank.getFluid(), inventory.type);
+					if(ar.getType() == EnumActionResult.SUCCESS){
+						tank.setFluid(ar.getResult());
+					}
 				}
 			}
 		}	
@@ -96,7 +98,6 @@ public class TileInterface extends TileSimpleHM implements ITickable{
 	}
 	
 	public boolean recieveFluid(FluidStack stack){
-		
 		return false;
 	}
 	

@@ -22,7 +22,7 @@ public class ModBrewing {
     	//ItemPotion.
 	}
 	
-	public static class Recipe implements IBrewingRecipe{
+	/* static class Recipe implements IBrewingRecipe{
 		
 		@Override
 		public boolean isInput(ItemStack input) {
@@ -38,5 +38,5 @@ public class ModBrewing {
 			return ingredient.isItemEqualIgnoreDurability(new ItemStack(Items.CLAY_BALL)) ? PotionUtils.addPotionToItemStack(new ItemStack(ModItems.itemDustLithium,rdm.nextInt(10) + 10), PotionTypes.AWKWARD) : PotionUtils.addPotionToItemStack(new ItemStack(ModItems.itemDustCalcium,rdm.nextInt(10) + 10), PotionTypes.AWKWARD) ;
 		}
 		
-	}
+	}*/
 }

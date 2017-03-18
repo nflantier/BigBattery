@@ -9,6 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import noelflantier.bigbattery.Ressources;
 import noelflantier.bigbattery.common.items.ItemBB;
 import noelflantier.bigbattery.common.items.ItemChloreFilter;
+import noelflantier.bigbattery.common.items.ItemManual;
 
 public class ModItems {
 
@@ -28,6 +29,8 @@ public class ModItems {
 	public static Item itemDustCalcium;
 	public static Item itemChloreFilter;
 	public static Item itemIonicAgent;
+
+	public static Item itemManual;
 	
 	public static void preInitCommon() {
 		itemIngotSilver = new ItemBB().setRegistryName(Ressources.UL_NAME_ITEM_INGOT_SILVER).setUnlocalizedName(Ressources.UL_NAME_ITEM_INGOT_SILVER);
@@ -64,6 +67,9 @@ public class ModItems {
 		itemChloreFilter = new ItemChloreFilter().setRegistryName(Ressources.UL_NAME_ITEM_CHLORE_FILTER).setUnlocalizedName(Ressources.UL_NAME_ITEM_CHLORE_FILTER);
 		GameRegistry.register(itemChloreFilter);
 		
+		itemManual = new ItemManual().setRegistryName(Ressources.UL_NAME_ITEM_MANUAL).setUnlocalizedName(Ressources.UL_NAME_ITEM_MANUAL);
+		GameRegistry.register(itemManual);
+		
 	}
 	
     @SideOnly(Side.CLIENT)
@@ -87,6 +93,8 @@ public class ModItems {
     	ModelLoader.setCustomModelResourceLocation(itemIonicAgent, 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_ITEM_IONIC_AGENT, "inventory"));
     	ModelLoader.setCustomModelResourceLocation(itemChloreFilter, 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_ITEM_CHLORE_FILTER, "inventory"));
 	
+    	ModelLoader.setCustomModelResourceLocation(itemManual, 0, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_ITEM_MANUAL, "inventory"));
+    	
     }
 
     @SideOnly(Side.CLIENT)

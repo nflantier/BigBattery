@@ -2,6 +2,8 @@ package noelflantier.bigbattery.common.blocks;
 
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
@@ -9,6 +11,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +23,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -27,6 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import noelflantier.bigbattery.BigBattery;
 import noelflantier.bigbattery.Ressources;
+import noelflantier.bigbattery.common.handlers.ModConfig;
 import noelflantier.bigbattery.common.handlers.ModGuis;
 import noelflantier.bigbattery.common.tiles.ITileMaster;
 import noelflantier.bigbattery.common.tiles.TilePlug;
@@ -68,7 +73,7 @@ public class BlockPlug extends ABlockBBStructure {
 		if(worldIn.isRemote || playerIn.isSneaking() || hand == EnumHand.OFF_HAND)
 			return true;
 		
-		if(playerIn.getHeldItem(EnumHand.MAIN_HAND).getItem() == Items.STICK){
+		if(!state.getValue(ISSTRUCT) && playerIn.getHeldItem(EnumHand.MAIN_HAND) == ItemStack.EMPTY){
 			TileEntity te = worldIn.getTileEntity(pos);
 			if( te != null && te instanceof ITileMaster && !((ITileMaster)te).getStructure().isStructured){
 				((ITileMaster)te).getStructure().batteryCheckAndSetupStructure(worldIn, pos, playerIn);
@@ -76,7 +81,6 @@ public class BlockPlug extends ABlockBBStructure {
 			return true;
 		}
 		if(state.getValue(ISSTRUCT) == true){
-
 			playerIn.openGui(BigBattery.instance, ModGuis.guiIDPlug, worldIn, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}
@@ -137,6 +141,15 @@ public class BlockPlug extends ABlockBBStructure {
         return state.getValue(ISSTRUCT) == true ? i + 6 : i;
     }
 
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
+    {
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)){
+			tooltip.add(I18n.format("tile.blockPlug.desc"));
+		}else{
+			tooltip.add(I18n.format("item.itemShift.desc", TextFormatting.WHITE + "" + TextFormatting.ITALIC));
+		}
+    }
 	/*@Override
     public IBlockState withRotation(IBlockState state, Rotation rot)
     {

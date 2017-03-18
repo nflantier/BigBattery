@@ -16,16 +16,23 @@ item.itemDustCalcium.name=Calcium dust
 item.itemIonicAgent.name=Ionic agent
 item.itemChloreFilter.name=Chlore filter
 
+item.itemManual.name=Big Battery Manual
+
+tile.blockPlug.desc=Right click with an empty hand to check and set the battery
 item.itemChloreFilter.desc=Right click water blocks to filter chlore, there is a cooldown of
 item.itemChloreFilter.desc2=ticks while you cant filter a
 item.itemChloreFilter.desc3=blocks radius area around the block clicked
 
 item.itemShift.desc=<Hold Shift>
 
-tile.blockCasing.basic.name=Glass casing
-tile.blockCasing.advanced.name=Steel casing
+tile.blockCasing.glass.name=Glass casing
+tile.blockCasing.iron.name=Iron casing
+
 tile.blockConductive.copper.name=Copper conductive
 tile.blockConductive.aluminium.name=Aluminium conductive
+tile.blockConductive.netherstar.name=Nether Star conductive
+tile.blockConductive.emerald.name=Emerald conductive
+
 tile.blockInterface.electrode.name=Electrode interface
 tile.blockInterface.electrolyte.name=Electrolyte interface
 tile.blockPlug.name=Plug
@@ -46,11 +53,15 @@ tile.blockNickel.name=Nickel block
 tile.blockZinc.name=Zinc block
 tile.blockTin.name=Tin block
 tile.blockAluminium.name=Aluminium block
+tile.blockLithiumGraphite.name=Lithium Graphite block
 tile.blockEnrichedClay.name=Enriched clay
 tile.blockAqueousChlore.name=Chloric solution
+
 tile.blockIonicChlore.name=Ionic chlore
 tile.blockIonicLithium.name=Ionic lithium
 tile.blockIonicCalcium.name=Ionic calcium
+tile.blockIonicDragonBreath.name=Ionic Dragon Breath
+
 tile.blockLithium.name=Lithium block
 tile.blockCalcium.name=Calcium block
 fluid.fluidChlore=Chloric solution

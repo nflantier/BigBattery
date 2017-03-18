@@ -1,11 +1,7 @@
 <!--
-electrode and electrolyte weight : the multiplicative of base itemstack for 
-ex :itemStack modId="minecraft" itemName="ingotIron" weight="1"
-	itemStack modId="minecraft" itemName="blockIron" weight="9"
-	itemStack modId="minecraft" itemName="nuggetIron" weight="-9"
-Base itemStack will be the one with weight set to 1.
-Here iron ingot is the base itemstack, iron block with weight of 9 because you need 9 iron ingot for a iron block, iron nugget with weight of -9 because you need 9 iron nugget to make one iron ingot.
-
+Weight: item with weight set to 1 is the item that will be placed in the battery so it has to be a block
+        item with weight negative means that you need the absolute weight value stacksize of that item to make the item with 1 weight
+        item with greater weight than 1 means 1 of this item will make the weight value of item with 1 weight
 Electrolyte type value 0:aqueous, 1:ionic, 2:solid.
 -->
 <materials>
@@ -13,15 +9,15 @@ Electrolyte type value 0:aqueous, 1:ionic, 2:solid.
 		<itemStack oreDictionary="ingotIron" weight="-9"/>
 		<itemStack oreDictionary="blockIron" weight="1"/>
 	</electrode>
-	<electrode name="silver" potential="1.98" oxydationNo="1">
+	<electrode name="silver" potential="1.98" oxydationNo="-1,0,1">
 		<itemStack oreDictionary="ingotSilver" weight="-9"/>
 		<itemStack oreDictionary="blockSilver" weight="1"/>
 	</electrode>
-	<electrode name="lead" potential="1.69" oxydationNo="2">
+	<electrode name="lead" potential="1.69" oxydationNo="1,2">
 		<itemStack oreDictionary="ingotLead" weight="-9"/>
 		<itemStack oreDictionary="blockLead" weight="1"/>
 	</electrode>
-	<electrode name="platinium" potential="1.19" oxydationNo="2,4">
+	<electrode name="platinium" potential="1.19" oxydationNo="0,1,2,3.8">
 		<itemStack oreDictionary="ingotPlatinium" weight="-9"/>
 		<itemStack oreDictionary="blockPlatinium" weight="1"/>
 	</electrode>
@@ -29,48 +25,71 @@ Electrolyte type value 0:aqueous, 1:ionic, 2:solid.
 		<itemStack oreDictionary="ingotCopper" weight="-9"/>
 		<itemStack oreDictionary="blockCopper" weight="1"/>
 	</electrode>
-	<electrode name="graphite" potential="0.13" oxydationNo="-4,-3,-2,-1,0,1,2,3,4">
+    <electrode name="zinc" potential="-0.13" oxydationNo="-4,-2,0,2,4">
+        <itemStack oreDictionary="ingotZinc" weight="-9"/>
+        <itemStack oreDictionary="blockZinc" weight="1"/>
+    </electrode>
+	<electrode name="graphite" potential="0.13" oxydationNo="-4,-3,-2,-1,0,1,2,3,3.2">
 		<itemStack oreDictionary="ingotGraphite" weight="-9"/>
 		<itemStack oreDictionary="blockGraphite" weight="1"/>
 	</electrode>
-	<electrode name="zinc" potential="-0.13" oxydationNo="-4,2,4">
-		<itemStack oreDictionary="ingotZinc" weight="-9"/>
-		<itemStack oreDictionary="blockZinc" weight="1"/>
-	</electrode>
-	<electrode name="nickel" potential="-0.25" oxydationNo="2">
+    <electrode name="diamond" potential="-0.22" oxydationNo="-3,-2,-1,0,1,2,3,3.1">
+        <itemStack oreDictionary="gemDiamond" weight="-9"/>
+        <itemStack oreDictionary="blockDiamond" weight="1"/>
+    </electrode>
+	<electrode name="nickel" potential="-0.25" oxydationNo="-2,-1,0,1,2">
 		<itemStack oreDictionary="ingotNickel" weight="-9"/>
 		<itemStack oreDictionary="blockNickel" weight="1"/>
 	</electrode>
-	<electrode name="tin" potential="-0.76" oxydationNo="2">
+	<electrode name="tin" potential="-0.76" oxydationNo="1,2">
 		<itemStack oreDictionary="ingotTin" weight="-9"/>
 		<itemStack oreDictionary="blockTin" weight="1"/>
 	</electrode>
+    <electrode name="lithium_graphite" potential="-1.5" oxydationNo="-4,-3,-2,-1,0,1,2,2.5,3,3.1">
+        <itemStack oreDictionary="blockLithiumGraphite" weight="1"/>
+    </electrode>
 	
-	<electrolyte name="aqueous_chlore" potential="1.35" oxydationNo="5" type="0">
+	<electrolyte name="aqueous_chlore" potential="1" oxydationNo="2,3" type="0">
 		<itemStack modID="bigbattery" itemName="blockAqueousChlore" weight="1"/>
-		<bucketStack modID="bigbattery" itemName="fluidchlore" weight="1"/>
         <fluidStack modID="bigbattery" itemName="fluidchlore" amount="1000"/>
 	</electrolyte>
-	<electrolyte name="ionic_chlore" potential="1.35" oxydationNo="5" type="1">
+	
+	<electrolyte name="ionic_chlore" potential="1.1" oxydationNo="1,1.8" type="1">
 		<itemStack modID="bigbattery" itemName="blockIonicChlore" weight="1"/>
 	</electrolyte>
-	<electrolyte name="ionic_lithium" potential="-3.04" oxydationNo="1" type="1">
+	<electrolyte name="ionic_lithium" potential="1.5" oxydationNo="0,1.6" type="1">
 		<itemStack modID="bigbattery" itemName="blockIonicLithium" weight="1"/>
 	</electrolyte>
-	<electrolyte name="solid_lithium" potential="-3.04" oxydationNo="1" type="2">
-		<itemStack modID="bigbattery" itemName="blockLithium" weight="1"/>
+    <electrolyte name="ionic_calcium" potential="1.3" oxydationNo="1,1.8" type="1">
+        <itemStack modID="bigbattery" itemName="blockIonicCalcium" weight="1"/>
+    </electrolyte>
+    <electrolyte name="ionic_dragon_breath" potential="2.2" oxydationNo="-2,-1,0,1.5" type="1">
+        <itemStack modID="bigbattery" itemName="blockIonicDragonBreath" weight="1"/>
+    </electrolyte>
+    <electrolyte name="ionic_slime" potential="1.1" oxydationNo="1,2.1" type="1">
+        <itemStack oreDictionary="slimeball" weight="-9"/>
+        <itemStack oreDictionary="blockSlime" weight="1"/>
+    </electrolyte>
+    
+	<electrolyte name="solid_lithium" potential="1.6" oxydationNo="1,1.9" type="2">
+        <itemStack oreDictionary="dustLithium" weight="-9"/>
+		<itemStack oreDictionary="blockLithium" weight="1"/>
 	</electrolyte>
-	<electrolyte name="ionic_calcium" potential="-3.8" oxydationNo="2" type="1">
-		<itemStack modID="bigbattery" itemName="blockIonicCalcium" weight="1"/>
-	</electrolyte>
-	<electrolyte name="solid_calcium" potential="-3.8" oxydationNo="2" type="2">
-		<itemStack modID="bigbattery" itemName="blockCalcium" weight="1"/>
+	<electrolyte name="solid_calcium" potential="1.5" oxydationNo="2,2.1" type="2">
+        <itemStack oreDictionary="dustCalcium" weight="-9"/>
+		<itemStack oreDictionary="blockCalcium" weight="1"/>
 	</electrolyte>
 	
-	<conductive name="conductive_aluminium" ratioRf="1.1">
+	<conductive name="conductive_aluminium" ratioRf="0.9">
 		<itemStack modID="bigbattery" itemName="blockConductive" itemMeta="0"/>
 	</conductive>
-	<conductive name="conductive_copper" ratioRf="0.9">
+	<conductive name="conductive_copper" ratioRf="0.8">
 		<itemStack modID="bigbattery" itemName="blockConductive" itemMeta="2"/>
 	</conductive>
+    <conductive name="conductive_emerald" ratioRf="1.2">
+        <itemStack modID="bigbattery" itemName="blockConductive" itemMeta="4"/>
+    </conductive>
+    <conductive name="conductive_nether_star" ratioRf="1.6">
+        <itemStack modID="bigbattery" itemName="blockConductive" itemMeta="6"/>
+    </conductive>
 </materials>
