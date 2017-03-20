@@ -39,6 +39,9 @@ public class GuiInterface extends GuiNF{
 				break;
 		}
 	}
+	
+	
+	
 	@Override
 	public void loadComponents(){
 		super.loadComponents();

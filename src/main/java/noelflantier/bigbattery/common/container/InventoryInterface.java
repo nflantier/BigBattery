@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
+import noelflantier.bigbattery.common.handlers.ModItems;
 import noelflantier.bigbattery.common.handlers.ModProperties.InterfaceType;
 import noelflantier.bigbattery.common.materials.MaterialsHandler;
 
@@ -16,6 +17,7 @@ public class InventoryInterface extends ItemStackHandler{
    	public InterfaceType type = null;
 	public static final int slotFilter1 = 18;
 	public static final int slotFilter2 = 19;
+	public boolean change = false;
 	public static final List<Integer> slotsFilter = new ArrayList<Integer>(){{add(slotFilter1);}};
    	
    	public InventoryInterface() {
@@ -28,17 +30,15 @@ public class InventoryInterface extends ItemStackHandler{
     @Override
     public void setStackInSlot(int slot, @Nonnull ItemStack stack)
     {
-    	if(slotsFilter.contains(slot)){
-    		
-    	}else
-    		super.setStackInSlot(slot, stack);
-    	
+    	super.setStackInSlot(slot, stack);
     }
+    
     @Nonnull
     public ItemStack extractItem(int slot, int amount, boolean simulate)
-    {
+    {	
     	return super.extractItem(slot, amount, simulate);
     }
+    
    	@Override
    	public int getSlotLimit(int slot)
    	{
@@ -51,11 +51,6 @@ public class InventoryInterface extends ItemStackHandler{
     {
         if(stack.isEmpty())
             return ItemStack.EMPTY;
-
-        /*if(!getStackInSlot(slotFilter).isEmpty()){
-        	if(!MaterialsHandler.areItemStackSameOre(getStackInSlot(slotFilter),stack, false))
-        		return stack;
-        }*/
         return isItemValidForSlot(slot, stack) ? super.insertItem(slot, stack, simulate) : stack;
     }
 	
@@ -81,4 +76,9 @@ public class InventoryInterface extends ItemStackHandler{
 		}
 		return false;
 	}
+
+    protected void onContentsChanged(int slot)
+    {
+    	change = true;
+    }
 }

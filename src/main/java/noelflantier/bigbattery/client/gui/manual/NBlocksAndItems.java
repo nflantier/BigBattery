@@ -10,12 +10,15 @@ import java.util.Map;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.UniversalBucket;
 import noelflantier.bigbattery.client.bases.GuiComponent;
 import noelflantier.bigbattery.client.bases.GuiRecipe;
 import noelflantier.bigbattery.common.blocks.BlockConductive;
 import noelflantier.bigbattery.common.blocks.BlockInterface;
 import noelflantier.bigbattery.common.handlers.ModBlocks;
+import noelflantier.bigbattery.common.handlers.ModFluids;
 import noelflantier.bigbattery.common.handlers.ModItems;
 import noelflantier.bigbattery.common.handlers.ModProperties.ConductiveType;
 import noelflantier.bigbattery.common.handlers.ModProperties.InterfaceType;
@@ -63,7 +66,7 @@ public class NBlocksAndItems  extends ABaseCategory{
 		vanilla.add(new ItemStack(ModItems.itemChloreFilter,1,0));
 		vanilla.add(new ItemStack(ModItems.itemDustCalcium,1,0));
 		vanilla.add(new ItemStack(ModItems.itemIngotSteel,1,0));
-		
+		vanilla.add(UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, ModFluids.fluidChlore));
 		
 		int dec = 0 ;
 		this.componentList.put("vanilla", new GuiComponent(this.x+10+100*(int)((dec)/25), this.y+30+(int)(10*scale)*((dec)%25), 90, (int)(10*scale)){{
@@ -73,8 +76,8 @@ public class NBlocksAndItems  extends ABaseCategory{
 		dec+=1;
 		for(int i = 0 ; i < vanilla.size() ; i++){
 			ItemStack it = vanilla.get(i);
-			String strID = PRE_IB+it.getItem().getUnlocalizedName(it);
-			String translated = I18n.format(it.getItem().getUnlocalizedName(it)+".name");
+			String strID = it.getItem().getUnlocalizedName(it).equals("item.forge.bucketFilled") ? PRE_IB+it.getItem().getUnlocalizedName(it)+FluidUtil.getFluidContained(it).getUnlocalizedName() : PRE_IB+it.getItem().getUnlocalizedName(it);
+			String translated = it.getItem().getUnlocalizedName(it).equals("item.forge.bucketFilled") ? FluidUtil.getFluidContained(it).getLocalizedName() : I18n.format(it.getItem().getUnlocalizedName(it)+".name");
 			this.componentList.put(strID, new GuiComponent(this.x+10+100*(int)((i+dec)/25), this.y+30+(int)(10*scale)*((i+dec)%25), 90, (int)(10*scale)){{
 				globalScale = scale;
 				addText(translated, 0, 0);

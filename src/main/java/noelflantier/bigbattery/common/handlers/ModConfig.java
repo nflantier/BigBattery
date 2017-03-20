@@ -15,6 +15,7 @@ public class ModConfig {
 	public static int tickChlore;
 	public static int amountFluidInterfaceCapacity;
 	public static int maximumEnrichedClayVainSize;
+	public static int chanceSpawningEnrichedClayPerChunk;
 
 	
 	public static void preInitCommon(FMLPreInitializationEvent event) {
@@ -37,6 +38,7 @@ public class ModConfig {
 			tickChlore = config.get(Configuration.CATEGORY_GENERAL, "number of ticks", 1000, "Ticks while the block clicked is out of chlore.").getInt();
 			amountFluidInterfaceCapacity = config.get(Configuration.CATEGORY_GENERAL, "mB", 10000, "The tank capacity of the electrolyte interface").getInt();
 			maximumEnrichedClayVainSize = config.get(Configuration.CATEGORY_GENERAL, "number of blocks", 24, "The maximun number of enriched clay you can find in a vain.").getInt();
+			chanceSpawningEnrichedClayPerChunk = config.get(Configuration.CATEGORY_GENERAL, "number of blocks", 10, "The maximun number of enriched clay you can find in a vain.").getInt();
 			
 		}
 		catch (Exception e) {

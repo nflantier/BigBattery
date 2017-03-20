@@ -19,7 +19,7 @@ public class GuiScrollable {
 	public boolean showBorders = true;
 	public int x,y;
 	public int width, height;
-	private static final ResourceLocation guiselements = new ResourceLocation(Ressources.MODID+":textures/gui/guisElements.png");
+	private static final ResourceLocation guiselements = new ResourceLocation(Ressources.MODID+":textures/gui/gui_elements.png");
 	public GuiImage arrowUp = new GuiImage(0, 0, 32,32 , 0F, 0.25F, 0.25F, 0.5F, guiselements);
 	public GuiImage arrowDown = new GuiImage(0, 0, 32,32 , 0.25F, 0.25F, 0.5F, 0.5F, guiselements);
 	public GuiImage topbot = new GuiImage(0, 0, 32,2 , 0F, 0.75F, 0.25F, 0.75F+2/128F, guiselements);

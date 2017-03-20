@@ -13,7 +13,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -23,6 +22,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -48,7 +48,7 @@ public class MultiBlockBattery {
 	public static Random rdm  = new Random();
 	
 	public BlockPos plugPos;
-	public EnumFacing plugFacing;
+	public EnumFacing plugFacingOpposite;
 	
 	public ItemStack electrolyteItemStack;
 	public EnumFacing electrolyteFacing;
@@ -382,7 +382,7 @@ public class MultiBlockBattery {
 			electrode2MP.totalUnit = Math.floor( ( electrode2MP.weight < 1 ? Math.floor( 1 / Math.abs( electrode2MP.weight ) ) : electrode2MP.weight ) * ( Math.pow(electrode2.oxydationNumber.size() ,1.2) * ( 1000 / Collections.max( electrode2.oxydationNumber ) ) ) );
 			electrolyteMP.totalUnit= Math.floor( ( electrolyteMP.weight < 1 ? Math.floor( 1 / Math.abs( electrolyteMP.weight ) ) : electrolyteMP.weight ) * ( Math.pow(electrolyte.potential ,electrolyte.electrolyteType.ratioDecay) * ( 1000 / Collections.max( electrolyte.oxydationNumber ) ) * ( Math.pow( electrolyte.oxydationNumber.size(), 1 ) ) ) );
 
-			System.out.println(electrode1MP.totalUnit+"    "+electrode2MP.totalUnit+"  "+electrolyteMP.totalUnit);
+			//System.out.println(electrode1MP.totalUnit+"    "+electrode2MP.totalUnit+"  "+electrolyteMP.totalUnit);
 		}
 
 		public int[] getMaterialsId(){
@@ -454,6 +454,7 @@ public class MultiBlockBattery {
 				return this;
 			}
 			electrolyte = MaterialsHandler.getElectrolyteFromStack(electrolyteStack);
+			System.out.println(electrolyte.stackReference);
 			electrolyteMP.currentAmount = amount;
 			return this;
 		}
@@ -506,11 +507,10 @@ public class MultiBlockBattery {
 	
 	public void init(BlockPos plugPos, IBlockState plugState){
 		this.init = true;
-		//this.plugPos = plugPos;
-		this.plugFacing = plugState.getValue(BlockPlug.FACING).getOpposite();
+		this.plugFacingOpposite = plugState.getValue(BlockPlug.FACING).getOpposite();
 	}
 		
-	private BlockPos findSide(BlockPos currentPos, EnumFacing direction, World world, int range, boolean checkElectrolyteFacing, boolean allowAir, double rangemin){
+	private BlockPos findSide(BlockPos currentPos, EnumFacing direction, World world, int range, boolean checkElectrolyteFacing, boolean allowAir, double rangemin, EntityPlayer player){
 		range++;
 		if(range > ModConfig.maxSizeBattery)
 			return null;
@@ -518,26 +518,28 @@ public class MultiBlockBattery {
 		IBlockState currentState = world.getBlockState(currentPos);
 		IBlockState nextState = world.getBlockState(nextPos);
 		ItemStack nextits = new ItemStack(nextState.getBlock(),1,nextState.getBlock().getMetaFromState(nextState));
-		
+
 		if(MaterialsHandler.anyMatchConductive(nextits)){
 			if(!mapFacingConductiveItemStack.containsKey(direction))
 				mapFacingConductiveItemStack.put(direction, nextits);
-			return findSide(nextPos, direction, world, range, checkElectrolyteFacing, allowAir, rangemin);
+			return findSide(nextPos, direction, world, range, checkElectrolyteFacing, allowAir, rangemin, player);
 		}else{
 			if(checkElectrolyteFacing && electrolyteFacing == null && range == 1){
 				electrolyteFacing = direction;
 			}
 		}
-		if(MaterialsHandler.anyMatchElectrolyte(nextits))
-			return findSide(nextPos, direction, world, range, checkElectrolyteFacing, allowAir, rangemin);
-		if( ( allowAir && nextState.getBlock() == Blocks.AIR ) || ( isBlockFluidReplaceable(nextState) ) ){
-			return findSide(nextPos, direction, world, range, checkElectrolyteFacing, allowAir, rangemin);
+				
+		if(MaterialsHandler.anyMatchElectrolyte(nextits)){
+			return findSide(nextPos, direction, world, range, checkElectrolyteFacing, allowAir, rangemin, player);
+		}
+		if( ( allowAir && nextState.getBlock() == Blocks.AIR ) || ( allowAir && isBlockFluidReplaceable(nextState) ) ){
+			return findSide(nextPos, direction, world, range, checkElectrolyteFacing, allowAir, rangemin, player);
 		}
 		if(allowedStructureBlock.contains(nextState.getBlock())){
 			allowAir = false;
 			if(nextState.getBlock() instanceof ABlockBBStructure == true && nextState.getValue(ABlockBBStructure.ISSTRUCT) == true)
 				return range >= rangemin ? currentPos : null;
-			return findSide(nextPos, direction, world, range, checkElectrolyteFacing, allowAir, rangemin);
+			return findSide(nextPos, direction, world, range, checkElectrolyteFacing, allowAir, rangemin, player);
 		}else if(allowedStructureBlock.contains(currentState.getBlock())){
 			return range >= rangemin ? currentPos : null;
 		}
@@ -548,21 +550,21 @@ public class MultiBlockBattery {
 		return state.getPropertyKeys().contains(BlockFluid.LEVEL) && state.getValue(BlockFluid.LEVEL) != 0 ;
 	}
 	
-	public boolean getStructure(World world){
+	public boolean getStructure(World world, EntityPlayer player){
 		reset();
 
-		EnumFacing dummyFacing = plugFacing;
-		
-		BlockPos l5 = findSide(plugPos, dummyFacing, world, 0, false, true, 3);
+		EnumFacing dummyFacing = plugFacingOpposite;
+
+		BlockPos l5 = findSide(plugPos, dummyFacing, world, 0, false, true, 3, player);
 		
 		dummyFacing = dummyFacing.getAxis().isVertical() ? dummyFacing.rotateAround(EnumFacing.Axis.X) : dummyFacing.rotateY();
-		BlockPos l1 = findSide(plugPos, dummyFacing, world, 0, true, false, 0);
-		BlockPos l2 = findSide(plugPos, dummyFacing.getOpposite(), world, 0, true, false, 0);
+		BlockPos l1 = findSide(plugPos, dummyFacing, world, 0, true, false, 0, player);
+		BlockPos l2 = findSide(plugPos, dummyFacing.getOpposite(), world, 0, true, false, 0, player);
 
-		dummyFacing = dummyFacing.rotateAround(plugFacing.getAxis());
+		dummyFacing = dummyFacing.rotateAround(plugFacingOpposite.getAxis());
 
-		BlockPos l3 = findSide(plugPos, dummyFacing, world, 0, true, false, 0);
-		BlockPos l4 = findSide(plugPos, dummyFacing.getOpposite(), world, 0, true, false, 0);
+		BlockPos l3 = findSide(plugPos, dummyFacing, world, 0, true, false, 0, player);
+		BlockPos l4 = findSide(plugPos, dummyFacing.getOpposite(), world, 0, true, false, 0, player);
 		/*System.out.println(l1);
 		System.out.println(l2);
 		System.out.println(l3);
@@ -591,7 +593,7 @@ public class MultiBlockBattery {
 			return false;
 		
 		if(!isStructured){
-			if(!getStructure(world))
+			if(!getStructure(world, player))
 				 return false;
 		}
 
@@ -718,7 +720,6 @@ public class MultiBlockBattery {
 							return new ActionResult(EnumActionResult.FAIL, stack);
 						materialsBattery.electrode1MP.updateValueAndMaterials(world ,materialsBattery.electrode1.stackReference, Blocks.AIR, e.getValue() <= 1.0D ? 1 : (int) Math.abs(e.getValue()));
 						setPlugCapacity(world);
-						System.out.println("  e1 "+stack+"   "+e.getKey());
 						return stack.getCount() != e.getKey().getCount() ? new ActionResult(EnumActionResult.SUCCESS, ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - e.getKey().getCount())) : new ActionResult(EnumActionResult.SUCCESS, ItemStack.EMPTY);
 					}
 				}
@@ -731,9 +732,7 @@ public class MultiBlockBattery {
 						if( e == null )
 							return new ActionResult(EnumActionResult.FAIL, stack);
 						materialsBattery.electrode2MP.updateValueAndMaterials(world , materialsBattery.electrode2.stackReference, Blocks.AIR, e.getValue() <= 1.0D ? 1 : (int) Math.abs(e.getValue()));
-						setPlugCapacity(world);
-						System.out.println("  e2 "+stack+"   "+e.getKey());
-						
+						setPlugCapacity(world);						
 						return stack.getCount() != e.getKey().getCount() ? new ActionResult(EnumActionResult.SUCCESS, ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - e.getKey().getCount())) : new ActionResult(EnumActionResult.SUCCESS, ItemStack.EMPTY);
 					}
 				}
@@ -863,7 +862,7 @@ public class MultiBlockBattery {
 			return false;
 		
 		EnumFacing tf = mapFacingConductiveItemStack.entrySet().iterator().next().getKey();
-		BlockPos nbp = plugPos.add(plugFacing.getDirectionVec()).add(tf.getDirectionVec());
+		BlockPos nbp = plugPos.add(plugFacingOpposite.getDirectionVec()).add(tf.getDirectionVec());
 		
 		ItemStack b1 = null;
 		EnumFacing fb1 = null;
@@ -927,7 +926,7 @@ public class MultiBlockBattery {
 	}
 
 	private boolean checkElectrolyte(World world) {
-		int di = plugFacing.getAxisDirection().getOffset();
+		int di = plugFacingOpposite.getAxisDirection().getOffset();
 		int xmin = plugPos.getX();
 		int xmax = plugPos.getX();
 		int ymin = plugPos.getY();
@@ -942,7 +941,7 @@ public class MultiBlockBattery {
 		int zmina = 0;
 		int zmaxa = 0;
 		
-		switch(plugFacing.getAxis()){
+		switch(plugFacingOpposite.getAxis()){
 			case X:
 				xmin = dwn.getX()+1;
 				xmina = -1;
@@ -1095,8 +1094,9 @@ public class MultiBlockBattery {
 		IBlockState s = world.getBlockState(bp);
 		if(s!=null && s.getBlock() instanceof ABlockBBStructure)
 			world.setBlockState(bp, s.withProperty(ABlockBBStructure.ISSTRUCT, true));
-		if(s!=null && s.getBlock() instanceof BlockConductive)
-			world.setBlockState(bp, s.withProperty(ABlockBBStructure.ISSTRUCT, true).withProperty(BlockConductive.FACING, plugFacing.getOpposite()));
+		if(s!=null && s.getBlock() instanceof BlockConductive){
+			world.setBlockState(bp, s.withProperty(ABlockBBStructure.ISSTRUCT, true).withProperty(BlockConductive.FACING,plugFacingOpposite));
+		}
 		TileEntity te = world.getTileEntity(bp);
 		if(te!=null && te instanceof ITileHaveMaster){
 			((ITileHaveMaster)te).setMaster(plugPos);
@@ -1247,8 +1247,8 @@ public class MultiBlockBattery {
 			nbt.setTag("interfacePos"+i, t);
 		}
 		
-    	if(plugFacing!=null)
-    		nbt.setInteger("plugFacing", plugFacing.getIndex());
+    	if(plugFacingOpposite!=null)
+    		nbt.setInteger("plugFacingOpposite", plugFacingOpposite.getIndex());
     	if(electrolyteFacing!=null)
     		nbt.setInteger("electrolyteFacing", electrolyteFacing.getIndex());
     	if(electrolyteItemStack!=null)
@@ -1290,7 +1290,7 @@ public class MultiBlockBattery {
         	electrolyteItemStack = new ItemStack((NBTTagCompound)es);
 
         amountElectrolyte = nbt.getInteger("amountElectrolyte");
-        plugFacing = EnumFacing.getFront(nbt.getInteger("plugFacing"));
+        plugFacingOpposite = EnumFacing.getFront(nbt.getInteger("plugFacingOpposite"));
         electrolyteFacing = EnumFacing.getFront(nbt.getInteger("electrolyteFacing"));
         isValid = nbt.getBoolean("isValid");
         isStructured = nbt.getBoolean("isStructured");

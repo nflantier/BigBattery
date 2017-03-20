@@ -26,8 +26,6 @@ public class BigBattery {
 	@Instance(Ressources.MODID)
 	public static BigBattery instance;
 	
-	public static SimpleNetworkWrapper networkWrapper;
-	
     @EventHandler
     public void preinit(FMLPreInitializationEvent event)
     {

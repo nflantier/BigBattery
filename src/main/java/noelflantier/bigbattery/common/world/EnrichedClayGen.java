@@ -19,13 +19,12 @@ public class EnrichedClayGen extends WorldGenerator{
 	
 	public void generate(World worldIn, Random rand, int xch, int zch) {
 		List<Integer> l = new ArrayList<Integer>();
-		while(l.size() < 10){
+		while(l.size() < ModConfig.chanceSpawningEnrichedClayPerChunk){
 			int r = rand.nextInt(ymax-ymin)+ymin;
 			if(!l.contains(r))
 				l.add(r);
 		}
 		//-5202994061371810039
-		System.out.println("........................................................ "+l.size());
 		l.stream().forEach(e->generate(worldIn, rand, new BlockPos(xch + rand.nextInt(16),e,zch + rand.nextInt(16))));
 		/*for (int y = ymin; y < ymax; y++) {
 			final int x = xch + rand.nextInt(16);
@@ -119,7 +118,7 @@ public class EnrichedClayGen extends WorldGenerator{
 
                             if (block == Blocks.DIRT || block == Blocks.CLAY)
                             {
-                        		System.out.println("........................................................ "+blockpos);
+                        		//System.out.println("........................................................ "+blockpos);
                                 worldIn.setBlockState(blockpos, ModBlocks.blockEnrichedClay.getDefaultState(), 2);
                             }
                         }

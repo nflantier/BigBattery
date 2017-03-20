@@ -141,7 +141,7 @@ public class ModBlocks {
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockCasing), 2, new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_IRON_CASING_FULL, "inventory"));
     	
     	for(int i = 0 ; i < ConductiveType.values().length ; i++){
-    		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockConductive), blockConductive.getMetaFromState(blockConductive.getDefaultState().withProperty(BlockConductive.CONDUCTIVE_TYPE, ConductiveType.getType(i))), new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CONDUCTIVE, "facing=south,isstruct=false,type="+ConductiveType.getType(i).getName()));
+    		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockConductive), blockConductive.getMetaFromState(blockConductive.getDefaultState().withProperty(BlockConductive.CONDUCTIVE_TYPE, ConductiveType.getType(i))), new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_CONDUCTIVE, "facing=north,isstruct=false,type="+ConductiveType.getType(i).getName()));
     	}
     	for(int i = 0 ; i < InterfaceType.values().length ; i++){
     		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(blockInterface), blockInterface.getMetaFromState(blockInterface.getDefaultState().withProperty(BlockInterface.INTERFACE_TYPE, InterfaceType.getType(i))), new ModelResourceLocation(Ressources.MODID+":"+Ressources.UL_NAME_BLOCK_INTERFACE, "isstruct=false,type="+InterfaceType.getType(i).getName()));

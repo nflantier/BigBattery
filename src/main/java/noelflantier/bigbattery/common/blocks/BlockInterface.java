@@ -1,15 +1,26 @@
 package noelflantier.bigbattery.common.blocks;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
@@ -104,6 +115,33 @@ public class BlockInterface extends ABlockBBStructure {
     public int getMetaFromState(IBlockState state)
     {
         return state.getValue(INTERFACE_TYPE).ordinal() * 2 + (state.getValue(ISSTRUCT) == true ? 1 : 0 );
+    }
+	
+	@Override
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack)
+    {
+		if(te != null){
+			harvesters.set(player);
+			
+			ItemStack itemStack = new ItemStack(getItemDropped(state, null, 0), 1, damageDropped(state));
+			NBTTagCompound compound = new NBTTagCompound();
+			compound.setTag("BlockEntityTag", te.writeToNBT(new NBTTagCompound()));
+		    itemStack.setTagCompound(itemStack.writeToNBT(compound));
+			List<ItemStack> l = new ArrayList<ItemStack>(){{
+				add(itemStack);
+			}};
+
+            net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(l, worldIn, pos, state, 0, 1.0F, false, harvesters.get());
+            for (ItemStack item : l)
+            {
+                if (worldIn.rand.nextFloat() <= 1.0F)
+                {
+                    spawnAsEntity(worldIn, pos, item);
+                }
+            }
+	        harvesters.set(null);
+		}else
+			super.harvestBlock(worldIn, player, pos, state, te, stack);
     }
 
 }

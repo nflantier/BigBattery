@@ -59,18 +59,22 @@ public class MaterialsHandler{
 	}
 	
 	public static boolean areItemStackSameOre(ItemStack it1, ItemStack it2, boolean strict){
+        if (it1.isEmpty() || it2.isEmpty())
+            return false;
 		if(it1.isItemEqualIgnoreDurability(it2))
 			return true;
 		if(strict)
 			return false;
-        if (it1.isEmpty() || it2.isEmpty())
-            return false;
-        
 		int [] it1t = OreDictionary.getOreIDs(it1);
 		int [] it2t = OreDictionary.getOreIDs(it2);
-		if(it1t.length <= 0 || it2t.length <= 0)
+		if(it1t == null || it2t == null || it1t.length <= 0 || it2t.length <= 0)
 			return false;
-		return Arrays.asList(ArrayUtils.toObject(it1t)).stream().anyMatch(o->Arrays.asList(ArrayUtils.toObject(it2t)).stream().anyMatch(i->o==i));
+		
+		for(int i = 0 ; i < it1t.length ; i++)
+			for(int j = 0 ; j < it2t.length ; j++)
+				if( it1t[i] == it2t[j] )
+					return true;
+		return false;
 	}
 	
 	public static boolean isItemStackEnough(ItemStack reference, ItemStack candidat){

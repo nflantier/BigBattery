@@ -12,17 +12,15 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -31,7 +29,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import noelflantier.bigbattery.BigBattery;
 import noelflantier.bigbattery.Ressources;
-import noelflantier.bigbattery.common.handlers.ModConfig;
 import noelflantier.bigbattery.common.handlers.ModGuis;
 import noelflantier.bigbattery.common.tiles.ITileMaster;
 import noelflantier.bigbattery.common.tiles.TilePlug;
@@ -72,7 +69,6 @@ public class BlockPlug extends ABlockBBStructure {
     {
 		if(worldIn.isRemote || playerIn.isSneaking() || hand == EnumHand.OFF_HAND)
 			return true;
-		
 		if(!state.getValue(ISSTRUCT) && playerIn.getHeldItem(EnumHand.MAIN_HAND) == ItemStack.EMPTY){
 			TileEntity te = worldIn.getTileEntity(pos);
 			if( te != null && te instanceof ITileMaster && !((ITileMaster)te).getStructure().isStructured){

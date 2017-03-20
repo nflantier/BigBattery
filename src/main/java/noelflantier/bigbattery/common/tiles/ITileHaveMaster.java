@@ -62,8 +62,8 @@ public interface ITileHaveMaster {
 		if(getWorldForMaster()==null || getMasterPos()==null)
 			return null;
 		TileEntity t = getWorldForMaster().getTileEntity(getMasterPos());
-		if(t!=null && t instanceof ITileMaster && ((ITileMaster)t).getStructure() !=null && ((ITileMaster)t).getStructure().isStructured && ((ITileMaster)t).getStructure().plugFacing!=null){
-			return ((ITileMaster)t).getStructure().plugFacing.getOpposite();
+		if(t!=null && t instanceof ITileMaster && ((ITileMaster)t).getStructure() !=null && ((ITileMaster)t).getStructure().isStructured && ((ITileMaster)t).getStructure().plugFacingOpposite!=null){
+			return ((ITileMaster)t).getStructure().plugFacingOpposite;
 		}
 		return null;
 	}

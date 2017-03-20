@@ -72,7 +72,6 @@ public class GuiImage extends GuiComponentBase{
 			//GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glColor4f(1f, 1f, 1f, alpha);
-	        float f = 0.015625F;
 	        Tessellator tessellator = Tessellator.getInstance();
 	        VertexBuffer vertexbuffer = tessellator.getBuffer();
 	        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);

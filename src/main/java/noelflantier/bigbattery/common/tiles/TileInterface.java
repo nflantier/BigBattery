@@ -66,7 +66,10 @@ public class TileInterface extends TileSimpleHM implements ITickable{
 			return;
 		if(inventory.type == null)
 			inventory.type = world.getBlockState(getPos()).getValue(BlockInterface.INTERFACE_TYPE);
-		
+		if(inventory.change){
+			this.markDirty();
+			inventory.change = false;
+		}
 		ITileMaster t = getTileMaster();
 		if(t == null || t.getStructure() == null || !t.getStructure().isStructured){
 		}else{
@@ -133,6 +136,7 @@ public class TileInterface extends TileSimpleHM implements ITickable{
         super.readFromNBT(nbt);
         if(nbt.getTag("capabilityInventory") != null)
         	CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.getStorage().readNBT(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY , getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ,null), null, nbt.getTag("capabilityInventory"));
+
         if(nbt.getTag("capabilityTank") != null)
         	CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.getStorage().readNBT(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY , getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ,null), null, nbt.getTag("capabilityTank"));
         inventory.type = ModProperties.InterfaceType.values()[nbt.getInteger("typeinterface")]; 

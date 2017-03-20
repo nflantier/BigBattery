@@ -49,7 +49,7 @@ public class GuiPlug extends GuiNF{
 			if(tile.getStructure().isStructured){
 
 				this.componentList.put("cu", new GuiComponent(6,15){{
-					addText("Can generate : "+((int)tile.currentRF)+" RF", 0, 0);
+					addText("Can generate : "+((int)tile.currentRF<=-1?0:(int)tile.currentRF)+" RF", 0, 0);
 				}});
 				
 				this.componentList.put("e1", new GuiComponent(6,35){{

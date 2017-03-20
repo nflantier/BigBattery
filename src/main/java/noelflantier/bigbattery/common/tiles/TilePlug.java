@@ -36,7 +36,7 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
 		if(!getStructure().isStructured)
 			return;
 
-		energyStorage.extractEnergy(1000000, false);
+		//energyStorage.extractEnergy(1000000, false);
 		if(energyStorage.getEnergyStored()>=energyStorage.getMaxEnergyStored()){
 			//setEnergyCapacity();
 			return;
@@ -48,17 +48,20 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
 			mbb.materialsBattery.handleMaterials(getWorld(), (float)truerf/(float)currentRF);
 		}else
 			setEnergyCapacity();
+		sendPacketPlug();
 		
-    	PacketHandler.sendToAllAround(new PacketPlug(getPos(), energyStorage.getEnergyStored(), lastEnergyStoredAmount, currentRF, mbb.materialsBattery.getMaterialsId() ),this);
-
 		lastEnergyStoredAmount = energyStorage.getEnergyStored();
 	}
 
+	public void sendPacketPlug(){
+    	PacketHandler.sendToAllAround(new PacketPlug(getPos(), energyStorage.getEnergyStored(), lastEnergyStoredAmount, currentRF, mbb.materialsBattery.getMaterialsId() ),this);
+	}
 
 	@Override
 	public void setEnergyCapacity() {
 		capacity = (int) mbb.materialsBattery.generateEnergy();
-		energyStorage.setCapacity(capacity);	
+		energyStorage.setCapacity(capacity);
+		sendPacketPlug();
 	}
 	
 	@Override
