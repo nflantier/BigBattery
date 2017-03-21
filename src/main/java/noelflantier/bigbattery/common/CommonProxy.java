@@ -42,8 +42,8 @@ public class CommonProxy {
     	ModTiles.preInitCommon();
     	ModBrewing.preInitCommon();
     	ModOreDict.preInitCommon();
-    	//7295658413789479504
     	ModMessages.preInitCommon();
+    	ModOreGen.init();
     	GameRegistry.registerWorldGenerator(new ModOreGen(), 100);
 	}
 	
@@ -52,7 +52,6 @@ public class CommonProxy {
 	}
 
 	public void postinit(FMLPostInitializationEvent event) {
-
 		ModEvents.postInitCommon();
 		ModRecipes.loadRecipes();
     	MaterialsHandler.getInstance().loadRecipes();

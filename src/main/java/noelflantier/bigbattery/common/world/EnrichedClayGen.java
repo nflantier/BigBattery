@@ -14,23 +14,21 @@ import noelflantier.bigbattery.common.handlers.ModConfig;
 
 public class EnrichedClayGen extends WorldGenerator{
 	
-	public int ymin = 55;
-	public int ymax = 65;
-	
+	public static final int ymin = 55;
+	public static final int ymax = 65;
+	//2807071691121312404
 	public void generate(World worldIn, Random rand, int xch, int zch) {
 		List<Integer> l = new ArrayList<Integer>();
+		int i = 0;
 		while(l.size() < ModConfig.chanceSpawningEnrichedClayPerChunk){
+			if(i >= 50)
+				break;
 			int r = rand.nextInt(ymax-ymin)+ymin;
 			if(!l.contains(r))
 				l.add(r);
+			i++;
 		}
-		//-5202994061371810039
 		l.stream().forEach(e->generate(worldIn, rand, new BlockPos(xch + rand.nextInt(16),e,zch + rand.nextInt(16))));
-		/*for (int y = ymin; y < ymax; y++) {
-			final int x = xch + rand.nextInt(16);
-			final int z = zch + rand.nextInt(16);
-			generate(worldIn, rand, new BlockPos(x,y,z));
-		}*/
 	}
 	
 	@Override
@@ -118,7 +116,6 @@ public class EnrichedClayGen extends WorldGenerator{
 
                             if (block == Blocks.DIRT || block == Blocks.CLAY)
                             {
-                        		//System.out.println("........................................................ "+blockpos);
                                 worldIn.setBlockState(blockpos, ModBlocks.blockEnrichedClay.getDefaultState(), 2);
                             }
                         }

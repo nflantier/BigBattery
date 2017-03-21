@@ -1,11 +1,13 @@
 package noelflantier.bigbattery.common.helpers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -39,6 +41,7 @@ import noelflantier.bigbattery.common.materials.MaterialsHandler.Electrode;
 import noelflantier.bigbattery.common.materials.MaterialsHandler.Electrode.TYPE;
 import noelflantier.bigbattery.common.tiles.ITileHaveMaster;
 import noelflantier.bigbattery.common.tiles.ITileMaster;
+import noelflantier.bigbattery.common.tiles.TilePlug;
 
 public class MultiBlockBattery {
 
@@ -1298,6 +1301,34 @@ public class MultiBlockBattery {
     }
 
 	public String getStringSize() {
-		return "X : "+(ues.getX()-dwn.getX())+" Y : "+(ues.getY()-dwn.getY())+" Z : "+(ues.getZ()-dwn.getZ());
+		return "X : "+(ues.getX()-dwn.getX())+"  Y : "+(ues.getY()-dwn.getY())+"  Z : "+(ues.getZ()-dwn.getZ());
+	}
+
+	public void setMaterials(int[]ids){
+		materialsBattery.electrode1 = ids[0]!=-1 ? MaterialsHandler.electrodeListByPotential.get(ids[0]) : null;
+		materialsBattery.electrode2 = ids[1]!=-1 ? MaterialsHandler.electrodeListByPotential.get(ids[1]) : null;
+		materialsBattery.electrolyte = ids[2]!=-1 ? MaterialsHandler.electrolyteListByPotential.get(ids[2]) : null;
+		materialsBattery.electrode1Cond = ids[3]!=-1 ? MaterialsHandler.conductiveListByRatio.get(ids[3]) : null;
+		materialsBattery.electrode2Cond = ids[4]!=-1 ? MaterialsHandler.conductiveListByRatio.get(ids[4]) : null;
+	}
+	
+	public void setMaterialsValues(double [][]values){
+		materialsBattery.electrode1MP.currentAmount = (int)values[0][0];
+		materialsBattery.electrode1MP.maxAmount = (int)values[0][1];
+		materialsBattery.electrode1MP.currentUnit = values[0][2];
+		
+		materialsBattery.electrode2MP.currentAmount = (int)values[1][0];
+		materialsBattery.electrode2MP.maxAmount = (int)values[1][1];
+		materialsBattery.electrode2MP.currentUnit = values[1][2];
+		
+		materialsBattery.electrolyteMP.currentAmount = (int)values[2][0];
+		materialsBattery.electrolyteMP.maxAmount = (int)values[2][1];
+		materialsBattery.electrolyteMP.currentUnit = values[2][2];
+	}
+	
+	public double[][] getMPValues() {
+		return new double[][]{new ArrayList<Double>(Arrays.asList((double)materialsBattery.electrode1MP.currentAmount,(double)materialsBattery.electrode1MP.maxAmount, materialsBattery.electrode1MP.currentUnit)).stream().collect(Collectors.toList()).stream().mapToDouble(i->i).toArray(),
+			new ArrayList<Double>(Arrays.asList((double)materialsBattery.electrode2MP.currentAmount,(double)materialsBattery.electrode2MP.maxAmount, materialsBattery.electrode2MP.currentUnit)).stream().collect(Collectors.toList()).stream().mapToDouble(i->i).toArray(),
+			new ArrayList<Double>(Arrays.asList((double)materialsBattery.electrolyteMP.currentAmount,(double)materialsBattery.electrolyteMP.maxAmount, materialsBattery.electrolyteMP.currentUnit)).stream().collect(Collectors.toList()).stream().mapToDouble(i->i).toArray()};
 	}
 }

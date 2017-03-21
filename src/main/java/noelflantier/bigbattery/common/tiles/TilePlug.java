@@ -9,6 +9,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
+import noelflantier.bigbattery.common.handlers.ModConfig;
 import noelflantier.bigbattery.common.helpers.MultiBlockBattery;
 import noelflantier.bigbattery.common.helpers.MultiBlockMessage;
 import noelflantier.bigbattery.common.network.PacketHandler;
@@ -35,8 +36,7 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
 			mbb.plugPos = getPos();
 		if(!getStructure().isStructured)
 			return;
-
-		//energyStorage.extractEnergy(1000000, false);
+		energyStorage.extractEnergy(100000, false);
 		if(energyStorage.getEnergyStored()>=energyStorage.getMaxEnergyStored()){
 			//setEnergyCapacity();
 			return;
@@ -45,6 +45,9 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
 		int truerf = energyStorage.recieve(currentRF,true);
 		if(truerf>0 && currentRF>0){
 			int g = energyStorage.recieve(currentRF,false);
+			if(ModConfig.areBatteryalwaysGenerating){
+				truerf = currentRF;
+			}
 			mbb.materialsBattery.handleMaterials(getWorld(), (float)truerf/(float)currentRF);
 		}else
 			setEnergyCapacity();
@@ -54,7 +57,7 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
 	}
 
 	public void sendPacketPlug(){
-    	PacketHandler.sendToAllAround(new PacketPlug(getPos(), energyStorage.getEnergyStored(), lastEnergyStoredAmount, currentRF, mbb.materialsBattery.getMaterialsId() ),this);
+    	PacketHandler.sendToAllAround(new PacketPlug(getPos(), energyStorage.getEnergyStored(), lastEnergyStoredAmount, currentRF, mbb.materialsBattery.getMaterialsId(), mbb.getMPValues() ),this);
 	}
 
 	@Override

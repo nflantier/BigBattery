@@ -16,6 +16,8 @@ public class ModConfig {
 	public static int amountFluidInterfaceCapacity;
 	public static int maximumEnrichedClayVainSize;
 	public static int chanceSpawningEnrichedClayPerChunk;
+	public static int numberOfIonicAgentPerFSE;
+	public static boolean areBatteryalwaysGenerating;
 
 	
 	public static void preInitCommon(FMLPreInitializationEvent event) {
@@ -33,13 +35,14 @@ public class ModConfig {
 	
 	public static void syncConfig() {
 		try {
-			maxSizeBattery = config.get(Configuration.CATEGORY_GENERAL, "number of blocks", 100, "Maximun size in block of any side for battery.").getInt();
-			rangeChlore = config.get(Configuration.CATEGORY_GENERAL, "range of blocks", 4, "Range of block that will no longer contains chlore around the block clicked.").getInt();
-			tickChlore = config.get(Configuration.CATEGORY_GENERAL, "number of ticks", 1000, "Ticks while the block clicked is out of chlore.").getInt();
-			amountFluidInterfaceCapacity = config.get(Configuration.CATEGORY_GENERAL, "mB", 10000, "The tank capacity of the electrolyte interface").getInt();
-			maximumEnrichedClayVainSize = config.get(Configuration.CATEGORY_GENERAL, "number of blocks", 24, "The maximun number of enriched clay you can find in a vain.").getInt();
-			chanceSpawningEnrichedClayPerChunk = config.get(Configuration.CATEGORY_GENERAL, "number of blocks", 10, "The maximun number of enriched clay you can find in a vain.").getInt();
-			
+			maxSizeBattery = config.get(Configuration.CATEGORY_GENERAL, "battery side size", 100, "Maximun size in block of any side for battery.").getInt();
+			rangeChlore = config.get(Configuration.CATEGORY_GENERAL, "chlore radius", 4, "Range of block that will no longer contains chlore around the block clicked.").getInt();
+			tickChlore = config.get(Configuration.CATEGORY_GENERAL, "chlore ticks", 1000, "Ticks while the block clicked is out of chlore.").getInt();
+			amountFluidInterfaceCapacity = config.get(Configuration.CATEGORY_GENERAL, "tank capacity interface", 10000, "The tank capacity of the electrolyte interface").getInt();
+			maximumEnrichedClayVainSize = config.get(Configuration.CATEGORY_GENERAL, "max enriched clay vain size", 18, "The maximun number of enriched clay you can find in a vain.").getInt();
+			chanceSpawningEnrichedClayPerChunk = config.get(Configuration.CATEGORY_GENERAL, "chance spawn enriched clay", 10, "The maximun number of enriched clay you can find in a vain.").getInt();
+			numberOfIonicAgentPerFSE = config.get(Configuration.CATEGORY_GENERAL, "number ionic agent per fermented spider eye", 12, "The number of ionic agent you get by smelting one fermented spider eyes in a furnace.").getInt();
+			areBatteryalwaysGenerating = config.get(Configuration.CATEGORY_GENERAL, "battery always generating power", false, "If set to true battery will generate power and consume materials even if there is nothing using the power").getBoolean();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

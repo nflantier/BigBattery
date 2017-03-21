@@ -17,6 +17,8 @@ archivesBaseName = "bigbattery"
 sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
 compileJava {
     sourceCompatibility = targetCompatibility = "1.8"
+	targetCompatibility = "1.8"
+	options.encoding = 'UTF-8'
 }
 
 minecraft {

@@ -216,8 +216,9 @@ public class GuiComponent extends GuiComponentBase{
 		return this.isLink && this.isMouseHover(x, y);
 	}
 	
-	public void replaceString(int id, String str){
+	public GuiComponent replaceString(int id, String str){
 		this.stringList.replace(id, str);
+		return this;
 	}
 	
 	public void draw(int x, int y){

@@ -64,7 +64,7 @@ public class ModRecipes {
 		GameRegistry.addSmelting(new ItemStack(Items.COAL,1,0), new ItemStack(ModItems.itemIngotGraphite,1,0), 0);
 		OreDictionary.getOres("dustCoal").stream().forEach(i->GameRegistry.addSmelting(i.copy(), new ItemStack(ModItems.itemIngotGraphite,1,0), 0));
 		GameRegistry.addSmelting(new ItemStack(Items.IRON_INGOT,1,0), new ItemStack(ModItems.itemIngotSteel,1,0), 0);
-		GameRegistry.addSmelting(new ItemStack(Items.FERMENTED_SPIDER_EYE,1,0), new ItemStack(ModItems.itemIonicAgent,8,0), 0);
+		GameRegistry.addSmelting(new ItemStack(Items.FERMENTED_SPIDER_EYE,1,0), new ItemStack(ModItems.itemIonicAgent,ModConfig.numberOfIonicAgentPerFSE,0), 0);
 		
 		GameRegistry.addSmelting(new ItemStack(ModBlocks.blockOreAluminium,1,0), new ItemStack(ModItems.itemIngotAluminium,1,0), 0);
 		GameRegistry.addSmelting(new ItemStack(ModBlocks.blockOreCopper,1,0), new ItemStack(ModItems.itemIngotCopper,1,0), 0);

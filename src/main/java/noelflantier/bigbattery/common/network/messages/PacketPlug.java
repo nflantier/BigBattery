@@ -20,6 +20,7 @@ public class PacketPlug  implements IMessage, IMessageHandler<PacketPlug, IMessa
 	public int lastenergystored;
 	public int currentRF;
 	public int [] idmaterials;
+	public double [][] mpvalues;
 	
 	public PacketPlug(){
 	
@@ -43,6 +44,17 @@ public class PacketPlug  implements IMessage, IMessageHandler<PacketPlug, IMessa
 		this.idmaterials = idmaterials;
 	}
 
+	public PacketPlug(BlockPos pos, int energy, int lastenergystored, int currentRF, int [] idmaterials, double[][] mpvalues) {
+		this.x = pos.getX();
+		this.y = pos.getY();
+		this.z = pos.getZ();
+		this.energy = energy;
+		this.lastenergystored = lastenergystored;
+		this.currentRF = currentRF;
+		this.idmaterials = idmaterials;
+		this.mpvalues = mpvalues;
+	}
+
 	@Override
 	public IMessage onMessage(PacketPlug message, MessageContext ctx) {
 		if (ctx.side.isClient()) {
@@ -54,11 +66,8 @@ public class PacketPlug  implements IMessage, IMessageHandler<PacketPlug, IMessa
 						((TilePlug)te).setEnergy(message.energy);
 						((TilePlug)te).lastEnergyStoredAmount = message.lastenergystored;
 						((TilePlug)te).currentRF = message.currentRF;
-						((TilePlug)te).mbb.materialsBattery.electrode1 = message.idmaterials[0]!=-1 ? MaterialsHandler.electrodeListByPotential.get(message.idmaterials[0]) : null;
-						((TilePlug)te).mbb.materialsBattery.electrode2 = message.idmaterials[1]!=-1 ? MaterialsHandler.electrodeListByPotential.get(message.idmaterials[1]) : null;
-						((TilePlug)te).mbb.materialsBattery.electrolyte = message.idmaterials[2]!=-1 ? MaterialsHandler.electrolyteListByPotential.get(message.idmaterials[2]) : null;
-						((TilePlug)te).mbb.materialsBattery.electrode1Cond = message.idmaterials[3]!=-1 ? MaterialsHandler.conductiveListByRatio.get(message.idmaterials[3]) : null;
-						((TilePlug)te).mbb.materialsBattery.electrode2Cond = message.idmaterials[4]!=-1 ? MaterialsHandler.conductiveListByRatio.get(message.idmaterials[4]) : null;
+						((TilePlug)te).mbb.setMaterials(message.idmaterials);
+						((TilePlug)te).mbb.setMaterialsValues(message.mpvalues);
 					}
 				}}
 			);
@@ -78,6 +87,16 @@ public class PacketPlug  implements IMessage, IMessageHandler<PacketPlug, IMessa
 	    idmaterials = new int [l];
 	    for(int j =0;j<l;j++)
 	    	idmaterials[j] = buf.readInt();
+
+	    int l2 = buf.readInt();
+	    mpvalues = new double[l2][];
+	    for(int j =0;j<l2;j++){
+		    int l3 = buf.readInt();
+		    double[] tdd = new double[l3];
+		    for(int i =0;i<l3;i++)
+		    	tdd[i] = buf.readDouble();
+		    mpvalues[j] = tdd;
+	    }
 		
 	}
 	@Override
@@ -92,6 +111,13 @@ public class PacketPlug  implements IMessage, IMessageHandler<PacketPlug, IMessa
 	    buf.writeInt(idmaterials.length);
 	    for(int j =0;j<idmaterials.length;j++)
 	    	buf.writeInt(idmaterials[j]);
+
+	    buf.writeInt(mpvalues.length);
+	    for(int j =0;j<mpvalues.length;j++){
+	    	buf.writeInt(mpvalues[j].length);
+		    for(int i =0;i<mpvalues[j].length;i++)
+		    	buf.writeDouble(mpvalues[j][i]);
+	    }
 		
 	}
 }

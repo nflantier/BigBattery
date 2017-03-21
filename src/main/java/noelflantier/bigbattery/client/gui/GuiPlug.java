@@ -1,12 +1,10 @@
 package noelflantier.bigbattery.client.gui;
 
-import java.util.Enumeration;
-
-import org.lwjgl.opengl.GL11;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import noelflantier.bigbattery.Ressources;
 import noelflantier.bigbattery.client.bases.GuiComponent;
@@ -24,7 +22,7 @@ public class GuiPlug extends GuiNF{
 	public GuiPlug(InventoryPlayer inventory, TilePlug tile) {
 		super(new ContainerPlug(inventory, tile));
 		this.xSize = 176;
-		this.ySize = 135;
+		this.ySize = 171;
 		this.tile = tile;
 	}
 
@@ -36,65 +34,87 @@ public class GuiPlug extends GuiNF{
 	@Override
 	public void updateScreen(){
 		super.updateScreen();
-		//this.componentList.get("fluiddraining").replaceString(0, "Fluid draining : "+this.pillar.amountToExtract+" MB/T");
+		componentList.get("e1m").replaceString(0, "Amount : "+tile.mbb.materialsBattery.electrode1MP.currentAmount).replaceString(1, "Max : "+tile.mbb.materialsBattery.electrode1MP.maxAmount).replaceString(2, "Decay : "+(int)tile.mbb.materialsBattery.electrode1MP.currentUnit);
+		componentList.get("e2m").replaceString(0, "Amount : "+tile.mbb.materialsBattery.electrode2MP.currentAmount).replaceString(1, "Max : "+tile.mbb.materialsBattery.electrode2MP.maxAmount).replaceString(2, "Decay : "+(int)tile.mbb.materialsBattery.electrode2MP.currentUnit);
+		componentList.get("elm").replaceString(0, "Amount : "+tile.mbb.materialsBattery.electrolyteMP.currentAmount).replaceString(1, "Max : "+tile.mbb.materialsBattery.electrolyteMP.maxAmount).replaceString(2, "Decay : "+(int)tile.mbb.materialsBattery.electrolyteMP.currentUnit);
 	}
 	
 	@Override
 	public void loadComponents(){
 		super.loadComponents();
 		this.componentList.put("mf", new GuiComponent(6, 5, 100, 10){{
-			addText("Plug : "+tile.getStructure().getStringSize(), 0, 0);
+			addText("Plug", 0, 0);
 		}});
+		
+		Map<MaterialsHandler.Electrode.TYPE,Integer> mat = new HashMap<>();
+		mat.put(MaterialsHandler.Electrode.TYPE.ANODE, 8);
+		mat.put(MaterialsHandler.Electrode.TYPE.CATHODE, 2);
+		
 		if(tile.getStructure()!=null){
 			if(tile.getStructure().isStructured){
 
-				this.componentList.put("cu", new GuiComponent(6,15){{
+				this.componentList.put("cu", new GuiComponent(32,20){{
+					addText("Size : "+tile.getStructure().getStringSize(), 0, 0);
 					addText("Can generate : "+((int)tile.currentRF<=-1?0:(int)tile.currentRF)+" RF", 0, 0);
 				}});
 				
-				this.componentList.put("e1", new GuiComponent(6,35){{
-					addText("Electrode 1 : ", 0, 0);
+				this.componentList.put("e1", new GuiComponent(10,48){{
+					addText("E1", 17, 0);
 					if(tile.mbb.materialsBattery.electrode1 != null){
 						if(tile.mbb.materialsBattery.electrode1.type != MaterialsHandler.Electrode.TYPE.NONE)
-							addText(""+tile.mbb.materialsBattery.electrode1.type.name(), 90, -10);
-						this.addItemStack(new GuiItemStack(75,30,tile.mbb.materialsBattery.electrode1.stackReference));
+							addText(""+tile.mbb.materialsBattery.electrode1.type.name(), mat.get(tile.mbb.materialsBattery.electrode1.type), 25);
+						this.addItemStack(new GuiItemStack(25,62,tile.mbb.materialsBattery.electrode1.stackReference));
 					}else
-						addText("empty", 75, -10);
+						addText("Empty", 10, 10);
 					
 				}});
+				this.componentList.put("e1m", new GuiComponent(10,95){{
+					this.globalScale = 0.6F;
+					addText("Amount : "+tile.mbb.materialsBattery.electrode1MP.currentAmount, 0, 0);
+					addText("Max : "+tile.mbb.materialsBattery.electrode1MP.maxAmount, 0, 0);
+					addText("Decay : "+(int)tile.mbb.materialsBattery.electrode1MP.currentUnit, 0, 0);
+				}});
 				
-				this.componentList.put("e2", new GuiComponent(6,55){{
-					addText("Electrode 2 : ", 0, 0);
+				this.componentList.put("el", new GuiComponent(65,48){{
+					addText("Ely", 16, 0);
+					if(tile.mbb.materialsBattery.electrolyte != null)
+						this.addItemStack(new GuiItemStack(80,62,tile.mbb.materialsBattery.electrolyte.stackReference));
+					else
+						addText("Empty", 10, 10);
+				}});
+				this.componentList.put("elm", new GuiComponent(65,95){{
+					this.globalScale = 0.6F;
+					addText("Amount : "+tile.mbb.materialsBattery.electrolyteMP.currentAmount, 0, 0);
+					addText("Max : "+tile.mbb.materialsBattery.electrolyteMP.maxAmount, 0, 0);
+					addText("Decay : "+(int)tile.mbb.materialsBattery.electrolyteMP.currentUnit, 0, 0);
+				}});
+				
+				this.componentList.put("e2", new GuiComponent(120,48){{
+					addText("E2", 17, 0);
 					if(tile.mbb.materialsBattery.electrode2 != null){
 						if(tile.mbb.materialsBattery.electrode2.type != MaterialsHandler.Electrode.TYPE.NONE)
-							addText(""+tile.mbb.materialsBattery.electrode2.type.name(), 90, -10);
-						this.addItemStack(new GuiItemStack(75,50,tile.mbb.materialsBattery.electrode2.stackReference));
+							addText(""+tile.mbb.materialsBattery.electrode2.type.name(), mat.get(tile.mbb.materialsBattery.electrode2.type), 25);
+						this.addItemStack(new GuiItemStack(135,62,tile.mbb.materialsBattery.electrode2.stackReference));
 					}else
-						addText("empty", 75, -10);
+						addText("Empty", 10, 10);
+				}});
+				this.componentList.put("e2m", new GuiComponent(120,95){{
+					this.globalScale = 0.6F;
+					addText("Amount : "+tile.mbb.materialsBattery.electrode2MP.currentAmount, 0, 0);
+					addText("Max : "+tile.mbb.materialsBattery.electrode2MP.maxAmount, 0, 0);
+					addText("Decay : "+(int)tile.mbb.materialsBattery.electrode2MP.currentUnit, 0, 0);
 				}});
 				
-				this.componentList.put("el", new GuiComponent(6,75){{
-					addText("Electrolyte : ", 0, 0);
-					if(tile.mbb.materialsBattery.electrolyte != null)
-						this.addItemStack(new GuiItemStack(72,70,tile.mbb.materialsBattery.electrolyte.stackReference));
-					else
-						addText("empty", 72, -10);
-				}});
-				
-				this.componentList.put("c1", new GuiComponent(6,95){{
-					addText("Conductive 1 : ", 0, 0);
-					if(tile.mbb.materialsBattery.electrode1Cond != null)
-						this.addItemStack(new GuiItemStack(80,90,tile.mbb.materialsBattery.electrode1Cond.stackReference));
-					else
-						addText("empty", 80, -10);
-				}});
-				
-				this.componentList.put("c2", new GuiComponent(6,115){{
-					addText("Conductive 2 : ", 0, 0);
-					if(tile.mbb.materialsBattery.electrode2Cond != null)
-						this.addItemStack(new GuiItemStack(80,110,tile.mbb.materialsBattery.electrode2Cond.stackReference));
-					else
-						addText("empty", 80, -10);
+				this.componentList.put("c1", new GuiComponent(10,145){{
+					addText("Conductives : ", 0, 0);
+
+					if(tile.mbb.materialsBattery.electrode1Cond != null){
+						this.addItemStack(new GuiItemStack(78,142,tile.mbb.materialsBattery.electrode1Cond.stackReference));
+					}
+					if(tile.mbb.materialsBattery.electrode2Cond != null){
+						this.addItemStack(new GuiItemStack(94,142,tile.mbb.materialsBattery.electrode2Cond.stackReference));
+					}
+					addText("Ratio : *"+((tile.mbb.materialsBattery.electrode2Cond.ratioEfficiency + tile.mbb.materialsBattery.electrode1Cond.ratioEfficiency) /2), 102, -10);
 				}});
 				
 			}else{
