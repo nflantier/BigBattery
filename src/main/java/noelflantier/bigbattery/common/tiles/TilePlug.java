@@ -2,6 +2,7 @@ package noelflantier.bigbattery.common.tiles;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -20,7 +21,6 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
 	public int capacity = 0;
 	public int lastEnergyStoredAmount = -1;
 	public int currentRF = -1;
-	public boolean isGenerating = false;
 	
 	public TilePlug(){
 		super();
@@ -35,6 +35,19 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
 		if(!getStructure().isStructured)
 			return;
 		//energyStorage.extractEnergy(100000, false);
+		
+		if(energyStorage.getEnergyStored()>0 && mbb.plugFacingOpposite != null){
+			BlockPos prf = getPos().add(mbb.plugFacingOpposite.getOpposite().getDirectionVec());
+			TileEntity t = world.getTileEntity(prf);
+			if(t!=null && t.hasCapability(CapabilityEnergy.ENERGY, mbb.plugFacingOpposite) && t.getCapability(CapabilityEnergy.ENERGY, mbb.plugFacingOpposite).canReceive()){
+				int toe = t.getCapability(CapabilityEnergy.ENERGY, mbb.plugFacingOpposite).receiveEnergy(energyStorage.getEnergyStored(), true);
+				if(toe > 0){
+					int ttoe = energyStorage.extractEnergy(toe, false);
+					t.getCapability(CapabilityEnergy.ENERGY, mbb.plugFacingOpposite).receiveEnergy(ttoe, false);
+				}
+			}
+		}
+		
 		if(energyStorage.getEnergyStored()>=energyStorage.getMaxEnergyStored()){
 			//setEnergyCapacity();
 			return;
