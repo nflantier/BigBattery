@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import noelflantier.bigbattery.BigBattery;
-import noelflantier.bigbattery.common.materials.MaterialsHandler;
 import noelflantier.bigbattery.common.tiles.TilePlug;
 
 public class PacketPlug  implements IMessage, IMessageHandler<PacketPlug, IMessage> {

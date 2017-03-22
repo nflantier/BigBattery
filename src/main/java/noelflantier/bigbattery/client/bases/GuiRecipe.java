@@ -3,7 +3,6 @@ package noelflantier.bigbattery.client.bases;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.lwjgl.opengl.GL11;
@@ -13,12 +12,10 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import noelflantier.bigbattery.Ressources;
 
 public class GuiRecipe extends GuiComponentBase{
 	
@@ -43,6 +40,8 @@ public class GuiRecipe extends GuiComponentBase{
 	public List<GuiItemStack> guiItemStackToCraft = new ArrayList<GuiItemStack>();
 	public List<IRecipe> vanillaRecipes = new ArrayList<IRecipe>();
 	public TYPE recipeType;
+	public int additionalWidth = 0;
+	public int additionalHeight = 0;
 	public static int heightSlot = 16;
 	public static int widthSlot = 16;
 	public static int heightDSlot = 17;
@@ -60,6 +59,10 @@ public class GuiRecipe extends GuiComponentBase{
 		this.recipeType = type;
 		this.guiItemStackList.addAll(li);
 		this.guiItemStackToCraft.addAll(toCraft);
+	}
+	public GuiRecipe(String name, int x, int y, List<GuiItemStack> toCraft, TYPE type, List<GuiItemStack> li, int w, int h){
+		this(name, x, y, toCraft, type, li);
+		setAdditionalValues(w, h);
 	}
 	public GuiRecipe(String name, int x, int y, ItemStack toCraft, List<GuiItemStack> li){
 		super(x,y);
@@ -131,28 +134,40 @@ public class GuiRecipe extends GuiComponentBase{
 		return true;
 	}
 	
+	public void setAdditionalValues(int w, int h){
+		additionalHeight = h;
+		additionalWidth = w;
+	}
+	
+	public int getActualWidth(){
+		return recipeType.width + additionalWidth ;
+	}
+	public int getActualHeight(){
+		return recipeType.height+ additionalHeight ;
+	}
+	
 	public void drawBorder(){
 		float ha = horizontal.alpha;
 		float va = vertical.alpha;
 		horizontal.alpha = 0.2F;
 		vertical.alpha = 0.2F;
-		horizontal.width = recipeType.width+8;
+		horizontal.width = getActualWidth()+8;
 		horizontal.height = 1;
 		horizontal.x = this.x-4;
 		horizontal.y = this.y-4;
 		horizontal.draw(x, y);
 
 		horizontal.x = this.x-4;
-		horizontal.y = this.y+recipeType.height+4;
+		horizontal.y = this.y+getActualHeight()+4;
 		horizontal.draw(x, y);
 		
 		vertical.width = 1;
-		vertical.height = recipeType.height+8+1;
+		vertical.height = getActualHeight()+8+1;
 		vertical.x = this.x-4;
 		vertical.y = this.y-4;
 		vertical.draw(x, y);
 		
-		vertical.x = this.x+recipeType.width+4;
+		vertical.x = this.x+getActualWidth()+4;
 		vertical.y = this.y-4;
 		vertical.draw(x, y);
 		
@@ -197,15 +212,15 @@ public class GuiRecipe extends GuiComponentBase{
 			for(int i = 0 ; i<this.guiItemStackToCraft.size();i++){
 				horizontal.width = widthSlot;
 				horizontal.height = 1;
-				horizontal.x = this.x+TYPE.VANILLA.width-widthSlot;
-				horizontal.y = this.y+TYPE.VANILLA.height/2;
+				horizontal.x = this.x+getActualWidth()-widthSlot;
+				horizontal.y = this.y+getActualHeight()/2;
 				horizontal.draw(x, y);
 			}
 		}else if(this.recipeType==TYPE.FURNACE){
 			for(int i = 0 ; i<this.guiItemStackToCraft.size();i++){
 				horizontal.width = widthSlot;
 				horizontal.height = 1;
-				horizontal.x = this.x+TYPE.FURNACE.width-widthSlot;
+				horizontal.x = this.x+getActualWidth()-widthSlot;
 				horizontal.y = this.y+heightSlot;
 				horizontal.draw(x, y);
 			}
@@ -235,7 +250,7 @@ public class GuiRecipe extends GuiComponentBase{
 		int suc = 0;
 		for(int i = 0 ; i < t.length ; i++){
 			if((float)FR.getStringWidth(str+" "+t[i])*scale>width){	
-				FR.drawString(String.format("%s%s%s", TextFormatting.DARK_GRAY, str, TextFormatting.RESET), getScaledValue(x,scale), getScaledValue(y+(int)(10*scale*suc),scale), 4210752);
+				FR.drawString(String.format("%s%s%s", TextFormatting.BLACK, str, TextFormatting.RESET), getScaledValue(x,scale), getScaledValue(y+(int)(10*scale*suc),scale), 4210752);
 				suc+=1;
 				str = "";
 			}
@@ -245,7 +260,7 @@ public class GuiRecipe extends GuiComponentBase{
 				str+=" "+t[i];
 		}
 		if(!str.equals("") && !str.equals(" ")){
-			FR.drawString(String.format("%s%s%s", TextFormatting.DARK_GRAY, str, TextFormatting.RESET), getScaledValue(x,scale), getScaledValue(y+(int)(10*scale*suc),scale), 4210752);
+			FR.drawString(String.format("%s%s%s", TextFormatting.BLACK, str, TextFormatting.RESET), getScaledValue(x,scale), getScaledValue(y+(int)(10*scale*suc),scale), 4210752);
 		}
 	}
 	
@@ -260,7 +275,7 @@ public class GuiRecipe extends GuiComponentBase{
 			int w = FR.getStringWidth(name);
 			if(this.recipeType==TYPE.VANILLA){
 				yName = 52;
-				drawAutoWidthName(name, this.x+xName, this.y+yName, TYPE.VANILLA.width, scale);
+				drawAutoWidthName(name, this.x+xName, this.y+yName, getActualWidth(), scale);
 			}
 		GL11.glPopMatrix();
 	}

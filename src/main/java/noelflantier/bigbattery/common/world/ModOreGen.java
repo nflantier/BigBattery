@@ -36,14 +36,14 @@ public class ModOreGen implements IWorldGenerator{
 	private void generateSurface(Random random, int chunkx, int chunckz, World world) {
 		//addOreSpawn(ModBlocks.blockEnrichedClay, Blocks.CLAY, world, random, chunkx, chunckz, 4, 12, 10, 50, 70);
 		enClayGen.generate(world, random, chunkx, chunckz);
-		addOreSpawn(ModBlocks.blockOreAluminium, Blocks.STONE, world, random, chunkx, chunckz, 3, 14, 9, 40, 80);
-		addOreSpawn(ModBlocks.blockOreCopper, Blocks.STONE, world, random, chunkx, chunckz, 4, 16, 11, 40, 80);
-		addOreSpawn(ModBlocks.blockOreLead, Blocks.STONE, world, random, chunkx, chunckz, 3, 5, 9, 20, 80);
-		addOreSpawn(ModBlocks.blockOreNickel, Blocks.STONE, world, random, chunkx, chunckz, 1, 3, 1, 8, 40);
-		addOreSpawn(ModBlocks.blockOrePlatinium, Blocks.STONE, world, random, chunkx, chunckz, 1, 2, 1, 7, 20);
-		addOreSpawn(ModBlocks.blockOreSilver, Blocks.STONE, world, random, chunkx, chunckz, 2, 6, 10, 20, 80);
-		addOreSpawn(ModBlocks.blockOreTin, Blocks.STONE, world, random, chunkx, chunckz, 3, 8, 11, 20, 80);
-		addOreSpawn(ModBlocks.blockOreZinc, Blocks.STONE, world, random, chunkx, chunckz, 2, 6, 9, 20, 80);
+		addOreSpawn(ModBlocks.blockOreAluminium, Blocks.STONE, world, random, chunkx, chunckz, 3, 14, 8, 40, 80);
+		addOreSpawn(ModBlocks.blockOreCopper, Blocks.STONE, world, random, chunkx, chunckz, 4, 16, 9, 40, 80);
+		addOreSpawn(ModBlocks.blockOreLead, Blocks.STONE, world, random, chunkx, chunckz, 3, 5, 7, 20, 80);
+		addOreSpawn(ModBlocks.blockOreNickel, Blocks.STONE, world, random, chunkx, chunckz, 1, 3, 1, 6, 40);
+		addOreSpawn(ModBlocks.blockOrePlatinium, Blocks.STONE, world, random, chunkx, chunckz, 1, 2, 3, 5, 20);
+		addOreSpawn(ModBlocks.blockOreSilver, Blocks.STONE, world, random, chunkx, chunckz, 2, 6, 9, 20, 80);
+		addOreSpawn(ModBlocks.blockOreTin, Blocks.STONE, world, random, chunkx, chunckz, 3, 8, 9, 20, 80);
+		addOreSpawn(ModBlocks.blockOreZinc, Blocks.STONE, world, random, chunkx, chunckz, 2, 6, 7, 20, 80);
 
 	}
 	

@@ -2,18 +2,13 @@ package noelflantier.bigbattery.common.handlers;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import noelflantier.bigbattery.Ressources;
-import noelflantier.bigbattery.common.blocks.ABlockBBStructure;
 import noelflantier.bigbattery.common.blocks.BlockCasing;
 import noelflantier.bigbattery.common.blocks.BlockConductive;
 import noelflantier.bigbattery.common.blocks.BlockEnrichedClay;

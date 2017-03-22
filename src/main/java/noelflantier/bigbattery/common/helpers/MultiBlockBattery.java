@@ -24,11 +24,9 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.oredict.OreDictionary;
 import noelflantier.bigbattery.common.blocks.ABlockBBStructure;
 import noelflantier.bigbattery.common.blocks.BlockConductive;
 import noelflantier.bigbattery.common.blocks.BlockFluid;
@@ -41,7 +39,6 @@ import noelflantier.bigbattery.common.materials.MaterialsHandler.Electrode;
 import noelflantier.bigbattery.common.materials.MaterialsHandler.Electrode.TYPE;
 import noelflantier.bigbattery.common.tiles.ITileHaveMaster;
 import noelflantier.bigbattery.common.tiles.ITileMaster;
-import noelflantier.bigbattery.common.tiles.TilePlug;
 
 public class MultiBlockBattery {
 
@@ -102,9 +99,9 @@ public class MultiBlockBattery {
 		}
 
 	    public BlockPos getRandomBlock(){
-	    	int sx = Math.abs(ues.getX() - dwn.getX());
-	    	int sy = Math.abs(ues.getY() - dwn.getY());
-	    	int sz = Math.abs(ues.getZ() - dwn.getZ());
+	    	int sx = Math.abs(ues.getX() - dwn.getX())+1;
+	    	int sy = Math.abs(ues.getY() - dwn.getY())+1;
+	    	int sz = Math.abs(ues.getZ() - dwn.getZ())+1;
 	    	
 	    	int rx = sx > 0 ? brdm.nextInt(sx) + dwn.getX() : dwn.getX();
 	    	int ry = sy > 0 ? brdm.nextInt(sy) + dwn.getY() : dwn.getY();
@@ -361,17 +358,17 @@ public class MultiBlockBattery {
 			double cate = 1;
 			double anoe = 1;
 			if(electrode1.type == TYPE.ANODE){
-				cate = Math.pow( Math.abs( Math.ceil( rangeElectrodeO - Math.abs( Collections.min( electrode2.oxydationNumber ) ) ) ) + 1 , 1 ) * Math.pow( electrode2MP.currentAmount + 1, 1.1 );
-				anoe = Math.pow( Math.abs( Math.ceil( rangeElectrodeO - Math.abs( Collections.max( electrode1.oxydationNumber ) ) ) ) + 1 , 1 ) * Math.pow( electrode1MP.currentAmount + 1, 1.1 );
+				cate = Math.pow( Math.abs( Math.ceil( rangeElectrodeO - Math.abs( Collections.min( electrode2.oxydationNumber ) ) ) ) + 1 , 1 ) * Math.pow( electrode2MP.currentAmount + 1, 1.3 );
+				anoe = Math.pow( Math.abs( Math.ceil( rangeElectrodeO - Math.abs( Collections.max( electrode1.oxydationNumber ) ) ) ) + 1 , 1 ) * Math.pow( electrode1MP.currentAmount + 1, 1.3 );
 			}else{
-				cate = Math.pow( Math.abs( Math.ceil( rangeElectrodeO - Math.abs( Collections.min( electrode1.oxydationNumber ) ) ) ) + 1 , 1 ) * Math.pow( electrode1MP.currentAmount + 1, 1.1 );
-				anoe = Math.pow( Math.abs( Math.ceil( rangeElectrodeO - Math.abs( Collections.max( electrode2.oxydationNumber ) ) ) ) + 1 , 1 ) * Math.pow( electrode2MP.currentAmount + 1, 1.1 );
+				cate = Math.pow( Math.abs( Math.ceil( rangeElectrodeO - Math.abs( Collections.min( electrode1.oxydationNumber ) ) ) ) + 1 , 1 ) * Math.pow( electrode1MP.currentAmount + 1, 1.3 );
+				anoe = Math.pow( Math.abs( Math.ceil( rangeElectrodeO - Math.abs( Collections.max( electrode2.oxydationNumber ) ) ) ) + 1 , 1 ) * Math.pow( electrode2MP.currentAmount + 1, 1.3 );
 			}
-			double ne = Math.pow( potentialDifference , 1.1 ) * ( cate + anoe );
+			double ne = Math.pow( potentialDifference , 1.3 ) * Math.pow( ( cate + anoe ) , 0.91 );
 			double ee = Math.pow( Math.abs( Math.ceil( rangeElectrolyteO - Math.abs( Collections.max( electrolyte.oxydationNumber ) ) ) ) + 1 , 1 ) * Math.abs(electrolyte.potential) * Math.pow( electrolyte.electrolyteType.ratioVoltage , 1.1 ) * Math.pow( electrolyteMP.currentAmount + 1, 1.1 );
 			double ce = Math.pow( ee + ne , 1 ) * ( ( electrode1Cond.ratioEfficiency + electrode2Cond.ratioEfficiency ) / 2 );
 			
-			//System.out.println(cate+"   "+anoe+"   "+ne+"    "+ee+"   "+ce+"   "+electrode1Cond.ratioEfficiency+"    "+electrode2Cond.ratioEfficiency);
+			System.out.println(cate+"   "+anoe+"   "+ne+"    "+ee+"   "+ce+"   "+electrode1Cond.ratioEfficiency+"    "+electrode2Cond.ratioEfficiency+"  "+potentialDifference);
 			
 			return ce < 0 ? 0 : ce;
 		}

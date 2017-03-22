@@ -10,7 +10,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import noelflantier.bigbattery.BigBattery;
 import noelflantier.bigbattery.common.tiles.TileInterface;
-import noelflantier.bigbattery.common.tiles.TilePlug;
 
 public class PacketInterface  implements IMessage, IMessageHandler<PacketInterface, IMessage> {
 	

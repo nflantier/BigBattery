@@ -8,7 +8,6 @@ import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
-import noelflantier.bigbattery.common.handlers.ModItems;
 import noelflantier.bigbattery.common.handlers.ModProperties.InterfaceType;
 import noelflantier.bigbattery.common.materials.MaterialsHandler;
 

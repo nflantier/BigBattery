@@ -1,11 +1,9 @@
 package noelflantier.bigbattery.common.tiles;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
 
 public abstract class ATileBB  extends TileEntity{
 	

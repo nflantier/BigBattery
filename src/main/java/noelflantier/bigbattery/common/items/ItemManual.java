@@ -7,7 +7,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import noelflantier.bigbattery.BigBattery;
-import noelflantier.bigbattery.Ressources;
 import noelflantier.bigbattery.common.handlers.ModGuis;
 
 public class ItemManual extends ItemBB{

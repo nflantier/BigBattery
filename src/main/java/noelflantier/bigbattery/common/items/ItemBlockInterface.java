@@ -7,11 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import noelflantier.bigbattery.common.blocks.BlockCasing;
-import noelflantier.bigbattery.common.blocks.BlockConductive;
 import noelflantier.bigbattery.common.blocks.BlockInterface;
-import noelflantier.bigbattery.common.handlers.ModProperties.CasingType;
-import noelflantier.bigbattery.common.handlers.ModProperties.ConductiveType;
 import noelflantier.bigbattery.common.handlers.ModProperties.InterfaceType;
 
 public class ItemBlockInterface  extends ItemBlockBB{

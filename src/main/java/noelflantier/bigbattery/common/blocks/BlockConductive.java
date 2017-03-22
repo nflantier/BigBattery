@@ -1,7 +1,5 @@
 package noelflantier.bigbattery.common.blocks;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
@@ -9,25 +7,17 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import noelflantier.bigbattery.Ressources;
-import noelflantier.bigbattery.common.handlers.ModProperties.CasingType;
 import noelflantier.bigbattery.common.handlers.ModProperties.ConductiveType;
-import noelflantier.bigbattery.common.handlers.ModProperties.PropertyCasingType;
 import noelflantier.bigbattery.common.handlers.ModProperties.PropertyConductiveType;
 import noelflantier.bigbattery.common.items.ItemBlockConductive;
 import noelflantier.bigbattery.common.tiles.ITileHaveMaster;
-import noelflantier.bigbattery.common.tiles.TileCasing;
 import noelflantier.bigbattery.common.tiles.TileConductive;
 
 public class BlockConductive extends ABlockBBStructure {

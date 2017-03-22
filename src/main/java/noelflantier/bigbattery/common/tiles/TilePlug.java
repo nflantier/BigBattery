@@ -7,8 +7,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
 import noelflantier.bigbattery.common.handlers.ModConfig;
 import noelflantier.bigbattery.common.helpers.MultiBlockBattery;
 import noelflantier.bigbattery.common.helpers.MultiBlockMessage;
@@ -36,7 +34,7 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
 			mbb.plugPos = getPos();
 		if(!getStructure().isStructured)
 			return;
-		energyStorage.extractEnergy(100000, false);
+		//energyStorage.extractEnergy(100000, false);
 		if(energyStorage.getEnergyStored()>=energyStorage.getMaxEnergyStored()){
 			//setEnergyCapacity();
 			return;
@@ -92,6 +90,7 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
         super.writeToNBT(nbt);
         getStructure().writeToNBT(nbt);
         nbt.setInteger("capacity", capacity);
+        nbt.setInteger("currentRF", currentRF);
         //nbt.setInteger("energy", energyStorage.getEnergyStored());
         nbt.setTag("capabilityEnergy",CapabilityEnergy.ENERGY.getStorage().writeNBT(CapabilityEnergy.ENERGY , getCapability(CapabilityEnergy.ENERGY,null), null));
         return nbt;
@@ -103,6 +102,7 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
         getStructure().readFromNBT(nbt);
         capacity = nbt.getInteger("capacity");
         energyStorage = new EnergyStoragePlug(capacity);
+        currentRF = nbt.getInteger("currentRF");
         //energyStorage.receiveEnergy(nbt.getInteger("energy"), false);
         if(nbt.getTag("capabilityEnergy") != null)
         	CapabilityEnergy.ENERGY.getStorage().readNBT(CapabilityEnergy.ENERGY, getCapability(CapabilityEnergy.ENERGY,null), null, nbt.getTag("capabilityEnergy"));

@@ -18,7 +18,6 @@ import noelflantier.bigbattery.common.handlers.ModItems;
 import noelflantier.bigbattery.common.handlers.ModProperties.ConductiveType;
 import noelflantier.bigbattery.common.handlers.ModProperties.InterfaceType;
 import noelflantier.bigbattery.common.materials.MaterialsHandler;
-import noelflantier.bigbattery.common.materials.MaterialsHandler.Conductive;
 import noelflantier.bigbattery.common.materials.MaterialsHandler.Electrode;
 import noelflantier.bigbattery.common.materials.MaterialsHandler.Electrolyte;
 
@@ -55,15 +54,18 @@ public class NIndexManual extends ABaseCategory{
 					addTextAutoWitdh("To build a battery you'll need at least a plug, one or two conductive types max and some casing.", 0, 0, NGuiManual.maxStringWidth);
 					addTextAutoWitdh("Adding materials and interfaces is optionnal. If you dont have interfaces you'll have to place the materials manualy. "
 							+ "Interfaces help you to automate this process.", 0, 0, NGuiManual.maxStringWidth);
-					addItemStack(new GuiItemStack(x+0,y+65,new ItemStack(ModBlocks.blockPlug,1,0)));
+					addTextAutoWitdh("A full battery will always generate more power, so make sure to fill it up to use the full potential of the battery.", 0, 0, NGuiManual.maxStringWidth);
+					addTextAutoWitdh("Battery only generate power if their internal buffer is used.", 0, 0, 100);
+
+					addItemStack(new GuiItemStack(x+100,y+80,new ItemStack(ModBlocks.blockPlug,1,0)));
 					for(int i = 0 ; i < ConductiveType.values().length ; i++){
 						ItemStack it = new ItemStack(ModBlocks.blockConductive,1,ModBlocks.blockConductive.getMetaFromState(ModBlocks.blockConductive.getDefaultState().withProperty(BlockConductive.CONDUCTIVE_TYPE, ConductiveType.getType(i))));
-			    		addItemStack(new GuiItemStack(x+i*20,y+85,it));
+			    		addItemStack(new GuiItemStack(x+100+i*20,y+96,it));
 			    	}
-					addItemStack(new GuiItemStack(x+0,y+105,new ItemStack(ModBlocks.blockCasing,1,0)));
-					addItemStack(new GuiItemStack(x+20,y+105,new ItemStack(ModBlocks.blockCasing,1,2)));
+					addItemStack(new GuiItemStack(x+100,y+112,new ItemStack(ModBlocks.blockCasing,1,0)));
+					addItemStack(new GuiItemStack(x+20+100,y+112,new ItemStack(ModBlocks.blockCasing,1,2)));
 					for(int i = 0 ; i < InterfaceType.values().length ; i++){
-			    		addItemStack(new GuiItemStack(x+i*20,y+125,new ItemStack(ModBlocks.blockInterface,1,ModBlocks.blockInterface.getMetaFromState(ModBlocks.blockInterface.getDefaultState().withProperty(BlockInterface.INTERFACE_TYPE, InterfaceType.getType(i))))));
+			    		addItemStack(new GuiItemStack(x+100+i*20,y+128,new ItemStack(ModBlocks.blockInterface,1,ModBlocks.blockInterface.getMetaFromState(ModBlocks.blockInterface.getDefaultState().withProperty(BlockInterface.INTERFACE_TYPE, InterfaceType.getType(i))))));
 			    	}
 				}});
 			}}
@@ -140,11 +142,17 @@ public class NIndexManual extends ABaseCategory{
 					
 					addImage(new GuiImage(x,y+decy,8,8,0.25F,0F,0.5F,1F,layout));
 					addTextAutoWitdh("Empty or ", 10,24, NGuiManual.maxStringWidth);
-					int j = 0;
-					for(Map.Entry<Integer,Electrode> entry : MaterialsHandler.electrodeListByPotential.entrySet()){	
-						addItemStack(new GuiItemStack(x+55+j*16,y+decy-4,entry.getValue().stackReference.copy()));
-						j++;
-					}	
+					addComponent(CAT_ELECTRODE,
+						new GuiComponent(x+57, y+decy, 55, 10){{
+							addText("Electrodes", 0, 0);
+							isLink = true;
+						}});
+					addTextAutoWitdh("or", 116,-10, NGuiManual.maxStringWidth);				
+					addComponent(CAT_ELECTROLYTE,
+						new GuiComponent(x+130, y+decy, 60, 10){{
+							addText("Electrolytes", 0, 0);
+							isLink = true;
+						}});
 					decy += 16;
 					
 					addImage(new GuiImage(x,y+decy,8,8,0F,0F,0.25F,1F,layout));
@@ -172,21 +180,24 @@ public class NIndexManual extends ABaseCategory{
 		listCategory.put(CAT_ELECTRODE, new DummyCategory(CAT_ELECTRODE,this.x, this.y){{
 			addComponent("in",
 				new GuiComponent(x+32, y+30, 100, 10){{
-					yButtonRecipes = 70;
+					yButtonRecipes = 71;
 					xButtonRecipes = 95;
 					nbGuiRecipeVertical = 1;
 					nbGuiRecipeHorizontal = 3;
 					handleRecipesGroup = true;
 					int i = 0;
 					for(Map.Entry<Integer,Electrode> entry : MaterialsHandler.electrodeListByPotential.entrySet()){
-						addRecipe(new GuiRecipe(entry.getValue().name+" E:"+entry.getValue().potential+" O:"+entry.getValue().oxydationNumber.size(),x,y,GuiRecipe.getGuiItemStack(new ArrayList<ItemStack>(){{add(entry.getValue().stackReference);}}),GuiRecipe.TYPE.VANILLA,GuiRecipe.getGuiItemStack(entry.getValue().listStack)));
+						addRecipe(new GuiRecipe("E:"+entry.getValue().potential+" O :"+entry.getValue().oxydationNumber.size()+"  "+entry.getValue().oxydationNumber.toString(),x,y,GuiRecipe.getGuiItemStack(new ArrayList<ItemStack>(){{add(entry.getValue().stackReference);}}),GuiRecipe.TYPE.VANILLA,GuiRecipe.getGuiItemStack(entry.getValue().listStack),0,5));
 						i++;
 					}
 				}});
 			addComponent("te",
-				new GuiComponent(x+10, y+130, 100, 10){{
-					addTextAutoWitdh("Electrodes have different potential (E). Anode will be the electrode with the least potential, Cathode will be the other one. The bigger the "
-							+ "potential difference is the more RF you will generate. The bigger the oxydation number (O) is the longer the electrode will last.", 0, 0, NGuiManual.maxStringWidth);
+				new GuiComponent(x+10, y+125, 100, 10){{
+					globalScale = 0.7F;
+					addTextAutoWitdh("Electrodes have different potential (E). The bigger the potential difference between your choosen electrodes is, the more RF you will "
+							+ "generate. The bigger the amount of oxydation number (O) is, the longer the electrode will last. Anode = least potential from the two choosen "
+							+ "electrodes, cathode will be the other one. A best anode to generate more rf will be one with minimal (O) value close to 1 and best cathode "
+							+ "to generate more rf will be one with maximal (O) value close to 1.", 0, 0, NGuiManual.maxStringWidth + (int) (NGuiManual.maxStringWidth*(1-globalScale)));
 				}});
 			}}
 		);
@@ -197,21 +208,29 @@ public class NIndexManual extends ABaseCategory{
 		listCategory.put(CAT_ELECTROLYTE, new DummyCategory(CAT_ELECTROLYTE,this.x, this.y){{
 			addComponent("in",
 				new GuiComponent(x+32, y+30, 100, 10){{
-					yButtonRecipes = 70;
+					yButtonRecipes = 71;
 					xButtonRecipes = 95;
 					nbGuiRecipeVertical = 1;
 					nbGuiRecipeHorizontal = 3;
 					handleRecipesGroup = true;
+					
 					int i = 0;
 					for(Map.Entry<Integer,Electrolyte> entry : MaterialsHandler.electrolyteListByPotential.entrySet()){
-						addRecipe(new GuiRecipe(entry.getValue().name+" E:"+entry.getValue().potential+" O:"+entry.getValue().oxydationNumber.size(),x,y,GuiRecipe.getGuiItemStack(new ArrayList<ItemStack>(){{add(entry.getValue().stackReference);}}),GuiRecipe.TYPE.VANILLA,GuiRecipe.getGuiItemStack(entry.getValue().listStack)));
+						addRecipe(new GuiRecipe("E:"+entry.getValue().potential+" O :"+entry.getValue().oxydationNumber.size()+"  "+entry.getValue().oxydationNumber.toString(),x,y,GuiRecipe.getGuiItemStack(new ArrayList<ItemStack>(){{add(entry.getValue().stackReference);}}),GuiRecipe.TYPE.VANILLA,GuiRecipe.getGuiItemStack(entry.getValue().listStack),0,5));
 						i++;
 					}
 				}});
 			addComponent("te",
-				new GuiComponent(x+10, y+130, 100, 10){{
-					addTextAutoWitdh("Electrolyte have different potential (E). The bigger the potential difference is the more RF you will generate. The bigger the "
-							+ "oxydation number (O) is the longer the electrolyte will last.", 0, 0, NGuiManual.maxStringWidth);
+				new GuiComponent(x+10, y+125, 100, 10){{
+					globalScale = 0.7F;
+					addTextAutoWitdh("Electrolyte have different potential (E). The bigger the potential is, the more RF you will generate. The bigger the "
+							+ "amount of oxydation number (O) is, the longer the electrolyte will last. A best electrolyte to generate more rf will be one with (O) maximal "
+							+ "value close to 1. There is differents type of electrolytes each one have there own ratio for voltage and lasting time : ", 0, 0, NGuiManual.maxStringWidth + (int) (NGuiManual.maxStringWidth*(1-globalScale)));
+					String te = "";
+					for(int i = 0 ; i < MaterialsHandler.Electrolyte.Type.values().length ; i++){
+						te += " "+MaterialsHandler.Electrolyte.Type.getTypeFromIndex(i).name()+" ( V : "+MaterialsHandler.Electrolyte.Type.getTypeFromIndex(i).ratioVoltage+" ,LT: "+MaterialsHandler.Electrolyte.Type.getTypeFromIndex(i).ratioDecay+")";
+					}
+					addTextAutoWitdh(te, 0,0, NGuiManual.maxStringWidth);
 				}});
 			}}
 		);

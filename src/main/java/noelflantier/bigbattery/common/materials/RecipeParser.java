@@ -26,8 +26,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.oredict.OreDictionary;
-import noelflantier.bigbattery.BigBattery;
-import noelflantier.bigbattery.Ressources;
 import noelflantier.bigbattery.common.materials.MaterialsHandler.Material;
 
 public class RecipeParser extends DefaultHandler {

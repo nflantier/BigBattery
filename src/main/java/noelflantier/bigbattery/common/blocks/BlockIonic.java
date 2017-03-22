@@ -8,7 +8,6 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import noelflantier.bigbattery.common.handlers.ModProperties.CasingType;
 
 public class BlockIonic extends ABlockBB{
 	public BlockIonic(Material materialIn, String ulname) {

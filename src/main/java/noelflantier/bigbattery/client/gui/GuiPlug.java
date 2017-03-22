@@ -34,6 +34,7 @@ public class GuiPlug extends GuiNF{
 	@Override
 	public void updateScreen(){
 		super.updateScreen();
+		componentList.get("cu").replaceString(1, "Can generate : "+((int)tile.currentRF<=-1?0:(int)tile.currentRF)+" RF");
 		componentList.get("e1m").replaceString(0, "Amount : "+tile.mbb.materialsBattery.electrode1MP.currentAmount).replaceString(1, "Max : "+tile.mbb.materialsBattery.electrode1MP.maxAmount).replaceString(2, "Decay : "+(int)tile.mbb.materialsBattery.electrode1MP.currentUnit);
 		componentList.get("e2m").replaceString(0, "Amount : "+tile.mbb.materialsBattery.electrode2MP.currentAmount).replaceString(1, "Max : "+tile.mbb.materialsBattery.electrode2MP.maxAmount).replaceString(2, "Decay : "+(int)tile.mbb.materialsBattery.electrode2MP.currentUnit);
 		componentList.get("elm").replaceString(0, "Amount : "+tile.mbb.materialsBattery.electrolyteMP.currentAmount).replaceString(1, "Max : "+tile.mbb.materialsBattery.electrolyteMP.maxAmount).replaceString(2, "Decay : "+(int)tile.mbb.materialsBattery.electrolyteMP.currentUnit);

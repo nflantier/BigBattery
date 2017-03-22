@@ -2,14 +2,6 @@ package noelflantier.bigbattery.common.handlers;
 
 import java.util.Random;
 
-import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionType;
-import net.minecraft.potion.PotionUtils;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.common.brewing.IBrewingRecipe;
-
 public class ModBrewing {
 	
 	public static Random rdm = new Random();

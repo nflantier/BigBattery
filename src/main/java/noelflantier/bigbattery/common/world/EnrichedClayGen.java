@@ -16,6 +16,7 @@ public class EnrichedClayGen extends WorldGenerator{
 	
 	public static final int ymin = 55;
 	public static final int ymax = 65;
+	public static int trueGen = 3;
 	//2807071691121312404
 	public void generate(World worldIn, Random rand, int xch, int zch) {
 		List<Integer> l = new ArrayList<Integer>();
@@ -28,7 +29,15 @@ public class EnrichedClayGen extends WorldGenerator{
 				l.add(r);
 			i++;
 		}
-		l.stream().forEach(e->generate(worldIn, rand, new BlockPos(xch + rand.nextInt(16),e,zch + rand.nextInt(16))));
+		
+		int cpt = 0;
+		for(int j = 0 ; j < l.size() ; j++){
+			if( generate(worldIn, rand, new BlockPos(xch + rand.nextInt(16),l.get(j),zch + rand.nextInt(16))) )
+				cpt += 1;
+			if( cpt > trueGen)
+				break;
+		}
+		
 	}
 	
 	@Override
@@ -80,7 +89,6 @@ public class EnrichedClayGen extends WorldGenerator{
                                     IBlockState state = worldIn.getBlockState(blockpos);
                             		if (worldIn.getBlockState(position).getBlock() == Blocks.CLAY || worldIn.getBlockState(position).getBlock() == Blocks.WATER)
                                     {
-                            			System.out.println(".................................................................... gg "+position);
                                     	worldIn.setBlockState(blockpos, ModBlocks.blockEnrichedClay.getDefaultState(), 2);
                                     }
                                 }

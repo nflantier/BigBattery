@@ -1,9 +1,5 @@
 package noelflantier.bigbattery;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraftforge.fluids.Fluid;
-
 public class Ressources {
 		
 	public static final String MODID = "bigbattery";
