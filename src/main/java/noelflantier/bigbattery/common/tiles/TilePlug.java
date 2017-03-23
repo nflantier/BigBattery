@@ -42,8 +42,7 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
 			if(t!=null && t.hasCapability(CapabilityEnergy.ENERGY, mbb.plugFacingOpposite) && t.getCapability(CapabilityEnergy.ENERGY, mbb.plugFacingOpposite).canReceive()){
 				int toe = t.getCapability(CapabilityEnergy.ENERGY, mbb.plugFacingOpposite).receiveEnergy(energyStorage.getEnergyStored(), true);
 				if(toe > 0){
-					int ttoe = energyStorage.extractEnergy(toe, false);
-					t.getCapability(CapabilityEnergy.ENERGY, mbb.plugFacingOpposite).receiveEnergy(ttoe, false);
+					t.getCapability(CapabilityEnergy.ENERGY, mbb.plugFacingOpposite).receiveEnergy(energyStorage.extractEnergy(toe, false), false);
 				}
 			}
 		}
