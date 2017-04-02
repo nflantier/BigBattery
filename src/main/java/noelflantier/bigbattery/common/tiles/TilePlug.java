@@ -58,7 +58,7 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
 			if(ModConfig.areBatteryalwaysGenerating){
 				truerf = currentRF;
 			}
-			mbb.materialsBattery.handleMaterials(getWorld(), (float)truerf/(float)currentRF);
+			mbb.materialsBattery.handleMaterials(getWorld(), (float)truerf/(float)currentRF, mbb.plugFacingOpposite);
 		}else
 			setEnergyCapacity();
 		sendPacketPlug();

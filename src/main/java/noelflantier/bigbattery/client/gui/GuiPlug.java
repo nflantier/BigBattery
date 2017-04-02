@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import noelflantier.bigbattery.Ressources;
@@ -34,7 +35,7 @@ public class GuiPlug extends GuiNF{
 	@Override
 	public void updateScreen(){
 		super.updateScreen();
-		componentList.get("cu").replaceString(1, "Can generate : "+((int)tile.currentRF<=-1?0:(int)tile.currentRF)+" RF");
+		componentList.get("cu").replaceString(1, I18n.format("gui.plug.cang")+((int)tile.currentRF<=-1?0:(int)tile.currentRF)+" RF");
 		componentList.get("e1m").replaceString(0, "Amount : "+tile.mbb.materialsBattery.electrode1MP.currentAmount).replaceString(1, "Max : "+tile.mbb.materialsBattery.electrode1MP.maxAmount).replaceString(2, "Decay : "+(int)tile.mbb.materialsBattery.electrode1MP.currentUnit);
 		componentList.get("e2m").replaceString(0, "Amount : "+tile.mbb.materialsBattery.electrode2MP.currentAmount).replaceString(1, "Max : "+tile.mbb.materialsBattery.electrode2MP.maxAmount).replaceString(2, "Decay : "+(int)tile.mbb.materialsBattery.electrode2MP.currentUnit);
 		componentList.get("elm").replaceString(0, "Amount : "+tile.mbb.materialsBattery.electrolyteMP.currentAmount).replaceString(1, "Max : "+tile.mbb.materialsBattery.electrolyteMP.maxAmount).replaceString(2, "Decay : "+(int)tile.mbb.materialsBattery.electrolyteMP.currentUnit);

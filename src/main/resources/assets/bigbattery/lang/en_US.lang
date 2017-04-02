@@ -66,3 +66,5 @@ tile.blockLithium.name=Lithium block
 tile.blockCalcium.name=Calcium block
 fluid.fluidChlore=Chloric solution
 
+gui.plug.cang=Can generate :
+

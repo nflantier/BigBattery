@@ -6,12 +6,17 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Predicate;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockWorldState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -81,11 +86,11 @@ public class MultiBlockBattery {
 	public MultiBlockBattery(){
 		
 	}
-
+	
 	public static class B3D{
-		public BlockPos dwn;
-		public BlockPos ues;
-		public static Random brdm = new Random();
+		private BlockPos dwn;
+		private BlockPos ues;
+		private static Random brdm = new Random();
 		
 		public B3D(BlockPos d, BlockPos u){
 			dwn = d;
@@ -98,35 +103,172 @@ public class MultiBlockBattery {
 	    public B3D() {
 		}
 
-	    public BlockPos getRandomBlock(){
-	    	int sx = Math.abs(ues.getX() - dwn.getX())+1;
-	    	int sy = Math.abs(ues.getY() - dwn.getY())+1;
-	    	int sz = Math.abs(ues.getZ() - dwn.getZ())+1;
+	    private BlockPos getRandomBlock(){
+	    	if(!allowRandomBlockPicking)
+	    		return null;
+	    	int sx = Math.abs( ues.getX() - dwn.getX() ) + 1;
+	    	int sy = Math.abs( ues.getY() - dwn.getY() ) + 1;
+	    	int sz = Math.abs( ues.getZ() - dwn.getZ() ) + 1;
 	    	
-	    	int rx = sx > 0 ? brdm.nextInt(sx) + dwn.getX() : dwn.getX();
-	    	int ry = sy > 0 ? brdm.nextInt(sy) + dwn.getY() : dwn.getY();
-	    	int rz = sz > 0 ? brdm.nextInt(sz) + dwn.getZ() : dwn.getZ();
-	    	return new BlockPos(rx, ry, rz);
+	    	return new BlockPos(brdm.nextInt(sx) + dwn.getX() , brdm.nextInt(sy) + dwn.getY() , brdm.nextInt(sz) + dwn.getZ() );
 	    }
 	    
-		public int getNumberOfBlock() {
+	    private int getNumberOfBlock() {
 			return ( Math.abs( ues.getX() - dwn.getX() ) + 1 ) * ( Math.abs( ues.getZ() - dwn.getZ() ) + 1 ) * ( Math.abs( ues.getY() - dwn.getY() ) + 1 );
 		}
-		
-	    public BlockPos getNextMaterialBlock(World world){
-			for (int x = dwn.getX() ; x <= ues.getX() ; x++ ){
-				for (int y = dwn.getY() ; y <= ues.getY() ; y++ ){
-					for (int z = dwn.getZ() ; z <= ues.getZ() ; z++ ){
-						BlockPos p = new BlockPos(x,y,z);
-						IBlockState s = world.getBlockState(p);
-						if(s.getBlock()!= Blocks.AIR){
-							return p;
+
+	    private static boolean allowRandomBlockPicking = false;
+	    private static Predicate<IBlockState> checkBlock(Block b){return p -> p.getBlock() == b;}
+	    private static Map<String,Object> mapReplaceAir = new HashMap<String, Object>(){{
+        	put("predicate", checkBlock(Blocks.AIR));
+        }};	
+        private static Map<String,Object> mapAddBlock = new HashMap<String, Object>();
+        
+        private static B3DIterate<BlockPos> B3D_GET_REMOVE  = new B3DIterate<BlockPos>(){
+			@Override
+			public Optional<BlockPos> checkBlock(Map<String, Object> m, World world) {
+				IBlockState s = world.getBlockState((BlockPos) m.get("pos"));
+				if( !((Predicate<IBlockState>) m.get("predicate")).apply(s) ){
+					return Optional.of((BlockPos) m.get("pos"));
+				}
+				return Optional.empty();
+			}
+        };
+        private static B3DIterate<Boolean> B3D_ADD  = new B3DIterate<Boolean>(){
+			@Override
+			public Optional<Boolean> checkBlock(Map<String, Object> m, World world) {
+				BlockPos p = (BlockPos) m.get("pos");
+				IBlockState s = world.getBlockState(p);
+				if( ((Predicate<IBlockState>) m.get("predicate")).apply(s) || isBlockFluidReplaceable(s)){
+					return Optional.of(world.setBlockState(p, ((Block) m.get("block")).getDefaultState()));
+				}
+				return Optional.of(false);
+			}
+			@Override
+			public Optional<Boolean> iterateBlocks(Map<String, Object> m, World world){
+				int i = 0;
+				BlockPos d = (BlockPos) m.get("dpos");
+				BlockPos u = (BlockPos) m.get("upos");
+				int inc = m.containsKey("inc") ? (int)m.get("inc") : 1;
+				for (int y = d.getY() ; inc >= 0 ? y <= u.getY() : y >= u.getY() ; y += inc ){
+					for (int x = d.getX() ; inc >= 0 ? x <= u.getX() : x >= u.getX() ; x += inc ){
+						for (int z = d.getZ() ; inc >= 0 ? z <= u.getZ() : z >= u.getZ() ; z += inc ){
+							//System.out.println("......................iadd "+x+"  "+y+"  "+z);
+							m.remove("pos");
+							m.put("pos", new BlockPos(x,y,z));
+							Optional<Boolean> b = checkBlock(m, world);
+							if(b.isPresent() && b.get() == true){
+								i++;
+								if( i >= (int)m.get("amount") )
+									return Optional.of(true);
+							}
 						}
 					}
 				}
-			}
+				return Optional.of(false);
+			};
+        };
+        
+        private BlockPos getBlockPosLimitForAmount(int amount, int dec, EnumFacing facing){
+        	int xc = dwn.getX();
+        	int zc = dwn.getZ();
+        	int yc = dwn.getY();
+        	int xl = Math.abs( ues.getX() - dwn.getX() ) + 1;
+        	int zl = Math.abs( ues.getZ() - dwn.getZ() ) + 1;
+        	int yl = Math.abs( ues.getY() - dwn.getY() ) + 1;
+        	switch(facing){
+        		case DOWN : 
+        	    	xc = ues.getX() - ((int) ( Math.ceil( (float)(amount) / (float)zl ) - 1 ) % xl);
+        	    	zc = ues.getZ() - (( amount + dec ) % zl);
+        	    	yc = ues.getY() - ((int) Math.ceil( (float)(amount) / (float)( zl * xl ) ) - 1);
+        			break;
+        		case UP : 
+        	    	xc = ues.getX() - ((int) ( Math.ceil( (float)(amount) / (float)zl ) - 1 ) % xl);
+        	    	zc = ues.getZ() - (( amount + dec ) % zl);
+        	    	yc = dwn.getY() + ((int) Math.ceil( (float)(amount) / (float)( zl * xl ) ) - 1);
+        	    	break;
+        		case NORTH : 
+        	    	xc = ues.getX() - ((int) ( Math.ceil( (float)(amount) / (float)yl ) - 1 ) % xl);
+        	    	zc = ues.getZ() - ((int) Math.ceil( (float)(amount) / (float)( yl * xl ) ) - 1);
+        	    	yc = ues.getY() - (( amount + dec ) % yl);
+        			break;
+        		case SOUTH : 
+        	    	xc = ues.getX() - ((int) ( Math.ceil( (float)(amount) / (float)yl ) - 1 ) % xl);
+        	    	zc = dwn.getZ() + ((int) Math.ceil( (float)(amount) / (float)( yl * xl ) ) - 1);
+        	    	yc = ues.getY() - (( amount + dec ) % yl);
+        			break;
+        		case WEST : 
+        	    	xc = ues.getX() - ((int) Math.ceil( (float)(amount) / (float)( yl * zl ) ) - 1);
+        	    	zc = ues.getZ() - ((int) ( Math.ceil( (float)(amount) / (float)yl ) - 1 ) % zl);
+        	    	yc = ues.getY() - (( amount + dec ) % yl);
+        			break;
+        		case EAST : 
+        	    	xc = dwn.getX() + ((int) Math.ceil( (float)(amount) / (float)( yl * zl ) ) - 1);
+        	    	zc = ues.getZ() - ((int) ( Math.ceil( (float)(amount) / (float)yl ) - 1 ) % zl);
+        	    	yc = ues.getY() - (( amount + dec ) % yl);
+        			break;
+        		default:
+        	    	xc = ues.getX() - ((int) ( Math.ceil( (float)(amount) / (float)zl ) - 1 ) % xl);
+        	    	zc = ues.getZ() - (( amount + dec ) % zl);
+        	    	yc = ues.getY() - ((int) Math.ceil( (float)(amount) / (float)( zl * xl ) ) - 1);
+        			break;
+        	}
+			//System.out.println("......................f "+dwn+"   "+ues);
+			//System.out.println("......................f "+xc+"   "+yc+"   "+zc);
+	    	return new BlockPos(xc , yc , zc);
+        }
+        
+        private BlockPos getNextMaterialBlock(World world, int amount, EnumFacing facing){
+	    	if(amount < 0)
+	    		return null;
+	    	mapReplaceAir.put("dpos", getBlockPosLimitForAmount(amount+1, -1, facing));
+	    	mapReplaceAir.put("upos", ues);
+	    	Optional<BlockPos> valid = B3D_GET_REMOVE.iterateBlocks(mapReplaceAir, world);
+	    	if(valid.isPresent())
+				return valid.get();
+
+	    	mapReplaceAir.put("dpos", dwn);
+	    	Optional<BlockPos> valid2 = B3D_GET_REMOVE.iterateBlocks(mapReplaceAir, world);
+			if(valid2.isPresent())
+				return valid2.get();
+			
 	    	return null;
 	    }
+	    
+	    private boolean placeBlockFromStack(World world, ItemStack stack, Block toReplace, int amountToAdd, int amount, EnumFacing facing) {
+			if(stack == null || ! ( stack.getItem() instanceof ItemBlock ) || ((ItemBlock)stack.getItem()).block == null)
+				return false;
+			mapAddBlock.put("predicate", checkBlock(toReplace));
+			mapAddBlock.put("block", ((ItemBlock)stack.getItem()).block);
+			mapAddBlock.put("amount", amountToAdd);
+			mapAddBlock.put("inc", -1);
+			mapAddBlock.put("dpos", getBlockPosLimitForAmount(amount, -1, facing));
+			mapAddBlock.put("upos", dwn);
+			Optional<Boolean> valid = B3D_ADD.iterateBlocks(mapAddBlock, world);
+
+	    	if(valid.isPresent())
+				return valid.get();
+
+	    	mapAddBlock.put("upos", ues);
+	    	Optional<Boolean> valid2 = B3D_ADD.iterateBlocks(mapAddBlock, world);
+			if(valid2.isPresent())
+				return valid2.get();
+	    	
+			return false;
+		}
+		
+	    private boolean placeBlockFromFluidStack(World world, FluidStack stack, Block toReplace, int amountToAdd, int amount, EnumFacing facing) {
+			if(stack == null || stack.getFluid() == null || stack.getFluid().getBlock() == null)
+				return false;
+			mapAddBlock.put("predicate", checkBlock(toReplace));
+			mapAddBlock.put("block", stack.getFluid().getBlock().getDefaultState());
+			mapAddBlock.put("amount", amountToAdd);
+			mapAddBlock.put("inc", -1);
+			mapAddBlock.put("dpos", getBlockPosLimitForAmount(amount+1, -1, facing));
+			mapAddBlock.put("upos", dwn);
+			Optional<Boolean> valid = B3D_ADD.iterateBlocks(mapAddBlock, world);
+			return valid.isPresent() ? valid.get() : false;
+		}
 	    
 		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 	    	if(dwn!=null){
@@ -146,52 +288,6 @@ public class MultiBlockBattery {
 	        dwn = new BlockPos(nbt.getInteger("dwnx"),nbt.getInteger("dwny"),nbt.getInteger("dwnz"));	
 	        ues = new BlockPos(nbt.getInteger("uesx"),nbt.getInteger("uesy"),nbt.getInteger("uesz"));
 	    }
-	    
-		public boolean placeBlockFromStack(World world, ItemStack stack, Block toReplace, int amount) {
-			int i = 0;
-			if(stack != null && stack.getItem() instanceof ItemBlock){
-				if(((ItemBlock)stack.getItem()).block != null){
-					for (int x = dwn.getX() ; x <= ues.getX() ; x++ ){
-						for (int y = dwn.getY() ; y <= ues.getY() ; y++ ){
-							for (int z = dwn.getZ() ; z <= ues.getZ() ; z++ ){
-								BlockPos p = new BlockPos(x,y,z);
-								IBlockState s = world.getBlockState(p);
-								if(s.getBlock() == toReplace  || isBlockFluidReplaceable(s)){
-									world.setBlockState(p, ((ItemBlock)stack.getItem()).block.getDefaultState());
-									i++;
-									if( i >= amount )
-										return true;
-								}
-							}
-						}
-					}
-				}
-			}
-			return false;
-		}
-		
-		public boolean placeBlockFromFluidStack(World world, FluidStack stack, Block toReplace, int amount) {
-			int i = 0;
-			if(stack != null && stack.getFluid()!=null){
-				if(stack.getFluid().getBlock() != null){
-					for (int x = dwn.getX() ; x <= ues.getX() ; x++ ){
-						for (int y = dwn.getY() ; y <= ues.getY() ; y++ ){
-							for (int z = dwn.getZ() ; z <= ues.getZ() ; z++ ){
-								BlockPos p = new BlockPos(x,y,z);
-								IBlockState s = world.getBlockState(p);
-								if(s.getBlock() == toReplace || isBlockFluidReplaceable(s) ){
-									world.setBlockState(p, stack.getFluid().getBlock().getDefaultState());
-									i++;
-									if( i >= amount )
-										return true;
-								}
-							}
-						}
-					}
-				}
-			}
-			return false;
-		}
 		
 	}
 	
@@ -205,6 +301,34 @@ public class MultiBlockBattery {
 		public B3D materialLimit = new B3D();
 		
 		public MaterialPart(){}
+
+		public void reset() {
+			weight = 1;
+			totalUnit = -1;
+			currentUnit = -1;
+			currentAmount = -1;
+		}
+		
+		public void setMaterialLimit(B3D b3d) {
+			materialLimit = b3d;
+			maxAmount = b3d.getNumberOfBlock();
+		}
+
+		public boolean updateValueAndMaterials(World world, ItemStack stack, Block toReplace, EnumFacing facing, int i) {
+			if(currentAmount + i > maxAmount)
+				i = maxAmount - currentAmount;
+			if(currentAmount >= maxAmount)
+				return false;
+			currentAmount += i;
+			return materialLimit.placeBlockFromStack(world, stack, toReplace, i, currentAmount, facing);
+		}
+		
+		public boolean updateValueAndMaterials(World world, FluidStack stack, Block toReplace, EnumFacing facing, int i) {
+			if(currentAmount >= maxAmount)
+				return false;
+			currentAmount += i;
+			return materialLimit.placeBlockFromFluidStack(world, stack, toReplace, i, currentAmount, facing);
+		}
 		
 	    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 	        nbt.setDouble("weight", weight);
@@ -224,34 +348,6 @@ public class MultiBlockBattery {
 	    	maxAmount = nbt.getInteger("maxAmount");
 	    	materialLimit.readFromNBT(nbt);
 	    }
-
-		public void reset() {
-			weight = 1;
-			totalUnit = -1;
-			currentUnit = -1;
-			currentAmount = -1;
-		}
-		
-		public void setMaterialLimit(B3D b3d) {
-			materialLimit = b3d;
-			maxAmount = b3d.getNumberOfBlock();
-		}
-
-		public boolean updateValueAndMaterials(World world, ItemStack stack, Block toReplace, int i) {
-			if(currentAmount + i > maxAmount)
-				i = maxAmount - currentAmount;
-			if(currentAmount >= maxAmount)
-				return false;
-			currentAmount += i;
-			return materialLimit.placeBlockFromStack(world, stack, toReplace, i);
-		}
-		
-		public boolean updateValueAndMaterials(World world, FluidStack stack, Block toReplace, int i) {
-			if(currentAmount >= maxAmount)
-				return false;
-			currentAmount += i;
-			return materialLimit.placeBlockFromFluidStack(world, stack, toReplace, i);
-		}
 	}
 	
 	public class MaterialsBattery{
@@ -288,7 +384,7 @@ public class MultiBlockBattery {
 			return false;
 		}
 		
-		public void handleMaterials(World world, float rationRF){
+		public void handleMaterials(World world, float rationRF, EnumFacing facing){
 			if(electrode1 == null || electrode2 == null || electrolyte == null)
 				return ;
 			
@@ -301,11 +397,9 @@ public class MultiBlockBattery {
 				}
 				if(electrode1MP.currentAmount>electrode1MP.maxAmount)
 					electrode1MP.currentAmount = electrode1MP.maxAmount;
-					electrode1MP.currentAmount-=1;
+				electrode1MP.currentAmount-=1;
 				if(deleteMaterials && !useMaterial(world, electrode1MP.materialLimit.getRandomBlock()) )
-					if( !useMaterial(world,electrode1MP.materialLimit.getNextMaterialBlock(world))){
-						//TODO si usematerial false check mp limit if block equal and set mp currentamount to that number
-					}
+					useMaterial(world,electrode1MP.materialLimit.getNextMaterialBlock(world, electrode1MP.currentAmount, facing));
 			}
 			if(electrode2MP.currentUnit<=0){
 				electrode2MP.currentUnit = electrode2MP.totalUnit;
@@ -316,9 +410,9 @@ public class MultiBlockBattery {
 				}
 				if(electrode2MP.currentAmount>electrode2MP.maxAmount)
 					electrode2MP.currentAmount = electrode2MP.maxAmount;
-					electrode2MP.currentAmount-=1;
+				electrode2MP.currentAmount-=1;
 				if(deleteMaterials && !useMaterial(world, electrode2MP.materialLimit.getRandomBlock()) )
-					useMaterial(world,electrode2MP.materialLimit.getNextMaterialBlock(world));
+					useMaterial(world,electrode2MP.materialLimit.getNextMaterialBlock(world, electrode2MP.currentAmount, facing));
 				
 			}
 			
@@ -331,9 +425,9 @@ public class MultiBlockBattery {
 				}
 				if(electrolyteMP.currentAmount>electrolyteMP.maxAmount)
 					electrolyteMP.currentAmount = electrolyteMP.maxAmount;
-					electrolyteMP.currentAmount-=1;
+				electrolyteMP.currentAmount-=1;
 				if(deleteMaterials && !useMaterial(world, electrolyteMP.materialLimit.getRandomBlock()) )
-					useMaterial(world,electrolyteMP.materialLimit.getNextMaterialBlock(world));
+					useMaterial(world,electrolyteMP.materialLimit.getNextMaterialBlock(world, electrolyteMP.currentAmount, facing));
 			}
 			
 			electrode1MP.currentUnit -= ( rdm.nextDouble() + 1 ) * rationRF +1;
@@ -368,7 +462,7 @@ public class MultiBlockBattery {
 			double ee = Math.pow( Math.abs( Math.ceil( rangeElectrolyteO - Math.abs( Collections.max( electrolyte.oxydationNumber ) ) ) ) + 1 , 1 ) * Math.abs(electrolyte.potential) * Math.pow( electrolyte.electrolyteType.ratioVoltage , 1.1 ) * Math.pow( electrolyteMP.currentAmount + 1, 1.1 );
 			double ce = Math.pow( ee + ne , 1 ) * ( ( electrode1Cond.ratioEfficiency + electrode2Cond.ratioEfficiency ) / 2 );
 			
-			System.out.println(cate+"   "+anoe+"   "+ne+"    "+ee+"   "+ce+"   "+electrode1Cond.ratioEfficiency+"    "+electrode2Cond.ratioEfficiency+"  "+potentialDifference);
+			//System.out.println(cate+"   "+anoe+"   "+ne+"    "+ee+"   "+ce+"   "+electrode1Cond.ratioEfficiency+"    "+electrode2Cond.ratioEfficiency+"  "+potentialDifference);
 			
 			return ce < 0 ? 0 : ce;
 		}
@@ -454,7 +548,6 @@ public class MultiBlockBattery {
 				return this;
 			}
 			electrolyte = MaterialsHandler.getElectrolyteFromStack(electrolyteStack);
-			System.out.println(electrolyte.stackReference);
 			electrolyteMP.currentAmount = amount;
 			return this;
 		}
@@ -653,7 +746,7 @@ public class MultiBlockBattery {
 								return new ActionResult(EnumActionResult.PASS, stack);
 							FluidStack fs = stack.copy();
 							fs.amount = stack.amount - amount;
-							materialsBattery.electrolyteMP.updateValueAndMaterials(world , stack, Blocks.AIR, 1);	
+							materialsBattery.electrolyteMP.updateValueAndMaterials(world , stack, Blocks.AIR, plugFacingOpposite, 1);	
 							return  fs.amount <= 0 ? new ActionResult(EnumActionResult.SUCCESS, null) : new ActionResult(EnumActionResult.SUCCESS, fs);
 						}
 					}
@@ -662,7 +755,7 @@ public class MultiBlockBattery {
 					if(MaterialsHandler.anyMatchElectrolyte(stack)){
 						materialsBattery.setElectrolyte(stack.copy(), 0);
 						materialsBattery.setEnergecticValues();
-						materialsBattery.electrolyteMP.updateValueAndMaterials(world ,stack , Blocks.AIR, 1);
+						materialsBattery.electrolyteMP.updateValueAndMaterials(world ,stack , Blocks.AIR, plugFacingOpposite, 1);
 						setPlugCapacity(world);
 						FluidStack fs = stack.copy();
 						int w = MaterialsHandler.getFluidAmountFromStack(materialsBattery.electrolyte, stack);
@@ -688,7 +781,7 @@ public class MultiBlockBattery {
 							Map.Entry<ItemStack,Double> e = MaterialsHandler.getStackAndWeightFromStack(materialsBattery.electrode1, stack);
 							if( e == null || ( e!=null && e.getValue() > 1 && materialsBattery.electrode1MP.currentAmount + e.getValue() > materialsBattery.electrode1MP.maxAmount ) )
 								return new ActionResult(EnumActionResult.FAIL, stack);
-							materialsBattery.electrode1MP.updateValueAndMaterials(world , materialsBattery.electrode1.stackReference, Blocks.AIR, e.getValue() <= 1.0D ? 1 : (int) Math.abs(e.getValue()));
+							materialsBattery.electrode1MP.updateValueAndMaterials(world , materialsBattery.electrode1.stackReference, Blocks.AIR, plugFacingOpposite, e.getValue() <= 1.0D ? 1 : (int) Math.abs(e.getValue()));
 							return stack.getCount() != e.getKey().getCount() ? new ActionResult(EnumActionResult.SUCCESS, ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - e.getKey().getCount())) : new ActionResult(EnumActionResult.SUCCESS, ItemStack.EMPTY);
 						}
 					}else{
@@ -702,7 +795,7 @@ public class MultiBlockBattery {
 							Map.Entry<ItemStack,Double> e = MaterialsHandler.getStackAndWeightFromStack(materialsBattery.electrode2, stack);
 							if( e == null || ( e!=null && e.getValue() > 1 && materialsBattery.electrode2MP.currentAmount + e.getValue() > materialsBattery.electrode2MP.maxAmount ) )
 								return new ActionResult(EnumActionResult.FAIL, stack);
-							materialsBattery.electrode2MP.updateValueAndMaterials(world , materialsBattery.electrode2.stackReference, Blocks.AIR, e.getValue() <= 1.0D ? 1 : (int) Math.abs(e.getValue()));
+							materialsBattery.electrode2MP.updateValueAndMaterials(world , materialsBattery.electrode2.stackReference, Blocks.AIR, plugFacingOpposite, e.getValue() <= 1.0D ? 1 : (int) Math.abs(e.getValue()));
 							return stack.getCount() != e.getKey().getCount() ? new ActionResult(EnumActionResult.SUCCESS, ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - e.getKey().getCount())) : new ActionResult(EnumActionResult.SUCCESS, ItemStack.EMPTY);
 						}
 					}else{
@@ -718,7 +811,7 @@ public class MultiBlockBattery {
 						Map.Entry<ItemStack,Double> e = MaterialsHandler.getStackAndWeightFromStack(materialsBattery.electrode1, stack);
 						if( e == null )
 							return new ActionResult(EnumActionResult.FAIL, stack);
-						materialsBattery.electrode1MP.updateValueAndMaterials(world ,materialsBattery.electrode1.stackReference, Blocks.AIR, e.getValue() <= 1.0D ? 1 : (int) Math.abs(e.getValue()));
+						materialsBattery.electrode1MP.updateValueAndMaterials(world ,materialsBattery.electrode1.stackReference, Blocks.AIR, plugFacingOpposite, e.getValue() <= 1.0D ? 1 : (int) Math.abs(e.getValue()));
 						setPlugCapacity(world);
 						return stack.getCount() != e.getKey().getCount() ? new ActionResult(EnumActionResult.SUCCESS, ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - e.getKey().getCount())) : new ActionResult(EnumActionResult.SUCCESS, ItemStack.EMPTY);
 					}
@@ -731,7 +824,7 @@ public class MultiBlockBattery {
 						Map.Entry<ItemStack,Double> e = MaterialsHandler.getStackAndWeightFromStack(materialsBattery.electrode2, stack);
 						if( e == null )
 							return new ActionResult(EnumActionResult.FAIL, stack);
-						materialsBattery.electrode2MP.updateValueAndMaterials(world , materialsBattery.electrode2.stackReference, Blocks.AIR, e.getValue() <= 1.0D ? 1 : (int) Math.abs(e.getValue()));
+						materialsBattery.electrode2MP.updateValueAndMaterials(world , materialsBattery.electrode2.stackReference, Blocks.AIR, plugFacingOpposite, e.getValue() <= 1.0D ? 1 : (int) Math.abs(e.getValue()));
 						setPlugCapacity(world);						
 						return stack.getCount() != e.getKey().getCount() ? new ActionResult(EnumActionResult.SUCCESS, ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - e.getKey().getCount())) : new ActionResult(EnumActionResult.SUCCESS, ItemStack.EMPTY);
 					}
@@ -743,7 +836,7 @@ public class MultiBlockBattery {
 							Map.Entry<ItemStack,Double> e = MaterialsHandler.getStackAndWeightFromStack(materialsBattery.electrolyte, stack);
 							if( e == null || ( e!=null && e.getValue() > 1 && materialsBattery.electrolyteMP.currentAmount + e.getValue() > materialsBattery.electrolyteMP.maxAmount ) )
 								return new ActionResult(EnumActionResult.FAIL, stack);
-							materialsBattery.electrolyteMP.updateValueAndMaterials(world , materialsBattery.electrolyte.stackReference, Blocks.AIR, e.getValue() <= 1.0D ? 1 : (int) Math.abs(e.getValue()));
+							materialsBattery.electrolyteMP.updateValueAndMaterials(world , materialsBattery.electrolyte.stackReference, Blocks.AIR, plugFacingOpposite, e.getValue() <= 1.0D ? 1 : (int) Math.abs(e.getValue()));
 							return stack.getCount() != e.getKey().getCount() ? new ActionResult(EnumActionResult.SUCCESS, ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - e.getKey().getCount())) : new ActionResult(EnumActionResult.SUCCESS, ItemStack.EMPTY);
 						}
 					}
@@ -755,7 +848,7 @@ public class MultiBlockBattery {
 						Map.Entry<ItemStack,Double> e = MaterialsHandler.getStackAndWeightFromStack(materialsBattery.electrolyte, stack);
 						if( e == null )
 							return new ActionResult(EnumActionResult.FAIL, stack);
-						materialsBattery.electrolyteMP.updateValueAndMaterials(world , materialsBattery.electrolyte.stackReference, Blocks.AIR, e.getValue() <= 1.0D ? 1 : (int) Math.abs(e.getValue()));
+						materialsBattery.electrolyteMP.updateValueAndMaterials(world , materialsBattery.electrolyte.stackReference, Blocks.AIR, plugFacingOpposite, e.getValue() <= 1.0D ? 1 : (int) Math.abs(e.getValue()));
 						setPlugCapacity(world);
 						return stack.getCount() != e.getKey().getCount() ? new ActionResult(EnumActionResult.SUCCESS, ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() -e.getKey().getCount())) : new ActionResult(EnumActionResult.SUCCESS, ItemStack.EMPTY);
 					}
