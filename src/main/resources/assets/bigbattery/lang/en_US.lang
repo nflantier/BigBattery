@@ -15,15 +15,7 @@ item.itemDustLithium.name=Lithium dust
 item.itemDustCalcium.name=Calcium dust
 item.itemIonicAgent.name=Ionic agent
 item.itemChloreFilter.name=Chlore filter
-
 item.itemManual.name=Big Battery Manual
-
-tile.blockPlug.desc=Right click with an empty hand to check and set the battery
-item.itemChloreFilter.desc=Right click water blocks to filter chlore, there is a cooldown of
-item.itemChloreFilter.desc2=ticks while you cant filter a
-item.itemChloreFilter.desc3=blocks radius area around the block clicked
-
-item.itemShift.desc=<Hold Shift>
 
 tile.blockCasing.glass.name=Glass casing
 tile.blockCasing.iron.name=Iron casing
@@ -66,5 +58,29 @@ tile.blockLithium.name=Lithium block
 tile.blockCalcium.name=Calcium block
 fluid.fluidChlore=Chloric solution
 
-gui.plug.cang=Can generate :
+tile.blockPlug.desc=Right click with an empty hand to check and set the battery
+item.itemChloreFilter.desc=Right click water blocks to filter chlore, there is a cooldown of
+item.itemChloreFilter.desc2=ticks while you cant filter a
+item.itemChloreFilter.desc3=blocks radius area around the block clicked
+item.itemShift.desc=<Hold Shift>
+
+gui.global.rf=RF
+gui.global.mb=MB
+gui.global.inventory=Inventory
+
+gui.plug.tile=Plug
+gui.plug.size=Size
+gui.plug.empty=Empty
+gui.plug.amount=Amount
+gui.plug.max=Max
+gui.plug.decay=Decay
+gui.plug.cang=Can generate
+gui.plug.electrolyte=Ely
+gui.plug.electrode1=E1
+gui.plug.electrode2=E2
+gui.plug.conductives=Conductives
+gui.plug.ratio=Ratio
+
+gui.interface.title=Interface
+gui.interface.onlya=Only accept
 

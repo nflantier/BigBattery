@@ -3,6 +3,7 @@ package noelflantier.bigbattery.client.gui;
 import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import noelflantier.bigbattery.Ressources;
@@ -29,11 +30,14 @@ public class GuiInterface extends GuiNF{
 
 	@Override
 	public void updateToolTips(String key) {
+
+		if(tile.inventory.type == ModProperties.InterfaceType.ELECTRODE)
+			return;
 		switch(key){
 			case "tank" :
 				((GuiToolTips)this.componentList.get("tank")).content =  new ArrayList<String>();
-				((GuiToolTips)this.componentList.get("tank")).addContent(this.fontRendererObj, String.format("%,d", tile.tank.getFluidAmount())+" MB");
-				((GuiToolTips)this.componentList.get("tank")).addContent(this.fontRendererObj, "/ "+String.format("%,d", this.tile.tank.getCapacity())+" MB");
+				((GuiToolTips)this.componentList.get("tank")).addContent(this.fontRendererObj, String.format("%,d", tile.tank.getFluidAmount())+" "+I18n.format("gui.global.mb"));
+				((GuiToolTips)this.componentList.get("tank")).addContent(this.fontRendererObj, "/ "+String.format("%,d", this.tile.tank.getCapacity())+" "+I18n.format("gui.global.mb"));
 				break;
 			default:
 				break;
@@ -45,17 +49,19 @@ public class GuiInterface extends GuiNF{
 	@Override
 	public void loadComponents(){
 		super.loadComponents();
-		this.componentList.put("tank", 
-				new GuiToolTips(guiLeft+153, guiTop+55, 14, 23, this.width)
-				);
+		if(tile.inventory.type == ModProperties.InterfaceType.ELECTROLYTE){
+			this.componentList.put("tank", 
+					new GuiToolTips(guiLeft+153, guiTop+55, 14, 23, this.width)
+					);
+		}
 		this.componentList.put("mf", new GuiComponent(6, 5, 100, 10){{
-			addText("Interface "+tile.inventory.type.name+" :", 0, 0);
+			addText(I18n.format("gui.interface.title")+" "+tile.inventory.type.name+" :", 0, 0);
 		}});
 		this.componentList.put("in", new GuiComponent(6, 79, 100, 10){{
-			addText("Inventory :", 0, 0);
+			addText(I18n.format("gui.global.inventory")+" :", 0, 0);
 		}});
 		this.componentList.put("re", new GuiComponent(28, 59, 100, 10){{
-			addText("Only accept", 0, 0);
+			addText(I18n.format("gui.interface.onlya"), 0, 0);
 		}});
 	}
 	
