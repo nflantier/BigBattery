@@ -47,6 +47,10 @@ public class GuiRecipe extends GuiComponentBase{
 	public static int heightDSlot = 17;
 	public static int widthDSlot = 17;
 	
+	public GuiRecipe(String name, int x, int y){
+		super(x,y);
+		this.name = name;
+	}
 	public GuiRecipe(String name, int x, int y, ItemStack toCraft, TYPE type){
 		super(x,y);
 		this.name = name;
@@ -111,7 +115,7 @@ public class GuiRecipe extends GuiComponentBase{
 			}
 			return getGuiItemStack(li);
 		}
-		return null;
+		return new ArrayList();
 	}
 	
 	public static List<List<GuiItemStack>> getGuiVanillaRecipesForStack(String name, int x, int y, ItemStack stack){

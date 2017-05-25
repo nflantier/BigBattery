@@ -116,11 +116,19 @@ public class NGuiManual extends GuiNFScreen{
 		while (enumKey.hasMoreElements()) {
 		    String key = enumKey.nextElement();
 		    Optional<ItemStack> st = this.fullComponentList.get(key).getItemStackHovered(x, y);
-		    if(st.isPresent() && listLink.containsKey(NBlocksAndItems.PRE_IB+st.get().getUnlocalizedName())){
+		    if(st.isPresent()){
+			    Optional<String> o = NBlocksAndItems.L_PRE_IB.stream().filter((s)->listLink.containsKey(s+st.get().getUnlocalizedName())).findFirst();
+			    if(o.isPresent()){
+			    	currentKey = o.get()+st.get().getUnlocalizedName();
+			    	setCategory(true);
+		    		break;
+			    }
+		    }
+		    /*if(st.isPresent() && listLink.containsKey(NBlocksAndItems.PRE_IB+st.get().getUnlocalizedName())){
 		    	currentKey = NBlocksAndItems.PRE_IB+st.get().getUnlocalizedName();
 		    	setCategory(true);
 	    		break;
-		    }
+		    }*/
 		    if(this.fullComponentList.get(key).clicked(x, y)){
 		    	currentKey = key;
 		    	setCategory(true);

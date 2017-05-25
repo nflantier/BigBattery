@@ -25,7 +25,12 @@ import noelflantier.bigbattery.common.handlers.ModProperties.InterfaceType;
 
 public class NBlocksAndItems  extends ABaseCategory{
 
-	public static final String PRE_IB = "PRE_IB";
+	public static final String PRE_IB_CRAFT = "PRE_IB_CRAFT";
+	public static final String PRE_IB_FURNACE = "PRE_IB_FURNACE";
+	public static final List<String> L_PRE_IB = new ArrayList<String>(){{
+		add(PRE_IB_CRAFT);
+		add(PRE_IB_FURNACE);
+	}};
 	public static float scale = 0.6F;
 	public NBlocksAndItems(String name, int x, int y) {
 		super(name,x,y);
@@ -76,7 +81,9 @@ public class NBlocksAndItems  extends ABaseCategory{
 		dec+=1;
 		for(int i = 0 ; i < vanilla.size() ; i++){
 			ItemStack it = vanilla.get(i);
-			String strID = it.getItem().getUnlocalizedName(it).equals("item.forge.bucketFilled") ? PRE_IB+it.getItem().getUnlocalizedName(it)+FluidUtil.getFluidContained(it).getUnlocalizedName() : PRE_IB+it.getItem().getUnlocalizedName(it);
+			if(it == null || it.isEmpty() == true || it.getItem() == null)
+				continue;
+			String strID = it.getItem().getUnlocalizedName(it).equals("item.forge.bucketFilled") ? PRE_IB_CRAFT+it.getItem().getUnlocalizedName(it)+FluidUtil.getFluidContained(it).getUnlocalizedName() : PRE_IB_CRAFT+it.getItem().getUnlocalizedName(it);
 			String translated = it.getItem().getUnlocalizedName(it).equals("item.forge.bucketFilled") ? FluidUtil.getFluidContained(it).getLocalizedName() : I18n.format(it.getItem().getUnlocalizedName(it)+".name");
 			this.componentList.put(strID, new GuiComponent(this.x+10+100*(int)((i+dec)/25), this.y+30+(int)(10*scale)*((i+dec)%25), 90, (int)(10*scale)){{
 				globalScale = scale;
@@ -86,7 +93,14 @@ public class NBlocksAndItems  extends ABaseCategory{
 			listCategory.put(strID, new DummyCategory(strID,this.x, this.y){{
 				addComponent("in",
 					new GuiComponent(x+10, y+30, 100, 10){{
-						addRecipe(new GuiRecipe(translated, this.x,this.y,it,GuiRecipe.TYPE.VANILLA));
+						//addMultipleRecipe(it, nb, translated, this.x,this.y,it,GuiRecipe.TYPE.VANILLA);
+						addMultipleRecipe(it, 2, translated, this.x,this.y, GuiRecipe.TYPE.VANILLA);
+						yButtonRecipes = 71;
+						xButtonRecipes = 95;
+						nbGuiRecipeVertical = 4;
+						nbGuiRecipeHorizontal = 4;
+						handleRecipesGroup = true;
+						//addRecipe(new GuiRecipe(translated, this.x,this.y,it,GuiRecipe.TYPE.VANILLA));
 					}});
 				}}
 			);
@@ -115,7 +129,7 @@ public class NBlocksAndItems  extends ABaseCategory{
 		
 		int j = 0 ;
 		for(Map.Entry<ItemStack, List<ItemStack>> entry : furnace.entrySet()){
-			String strID = PRE_IB+entry.getKey().getItem().getUnlocalizedName(entry.getKey());
+			String strID = PRE_IB_FURNACE+entry.getKey().getItem().getUnlocalizedName(entry.getKey());
 			String translated = I18n.format(entry.getKey().getItem().getUnlocalizedName(entry.getKey())+".name");
 			this.componentList.put(strID, new GuiComponent(this.x+10+100*(int)((j+dec)/25), this.y+30+(int)(10*scale)*((j+dec)%25), 90, (int)(10*scale)){{
 				globalScale = scale;

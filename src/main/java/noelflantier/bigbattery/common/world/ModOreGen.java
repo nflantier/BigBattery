@@ -14,6 +14,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import noelflantier.bigbattery.common.handlers.ModBlocks;
+import noelflantier.bigbattery.common.handlers.ModConfig;
 
 public class ModOreGen implements IWorldGenerator{
 	
@@ -35,15 +36,28 @@ public class ModOreGen implements IWorldGenerator{
 
 	private void generateSurface(Random random, int chunkx, int chunckz, World world) {
 		//addOreSpawn(ModBlocks.blockEnrichedClay, Blocks.CLAY, world, random, chunkx, chunckz, 4, 12, 10, 50, 70);
-		enClayGen.generate(world, random, chunkx, chunckz);
-		addOreSpawn(ModBlocks.blockOreAluminium, Blocks.STONE, world, random, chunkx, chunckz, 3, 14, 8, 40, 80);
-		addOreSpawn(ModBlocks.blockOreCopper, Blocks.STONE, world, random, chunkx, chunckz, 4, 16, 9, 40, 80);
-		addOreSpawn(ModBlocks.blockOreLead, Blocks.STONE, world, random, chunkx, chunckz, 3, 5, 7, 20, 80);
-		addOreSpawn(ModBlocks.blockOreNickel, Blocks.STONE, world, random, chunkx, chunckz, 1, 3, 1, 6, 40);
-		addOreSpawn(ModBlocks.blockOrePlatinium, Blocks.STONE, world, random, chunkx, chunckz, 1, 2, 3, 5, 20);
-		addOreSpawn(ModBlocks.blockOreSilver, Blocks.STONE, world, random, chunkx, chunckz, 2, 6, 9, 20, 80);
-		addOreSpawn(ModBlocks.blockOreTin, Blocks.STONE, world, random, chunkx, chunckz, 3, 8, 9, 20, 80);
-		addOreSpawn(ModBlocks.blockOreZinc, Blocks.STONE, world, random, chunkx, chunckz, 2, 6, 7, 20, 80);
+
+		if(ModConfig.clayGenOres)
+			enClayGen.generate(world, random, chunkx, chunckz);
+
+		if(!ModConfig.metalGenOres)
+			return;
+		if(ModConfig.genAluminium)
+			addOreSpawn(ModBlocks.blockOreAluminium, Blocks.STONE, world, random, chunkx, chunckz, 3, 14, 8, 40, 80);
+		if(ModConfig.genCopper)
+			addOreSpawn(ModBlocks.blockOreCopper, Blocks.STONE, world, random, chunkx, chunckz, 4, 16, 9, 40, 80);
+		if(ModConfig.genLead)
+			addOreSpawn(ModBlocks.blockOreLead, Blocks.STONE, world, random, chunkx, chunckz, 3, 5, 7, 20, 80);
+		if(ModConfig.genNickel)
+			addOreSpawn(ModBlocks.blockOreNickel, Blocks.STONE, world, random, chunkx, chunckz, 1, 3, 1, 6, 40);
+		if(ModConfig.genPlatinium)
+			addOreSpawn(ModBlocks.blockOrePlatinium, Blocks.STONE, world, random, chunkx, chunckz, 1, 2, 3, 5, 20);
+		if(ModConfig.genSilver)
+			addOreSpawn(ModBlocks.blockOreSilver, Blocks.STONE, world, random, chunkx, chunckz, 2, 6, 9, 20, 80);
+		if(ModConfig.genTin)
+			addOreSpawn(ModBlocks.blockOreTin, Blocks.STONE, world, random, chunkx, chunckz, 3, 8, 9, 20, 80);
+		if(ModConfig.genZinc)
+			addOreSpawn(ModBlocks.blockOreZinc, Blocks.STONE, world, random, chunkx, chunckz, 2, 6, 7, 20, 80);
 
 	}
 	

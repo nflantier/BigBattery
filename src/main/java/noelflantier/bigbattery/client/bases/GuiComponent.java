@@ -7,13 +7,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.text.TextFormatting;
+import noelflantier.bigbattery.client.bases.GuiRecipe.TYPE;
 
 public class GuiComponent extends GuiComponentBase{
 
@@ -104,6 +108,24 @@ public class GuiComponent extends GuiComponentBase{
 
 	public void addItemStack(GuiItemStack st){
 		this.itemStackList.add(st);
+	}
+	
+	public void addMultipleRecipe(ItemStack stack, int nb, String translated, int x, int y, GuiRecipe.TYPE recipeType){
+		if(TYPE.VANILLA==recipeType){
+			List<IRecipe> vanillaRecipes = (List<IRecipe>) CraftingManager.getInstance().getRecipeList().stream().filter((s)->GuiRecipe.isStackSame(((IRecipe)s).getRecipeOutput(),stack)).collect(Collectors.toList());
+			if(vanillaRecipes.isEmpty())
+				return;
+			for(int i = 0 ; i < nb ; i++){
+				if(i >= vanillaRecipes.size())
+					return;
+				GuiRecipe g = new GuiRecipe(translated, x, y);
+				g.recipeType = recipeType;
+				int t = i;
+				g.guiItemStackToCraft.addAll(g.getGuiItemStack(new ArrayList<ItemStack>(){{add(vanillaRecipes.get(t).getRecipeOutput());}}));
+				g.guiItemStackList.addAll(g.computeVanillaRecipes(vanillaRecipes.get(i)));
+				addRecipe(g);
+			}
+		}
 	}
 	
 	public void addRecipe(GuiRecipe r){

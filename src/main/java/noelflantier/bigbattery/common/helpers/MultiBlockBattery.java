@@ -139,7 +139,10 @@ public class MultiBlockBattery {
 			public Optional<Boolean> checkBlock(Map<String, Object> m, World world) {
 				BlockPos p = (BlockPos) m.get("pos");
 				IBlockState s = world.getBlockState(p);
-				if( ((Predicate<IBlockState>) m.get("predicate")).apply(s) || isBlockFluidReplaceable(s)){
+				/*System.out.println("...................... "+m.get("block")+"  "+s+"   "+p);
+				System.out.println("...................... "+((Predicate<IBlockState>) m.get("predicate")).apply(s));
+				System.out.println("...................... "+isBlockFluidReplaceable(s));*/
+				if( ((Predicate<IBlockState>) m.get("predicate")).apply(s) || isBlockFluidReplaceable(s) ){
 					return Optional.of(world.setBlockState(p, ((Block) m.get("block")).getDefaultState()));
 				}
 				return Optional.of(false);
@@ -246,10 +249,11 @@ public class MultiBlockBattery {
 			mapAddBlock.put("upos", dwn);
 			Optional<Boolean> valid = B3D_ADD.iterateBlocks(mapAddBlock, world);
 
-	    	if(valid.isPresent())
-				return valid.get();
+	    	if(valid.isPresent() && valid.get())
+				return true;
 
 	    	mapAddBlock.put("upos", ues);
+			mapAddBlock.put("inc", 1);
 	    	Optional<Boolean> valid2 = B3D_ADD.iterateBlocks(mapAddBlock, world);
 			if(valid2.isPresent())
 				return valid2.get();
@@ -261,13 +265,22 @@ public class MultiBlockBattery {
 			if(stack == null || stack.getFluid() == null || stack.getFluid().getBlock() == null)
 				return false;
 			mapAddBlock.put("predicate", checkBlock(toReplace));
-			mapAddBlock.put("block", stack.getFluid().getBlock().getDefaultState());
+			mapAddBlock.put("block", stack.getFluid().getBlock());
 			mapAddBlock.put("amount", amountToAdd);
 			mapAddBlock.put("inc", -1);
-			mapAddBlock.put("dpos", getBlockPosLimitForAmount(amount+1, -1, facing));
+			mapAddBlock.put("dpos", getBlockPosLimitForAmount(amount, -1, facing));
 			mapAddBlock.put("upos", dwn);
 			Optional<Boolean> valid = B3D_ADD.iterateBlocks(mapAddBlock, world);
-			return valid.isPresent() ? valid.get() : false;
+	    	if(valid.isPresent() && valid.get())
+				return true;
+
+	    	mapAddBlock.put("upos", ues);
+			mapAddBlock.put("inc", 1);
+	    	Optional<Boolean> valid2 = B3D_ADD.iterateBlocks(mapAddBlock, world);
+			if(valid2.isPresent())
+				return valid2.get();
+			
+			return false;
 		}
 	    
 		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {

@@ -4,7 +4,7 @@ public class Ressources {
 		
 	public static final String MODID = "bigbattery";
 	public static final String NAME = "BigBattery";
-	public static final String VERSION = "0.1";
+	public static final String VERSION = "0.1.4";
 	public static final String SERVER_PROXY = "noelflantier.bigbattery.common.CommonProxy";
 	public static final String CLIENT_PROXY = "noelflantier.bigbattery.client.ClientProxy";
 	

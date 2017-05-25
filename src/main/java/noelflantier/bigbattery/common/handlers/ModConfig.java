@@ -2,6 +2,7 @@ package noelflantier.bigbattery.common.handlers;
 
 import java.io.File;
 
+import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import noelflantier.bigbattery.Ressources;
@@ -18,6 +19,18 @@ public class ModConfig {
 	public static int chanceSpawningEnrichedClayPerChunk;
 	public static int numberOfIonicAgentPerFSE;
 	public static boolean areBatteryalwaysGenerating;
+	public static boolean metalGenOres;
+	public static boolean clayGenOres;
+	public static boolean genAluminium;
+	public static boolean genCopper;
+	public static boolean genLead;
+	public static boolean genNickel;
+	public static boolean genPlatinium;
+	public static boolean genSilver;
+	public static boolean genTin;
+	public static boolean genZinc;
+	
+	public static final String CATGENORES = "ores";
 
 	
 	public static void preInitCommon(FMLPreInitializationEvent event) {
@@ -43,6 +56,18 @@ public class ModConfig {
 			chanceSpawningEnrichedClayPerChunk = config.get(Configuration.CATEGORY_GENERAL, "chance spawn enriched clay", 10, "The maximun number of enriched clay you can find in a vain.").getInt();
 			numberOfIonicAgentPerFSE = config.get(Configuration.CATEGORY_GENERAL, "number ionic agent per fermented spider eye", 12, "The number of ionic agent you get by smelting one fermented spider eyes in a furnace.").getInt();
 			areBatteryalwaysGenerating = config.get(Configuration.CATEGORY_GENERAL, "battery always generating power", false, "If set to true battery will generate power and consume materials even if there is nothing using the power").getBoolean();
+			metalGenOres = config.get(Configuration.CATEGORY_GENERAL, "generating metalic ores", true, "If set to true metalic ores will be generated in the world depending on their own configuration, if set to false metalic ores will not be generated overriding their own configuration").getBoolean();
+			clayGenOres = config.get(Configuration.CATEGORY_GENERAL, "generating enriched clay", true, "If set to true enriched clay will be generated in the world").getBoolean();
+			
+			genAluminium = config.get(CATGENORES, "generating aluminium", true, "If set to true and generating metalic ores is set to true aluminium will be generated in the world").getBoolean();
+			genCopper = config.get(CATGENORES, "generating copper", true, "If set to true and generating metalic ores is set to true copper will be generated in the world").getBoolean();
+			genLead = config.get(CATGENORES, "generating lead", true, "If set to true and generating metalic ores is set to true lead will be generated in the world").getBoolean();
+			genNickel = config.get(CATGENORES, "generating nickel", true, "If set to true and generating metalic ores is set to true nickel will be generated in the world").getBoolean();
+			genPlatinium = config.get(CATGENORES, "generating platinium", true, "If set to true and generating metalic ores is set to true platinium will be generated in the world").getBoolean();
+			genSilver = config.get(CATGENORES, "generating silver", true, "If set to true and generating metalic ores is set to true silver will be generated in the world").getBoolean();
+			genTin = config.get(CATGENORES, "generating tin", true, "If set to true and generating metalic ores is set to true tin will be generated in the world").getBoolean();
+			genZinc = config.get(CATGENORES, "generating zinc", true, "If set to true and generating metalic ores is set to true zinc will be generated in the world").getBoolean();
+			
 		}
 		catch (Exception e) {
 			e.printStackTrace();

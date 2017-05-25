@@ -34,7 +34,7 @@ public class TilePlug extends ATileBBTicking implements ITileMaster{
 			mbb.plugPos = getPos();
 		if(!getStructure().isStructured)
 			return;
-		//energyStorage.extractEnergy(100000, false);
+		energyStorage.extractEnergy(100000, false);
 		
 		if(energyStorage.getEnergyStored()>0 && mbb.plugFacingOpposite != null){
 			BlockPos prf = getPos().add(mbb.plugFacingOpposite.getOpposite().getDirectionVec());
